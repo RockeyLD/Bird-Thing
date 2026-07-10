@@ -1,9 +1,4 @@
-.page {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: var(--bg);
-}
+.page { display: flex; flex-direction: column; height: 100vh; position: relative; }
 
 .nav-bar {
   padding-bottom: 20rpx;

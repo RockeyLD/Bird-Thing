@@ -1,4 +1,4 @@
-.page { display: flex; flex-direction: column; height: 100vh; }
+.page { display: flex; flex-direction: column; height: 100vh; position: relative; }
 
 .nav-bar { padding-bottom: 20rpx; padding-left: 30rpx; background: var(--bg); }
 .nav-title { font-size: 40rpx; font-weight: 700; }

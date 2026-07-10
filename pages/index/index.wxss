@@ -22,7 +22,7 @@
   color: var(--primary);
 }
 
-.page { display: flex; flex-direction: column; height: 100vh; }
+.page { display: flex; flex-direction: column; height: 100vh; position: relative; }
 
 .nav-bar {
   padding-bottom: 20rpx;
