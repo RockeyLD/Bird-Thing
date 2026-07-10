@@ -5,7 +5,9 @@ Page({
   data: {
     birds: BIRDS,
     filtered: BIRDS,
-    keyword: ''
+    keyword: '',
+    showCard: false,
+    cardBird: null
   },
 
   onLoad() {
@@ -34,6 +36,21 @@ Page({
 
   onBirdTap(e) {
     const { id } = e.currentTarget.dataset;
+    const bird = BIRDS.find(b => b.id === id);
+    this.setData({ showCard: true, cardBird: bird });
+  },
+
+  onStartQuiz() {
+    const id = this.data.cardBird.id;
+    this.setData({ showCard: false });
     wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${id}` });
+  },
+
+  onMaskTap() {
+    this.setData({ showCard: false });
+  },
+
+  onContentTap() {
+    // 阻止事件冒泡
   }
 });
