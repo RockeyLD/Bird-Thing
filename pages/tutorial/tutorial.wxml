@@ -1,0 +1,18 @@
+<view class="page">
+  <view class="tutorial-content">
+    <view class="step-indicator">
+      <view class="step-dot {{index === step ? 'active' : ''}}" wx:for="{{steps}}" wx:key="index"></view>
+    </view>
+
+    <view class="step-card">
+      <view class="step-emoji">{{steps[step].emoji}}</view>
+      <view class="title-lg">{{steps[step].title}}</view>
+      <view class="step-desc">{{steps[step].desc}}</view>
+    </view>
+
+    <button class="btn-primary" style="width: 100%;" bindtap="onNextTap">
+      {{steps[step].action}}
+    </button>
+    <view class="skip-link" bindtap="onSkipTap">稍后再说</view>
+  </view>
+</view>

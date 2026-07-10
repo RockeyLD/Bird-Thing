@@ -1,7 +1,67 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    Weixin
+<view class="page">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-title">Bird Thing</view>
+    <view class="score-badge">
+      <text>⭐</text>
+      <text>{{user.totalScore}}</text>
+    </view>
   </view>
-</scroll-view>
+
+  <scroll-view class="scrollarea" scroll-y>
+    <view class="container">
+      <!-- 宠物展示区 -->
+      <view class="card pet-card">
+        <view wx:if="{{!pet}}" class="pet-empty">
+          <view class="pet-egg">🥚</view>
+          <view class="title-md">还没有宠物鸟</view>
+          <view class="text-sm">领养一颗鸟蛋，开启你的鸟类之旅</view>
+          <button class="btn-primary adopt-btn" bindtap="onAdoptTap">领养鸟蛋</button>
+        </view>
+        <view wx:else class="pet-show">
+          <view class="pet-avatar {{stageInfo.key}}">
+            <text wx:if="{{stageInfo.key === 'egg'}}">🥚</text>
+            <text wx:elif="{{stageInfo.key === 'chick'}}">🐣</text>
+            <text wx:elif="{{stageInfo.key === 'adult'}}">🐦</text>
+            <text wx:elif="{{stageInfo.key === 'elder'}}">🦅</text>
+            <text wx:else>🦜</text>
+          </view>
+          <view class="pet-info">
+            <view class="title-md">{{stageInfo.label}}</view>
+            <view class="text-sm">经验 {{pet.exp}} / {{stageInfo.nextExpLabel}}</view>
+          </view>
+          <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
+            <view class="progress-fill" style="width: {{pet.exp / stageInfo.nextExp * 100}}%"></view>
+          </view>
+          <button class="btn-secondary feed-btn" bindtap="onFeedTap">
+            喂食 (-{{feedPrice}}积分)
+          </button>
+        </view>
+      </view>
+
+      <!-- 快捷入口 -->
+      <view class="section-title">快捷入口</view>
+      <view class="grid-2">
+        <view class="action-card" wx:for="{{quickActions}}" wx:key="label" bindtap="onQuickTap" data-page="{{item.page}}">
+          <view class="action-icon" style="background: {{item.color}}20; color: {{item.color}}">
+            {{item.icon}}
+          </view>
+          <view class="action-label">{{item.label}}</view>
+        </view>
+      </view>
+
+      <!-- 今日推荐 -->
+      <view class="section-title">今日推荐</view>
+      <view class="card recommend-card">
+        <view class="recommend-content">
+          <view class="recommend-icon">🌿</view>
+          <view>
+            <view class="title-md">红耳鹎</view>
+            <view class="text-sm">眼睛下方有一块醒目的红色斑块</view>
+          </view>
+        </view>
+        <button class="btn-primary" style="margin-top: 20rpx;" bindtap="onQuickTap" data-page="/pages/library/library">去学习</button>
+      </view>
+    </view>
+  </scroll-view>
+</view>

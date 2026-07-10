@@ -1,10 +1,84 @@
-/**index.wxss**/
-page {
-  height: 100vh;
+.page { display: flex; flex-direction: column; height: 100vh; }
+
+.nav-bar {
+  padding: 120rpx 30rpx 20rpx;
+  background: var(--bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-title { font-size: 40rpx; font-weight: 700; color: var(--text); }
+
+.scrollarea { flex: 1; overflow-y: hidden; }
+
+.pet-card { text-align: center; padding: 50rpx 30rpx; }
+
+.pet-egg { font-size: 120rpx; margin-bottom: 20rpx; }
+
+.pet-avatar { font-size: 140rpx; margin-bottom: 16rpx; }
+
+.pet-avatar.egg { animation: float 3s ease-in-out infinite; }
+.pet-avatar.chick { animation: bounce 2s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.pet-info { margin-bottom: 20rpx; }
+
+.progress-bar {
+  height: 16rpx;
+  background: rgba(76, 175, 130, 0.15);
+  border-radius: 8rpx;
+  overflow: hidden;
+  margin: 20rpx 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+.adopt-btn { margin-top: 30rpx; }
+.feed-btn { margin-top: 20rpx; }
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  margin: 30rpx 0 20rpx;
+}
+
+.action-card {
+  background: var(--card);
+  border-radius: 24rpx;
+  padding: 30rpx;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
 }
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
 }
+
+.action-label { font-size: 28rpx; font-weight: 600; }
+
+.recommend-card { padding: 30rpx; }
+.recommend-content { display: flex; align-items: center; gap: 20rpx; }
+.recommend-icon { font-size: 80rpx; }

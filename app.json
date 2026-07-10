@@ -1,10 +1,30 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/library/library",
+    "pages/quiz/quiz",
+    "pages/pet/pet",
+    "pages/codex/codex",
+    "pages/tutorial/tutorial"
   ],
+  "tabBar": {
+    "custom": true,
+    "color": "#8A9A90",
+    "selectedColor": "#4CAF82",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/library/library", "text": "知识库" },
+      { "pagePath": "pages/codex/codex", "text": "图鉴" },
+      { "pagePath": "pages/pet/pet", "text": "宠物" }
+    ]
+  },
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationStyle": "custom"
+    "navigationBarBackgroundColor": "#F4F8F4",
+    "navigationStyle": "custom",
+    "backgroundColor": "#F4F8F4"
   },
   "renderer": "webview"
 }
