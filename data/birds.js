@@ -322,12 +322,47 @@ const DIMENSIONS = [
   { key: 'behavior', label: '习性', icon: '✨' }
 ];
 
+const PET_BIRDS = [
+  {
+    id: 'pet_eagle',
+    name: '老鹰',
+    stages: {
+      egg: '/images/pets/eagle_egg.png',
+      chick: '/images/pets/eagle_young.png',
+      adult: '/images/pets/eagle_adult.png',
+      ultimate: '/images/pets/eagle_ultimate.png'
+    },
+    bg: '/images/pets/eagle_bg.png'
+  },
+  {
+    id: 'pet_starling',
+    name: '黑顶椋鸟',
+    stages: {
+      egg: '/images/pets/starling_egg.png',
+      chick: '/images/pets/starling_young.png',
+      adult: '/images/pets/starling_adult.png',
+      ultimate: '/images/pets/starling_ultimate.png'
+    },
+    bg: '/images/pets/starling_bg.png'
+  },
+  {
+    id: 'pet_bulbul',
+    name: '红耳鹎',
+    stages: {
+      egg: '/images/pets/bulbul_egg.png',
+      chick: '/images/pets/bulbul_young.png',
+      adult: '/images/pets/bulbul_adult.png',
+      ultimate: '/images/pets/bulbul_ultimate.png'
+    },
+    bg: '/images/pets/bulbul_bg.png'
+  }
+];
+
 const STAGES = [
   { key: 'egg', label: '鸟蛋', nextExp: 100 },
-  { key: 'chick', label: '幼鸟', nextExp: 300 },
-  { key: 'adult', label: '成鸟', nextExp: 600 },
-  { key: 'elder', label: '老年', nextExp: 1000 },
-  { key: 'max', label: '满级', nextExp: Infinity }
+  { key: 'chick', label: '幼年', nextExp: 300 },
+  { key: 'adult', label: '成年', nextExp: 600 },
+  { key: 'ultimate', label: '究极', nextExp: 1000 }
 ];
 
 const FEED_PRICE = 20;
@@ -338,7 +373,7 @@ function getStage(exp) {
   if (exp < 300) return STAGES[1];
   if (exp < 600) return STAGES[2];
   if (exp < 1000) return STAGES[3];
-  return STAGES[4];
+  return { ...STAGES[3], isMax: true, nextExpLabel: 'MAX' };
 }
 
 function getStageIndex(exp) {
@@ -346,9 +381,9 @@ function getStageIndex(exp) {
   if (exp < 300) return 1;
   if (exp < 600) return 2;
   if (exp < 1000) return 3;
-  return 4;
+  return 3;
 }
 
 module.exports = {
-  BIRDS, DIMENSIONS, STAGES, FEED_PRICE, FEED_EXP, getStage, getStageIndex
+  BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_PRICE, FEED_EXP, getStage, getStageIndex
 };

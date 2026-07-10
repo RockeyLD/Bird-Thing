@@ -6,6 +6,8 @@ const TUTORIAL_KEY = 'tutorialCompleted';
 let isGuestMode = false;
 let guestState = getDefaultState();
 
+const { PET_BIRDS } = require('../data/birds');
+
 function getDefaultState() {
   return {
     totalScore: 0,
@@ -13,7 +15,8 @@ function getDefaultState() {
     birdShed: [],
     learnedBirdIds: [],
     codex: {},
-    feedStock: 0
+    feedStock: 0,
+    ownedPetTypes: []
   };
 }
 
@@ -148,10 +151,40 @@ function consumeFeed() {
   return false;
 }
 
+function getOwnedPetTypes() {
+  const state = getUserState();
+  return state.ownedPetTypes || [];
+}
+
+function recordOwnedPetType(typeId) {
+  const state = getUserState();
+  if (!state.ownedPetTypes) state.ownedPetTypes = [];
+  if (!state.ownedPetTypes.includes(typeId)) {
+    state.ownedPetTypes.push(typeId);
+    setUserState(state);
+  }
+}
+
+function createRandomPet() {
+  const owned = getOwnedPetTypes();
+  const candidates = PET_BIRDS.filter(b => !owned.includes(b.id));
+  const pool = candidates.length > 0 ? candidates : PET_BIRDS;
+  const bird = pool[Math.floor(Math.random() * pool.length)];
+  const pet = {
+    birdId: bird.id,
+    exp: 0,
+    feedCount: 0,
+    isRetired: false
+  };
+  recordOwnedPetType(bird.id);
+  return pet;
+}
+
 module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
   getFeedStock, addFeedStock, consumeFeed,
+  getOwnedPetTypes, recordOwnedPetType, createRandomPet,
   loadFromCloud, setIsGuestMode, getIsGuestMode
 };

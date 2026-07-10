@@ -1,6 +1,22 @@
 /** 宠物养成 */
-const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed } = require('../../utils/storage');
-const { BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP } = require('../../data/birds');
+const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, createRandomPet } = require('../../utils/storage');
+const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP } = require('../../data/birds');
+
+function getPetBird(birdId) {
+  return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
+}
+
+function getPetImage(pet) {
+  if (!pet) return '';
+  const bird = getPetBird(pet.birdId);
+  const stage = getStage(pet.exp);
+  return bird.stages[stage.key] || bird.stages.egg;
+}
+
+function getPetBg(pet) {
+  if (!pet) return '/images/Background.png';
+  return getPetBird(pet.birdId).bg || '/images/Background.png';
+}
 
 Page({
   data: {
@@ -10,7 +26,9 @@ Page({
     stageIndex: 0,
     feedPrice: FEED_PRICE,
     feedExp: FEED_EXP,
-    feedStock: 0
+    feedStock: 0,
+    petImage: '',
+    petBg: '/images/Background.png'
   },
 
   onLoad() {
@@ -29,7 +47,7 @@ Page({
     const pet = getCurrentPet();
     const stageInfo = pet ? getStage(pet.exp) : null;
     if (stageInfo) {
-      stageInfo.isMax = stageInfo.nextExp === Infinity;
+      stageInfo.isMax = stageInfo.key === 'ultimate';
       stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
     }
     this.setData({
@@ -37,7 +55,9 @@ Page({
       pet,
       stageInfo,
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
-      feedStock: getFeedStock()
+      feedStock: getFeedStock(),
+      petImage: getPetImage(pet),
+      petBg: getPetBg(pet)
     });
   },
 
@@ -50,15 +70,10 @@ Page({
   },
 
   onAdoptTap() {
-    const pet = {
-      birdId: BIRDS[0].id,
-      exp: 0,
-      feedCount: 0,
-      isRetired: false
-    };
+    const pet = createRandomPet();
     setCurrentPet(pet);
     this.refresh();
-    wx.showToast({ title: '领养成功！', icon: 'success' });
+    wx.showToast({ title: `获得一颗${getPetBird(pet.birdId).name}蛋！`, icon: 'success' });
   },
 
   onFeedTap() {
@@ -75,11 +90,26 @@ Page({
       return;
     }
     const oldStageIndex = this.data.stageIndex;
+    const oldPet = this.data.pet;
     consumeFeed();
     const updated = feedPet(FEED_EXP);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (newStage > oldStageIndex) {
+    if (oldStageIndex === 3 && oldPet.exp < 1000 && updated.exp >= 1000) {
+      // 究极满级，获得新鸟蛋
+      const oldBird = getPetBird(oldPet.birdId);
+      wx.showModal({
+        title: '恭喜！',
+        content: `你的${oldBird.name}已经究极满级！获得一颗新的鸟蛋！`,
+        showCancel: false,
+        success: () => {
+          const newPet = createRandomPet();
+          setCurrentPet(newPet);
+          this.refresh();
+          wx.showToast({ title: `获得${getPetBird(newPet.birdId).name}蛋！`, icon: 'success' });
+        }
+      });
+    } else if (newStage > oldStageIndex) {
       wx.showModal({
         title: '恭喜升级！',
         content: `你的宠物鸟进化到了「${getStage(updated.exp).label}」阶段！`,
@@ -88,27 +118,5 @@ Page({
     } else {
       wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });
     }
-  },
-
-  onReleaseTap() {
-    const pet = getCurrentPet();
-    if (!pet || getStageIndex(pet.exp) < 4) {
-      wx.showToast({ title: '还没满级呢', icon: 'none' });
-      return;
-    }
-    wx.showModal({
-      title: '放归自然',
-      content: '确定要放归这只满级的宠物鸟吗？它将加入你的鸟舍收藏。',
-      success: (res) => {
-        if (res.confirm) {
-          const state = getUserState();
-          state.birdShed.push({ ...pet, isRetired: true });
-          state.currentBird = null;
-          setUserState(state);
-          this.refresh();
-          wx.showToast({ title: '放归成功！', icon: 'success' });
-        }
-      }
-    });
   }
 });

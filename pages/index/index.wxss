@@ -42,7 +42,7 @@
 
 .pet-egg { font-size: 120rpx; margin-bottom: 20rpx; }
 
-.pet-avatar { font-size: 140rpx; margin-bottom: 16rpx; }
+.pet-avatar { width: 200rpx; height: 200rpx; margin: 0 auto 16rpx; display: block; }
 
 .pet-avatar.egg { animation: float 3s ease-in-out infinite; }
 .pet-avatar.chick { animation: bounce 2s ease-in-out infinite; }
