@@ -17,6 +17,8 @@ Page({
       this.getTabBar().setData({ selected: 1 });
     }
   },
+
+  onSearch(e) {
     const keyword = e.detail.value.toLowerCase();
     this.setData({
       keyword,
