@@ -1,13 +1,4 @@
-<<<<<<< HEAD
 .page { display: flex; flex-direction: column; height: 100vh; position: relative; }
-=======
-.page {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background: var(--bg);
-}
->>>>>>> 7dd0ad430a0f7fbf1cb017501c04d3f6c6a45d94
 
 .nav-bar {
   padding-bottom: 20rpx;
