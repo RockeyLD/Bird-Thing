@@ -8,7 +8,11 @@ page {
   --text-secondary: #8A9A90;
   --accent: #E8705B;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: url('./images/Background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: var(--text);
 }
 
