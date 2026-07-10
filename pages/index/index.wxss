@@ -10,7 +10,7 @@
 
 .nav-title { font-size: 40rpx; font-weight: 700; color: var(--text); }
 
-.scrollarea { flex: 1; overflow-y: hidden; }
+.scrollarea { flex: 1; overflow-y: auto; }
 
 .pet-card { text-align: center; padding: 50rpx 30rpx; }
 
