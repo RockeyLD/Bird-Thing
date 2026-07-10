@@ -96,7 +96,7 @@ page { background: transparent; overflow: hidden; }
 }
 
 .pet-avatar {
-  font-size: 140rpx;
+  font-size: 400rpx;
   display: inline-block;
   transition: transform 0.3s ease;
   line-height: 1;
