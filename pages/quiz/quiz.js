@@ -89,7 +89,7 @@ Page({
     const entry = state.codex[this.data.bird.id];
     entry.mastered = true;
     entry.lastReviewAt = Date.now();
-    if (!entry.learnedDimensions.includes('quiz')) {
+    if (entry.learnedDimensions.length < 5) {
       entry.learnedDimensions.push('quiz');
     }
     if (!state.learnedBirdIds.includes(this.data.bird.id)) {
