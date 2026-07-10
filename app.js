@@ -4,6 +4,7 @@ App({
     userInfo: null,
     openid: null,
     cloudInited: false,
+    isGuest: false,
     statusBarHeight: 0,
     navBarHeight: 44,
     menuButtonRight: 0

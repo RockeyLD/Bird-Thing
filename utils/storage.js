@@ -3,6 +3,9 @@ const { syncToCloud } = require('./cloud');
 const USER_KEY = 'userState';
 const TUTORIAL_KEY = 'tutorialCompleted';
 
+let isGuestMode = false;
+let guestState = getDefaultState();
+
 function getDefaultState() {
   return {
     totalScore: 0,
@@ -13,7 +16,21 @@ function getDefaultState() {
   };
 }
 
+function setIsGuestMode(v) {
+  isGuestMode = v;
+  if (v) {
+    guestState = getDefaultState();
+  }
+  const app = getApp();
+  if (app) app.globalData.isGuest = v;
+}
+
+function getIsGuestMode() {
+  return isGuestMode;
+}
+
 function getUserState() {
+  if (isGuestMode) return guestState;
   try {
     const data = wx.getStorageSync(USER_KEY);
     return data || getDefaultState();
@@ -23,6 +40,10 @@ function getUserState() {
 }
 
 function setUserState(state) {
+  if (isGuestMode) {
+    guestState = state;
+    return;
+  }
   wx.setStorageSync(USER_KEY, state);
   try {
     syncToCloud(state).catch(() => {});
@@ -107,5 +128,5 @@ module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
-  loadFromCloud
+  loadFromCloud, setIsGuestMode, getIsGuestMode
 };

@@ -1,0 +1,19 @@
+<view class="page login-page">
+  <view class="login-wrapper">
+    <view class="brand">
+      <view class="brand-icon">🐦</view>
+      <view class="brand-title">Bird Thing</view>
+      <view class="brand-subtitle">鸟类科普养成游戏</view>
+    </view>
+
+    <view class="actions">
+      <button class="btn-login" bindtap="onWxLogin">
+        <text>微信一键登录</text>
+      </button>
+      <button class="btn-guest" bindtap="onGuestLogin">
+        <text>访客模式</text>
+      </button>
+      <view class="guest-hint">访客模式下游戏进度不会保存</view>
+    </view>
+  </view>
+</view>

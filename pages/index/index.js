@@ -1,4 +1,4 @@
-const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
 const { BIRDS, getStage, FEED_PRICE, FEED_EXP } = require('../../data/birds');
 
@@ -10,6 +10,7 @@ Page({
     feedPrice: FEED_PRICE,
     feedExp: FEED_EXP,
     isLoggedIn: false,
+    isGuest: false,
     quickActions: [
       { label: '答题学鸟', icon: '💡', page: '/pages/library/library', color: '#4CAF82' },
       { label: '我的图鉴', icon: '📖', page: '/pages/codex/codex', color: '#2196F3' },
@@ -37,7 +38,8 @@ Page({
 
   checkLogin() {
     const openid = wx.getStorageSync('openid');
-    this.setData({ isLoggedIn: !!openid });
+    const isGuest = getIsGuestMode();
+    this.setData({ isLoggedIn: !!openid || isGuest, isGuest });
   },
 
   refresh() {
@@ -56,6 +58,19 @@ Page({
   },
 
   onLoginTap() {
+    if (getIsGuestMode()) {
+      wx.showModal({
+        title: '切换账号',
+        content: '当前为访客模式，是否返回登录页？',
+        confirmText: '去登录',
+        success: (res) => {
+          if (res.confirm) {
+            wx.reLaunch({ url: '/pages/login/login' });
+          }
+        }
+      });
+      return;
+    }
     if (!isCloudReady()) {
       wx.setStorageSync('openid', 'local-user');
       this.setData({ isLoggedIn: true });
