@@ -1,4 +1,4 @@
-const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
 const { BIRDS, getStage, FEED_PRICE, FEED_EXP } = require('../../data/birds');
 
@@ -114,12 +114,12 @@ Page({
   },
 
   onFeedTap() {
-    const user = getUserState();
-    if (user.totalScore < FEED_PRICE) {
-      wx.showToast({ title: '积分不足，去答题吧', icon: 'none' });
+    const stock = getFeedStock();
+    if (stock <= 0) {
+      wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
-    addScore(-FEED_PRICE);
+    consumeFeed();
     const updated = feedPet(FEED_EXP);
     this.refresh();
     wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });

@@ -47,7 +47,7 @@
               <view class="progress-fill" style="width: {{pet.exp / stageInfo.nextExp * 100}}%"></view>
             </view>
             <button class="btn-secondary feed-btn" bindtap="onFeedTap">
-              喂食 (-{{feedPrice}}积分)
+              立即喂食
             </button>
           </view>
         </view>

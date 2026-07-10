@@ -8,9 +8,12 @@ Page({
     FEED_PRICE
   },
 
-  onLoad() {
+  onLoad(options) {
     getApp().setNavBarData(this);
     this.refresh();
+    if (options.noStock) {
+      wx.showToast({ title: '没有粮食啦！来商店看看吧～', icon: 'none', duration: 2500 });
+    }
   },
 
   onShow() {
