@@ -148,6 +148,6 @@
 .knowledge-section-title { font-size: 30rpx; font-weight: 700; color: var(--primary); margin-bottom: 12rpx; }
 .knowledge-text { font-size: 28rpx; line-height: 1.6; color: var(--text-secondary); }
 
-.card-modal-inner .btn-primary { margin: 20rpx 40rpx 40rpx 40rpx; flex-shrink: 0; background: var(--primary); color: #fff; border-radius: 24rpx; font-size: 32rpx; font-weight: 600; padding: 24rpx 0; border: none; }
+.card-modal-inner .btn-primary { margin: 20rpx 40rpx 40rpx 40rpx; flex-shrink: 0; background: var(--primary); color: #fff; border-radius: 24rpx; font-size: 32rpx; font-weight: 600; height: 88rpx; line-height: 88rpx; padding: 0; border: none; text-align: center; }
 .btn-primary { background: var(--primary); color: #fff; border-radius: 24rpx; font-size: 32rpx; font-weight: 600; padding: 24rpx 0; border: none; }
 .btn-primary:active { transform: scale(0.97); }
