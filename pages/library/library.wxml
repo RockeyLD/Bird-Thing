@@ -39,37 +39,41 @@
 
   <!-- 鸟类知识卡片弹窗 -->
   <view wx:if="{{showCard}}" class="card-modal" catchtap="onMaskTap">
-    <view class="card-modal-content" catchtap="onContentTap">
-      <view class="bird-header-modal">
-        <image wx:if="{{cardBird.cover}}" class="bird-cover-img" src="{{cardBird.cover}}" mode="aspectFit" />
-        <view wx:else class="bird-emoji">🐦</view>
-        <view class="title-lg">{{cardBird.name}}</view>
-        <view class="text-sm">{{cardBird.enName}}</view>
-        <view class="bird-tags">
-          <text class="tag" wx:for="{{cardBird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+    <view class="card-modal-inner" catchtap="onContentTap">
+      <scroll-view scroll-y class="card-scroll">
+        <view class="card-inner-padding">
+          <view class="bird-header-modal">
+            <image wx:if="{{cardBird.cover}}" class="bird-cover-img" src="{{cardBird.cover}}" mode="aspectFit" />
+            <view wx:else class="bird-emoji">🐦</view>
+            <view class="title-lg">{{cardBird.name}}</view>
+            <view class="text-sm">{{cardBird.enName}}</view>
+            <view class="bird-tags">
+              <text class="tag" wx:for="{{cardBird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+            </view>
+          </view>
+          <view class="knowledge-card-modal">
+            <view wx:if="{{cardBird.persona}}" class="knowledge-section">
+              <view class="knowledge-section-title">🎭 人设</view>
+              <view class="knowledge-text">{{cardBird.persona}}</view>
+            </view>
+            <view wx:if="{{cardBird.identification}}" class="knowledge-section">
+              <view class="knowledge-section-title">👁 辨识</view>
+              <view class="knowledge-text">{{cardBird.identification}}</view>
+            </view>
+            <view wx:if="{{cardBird.habit}}" class="knowledge-section">
+              <view class="knowledge-section-title">🌿 习性</view>
+              <view class="knowledge-text">{{cardBird.habit}}</view>
+            </view>
+            <view wx:if="{{cardBird.trivia}}" class="knowledge-section">
+              <view class="knowledge-section-title">💡 冷知识</view>
+              <view class="knowledge-text">{{cardBird.trivia}}</view>
+            </view>
+            <view wx:if="{{!cardBird.persona}}" class="knowledge-section">
+              <view class="knowledge-text">{{cardBird.desc}}</view>
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="knowledge-card-modal">
-        <view wx:if="{{cardBird.persona}}" class="knowledge-section">
-          <view class="knowledge-section-title">🎭 人设</view>
-          <view class="knowledge-text">{{cardBird.persona}}</view>
-        </view>
-        <view wx:if="{{cardBird.identification}}" class="knowledge-section">
-          <view class="knowledge-section-title">👁 辨识</view>
-          <view class="knowledge-text">{{cardBird.identification}}</view>
-        </view>
-        <view wx:if="{{cardBird.habit}}" class="knowledge-section">
-          <view class="knowledge-section-title">🌿 习性</view>
-          <view class="knowledge-text">{{cardBird.habit}}</view>
-        </view>
-        <view wx:if="{{cardBird.trivia}}" class="knowledge-section">
-          <view class="knowledge-section-title">💡 冷知识</view>
-          <view class="knowledge-text">{{cardBird.trivia}}</view>
-        </view>
-        <view wx:if="{{!cardBird.persona}}" class="knowledge-section">
-          <view class="knowledge-text">{{cardBird.desc}}</view>
-        </view>
-      </view>
+      </scroll-view>
       <button class="btn-primary" bindtap="onStartQuiz">开始答题</button>
     </view>
   </view>
