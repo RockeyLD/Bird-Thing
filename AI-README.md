@@ -1,6 +1,6 @@
-# AI-README.md · 鸟类科普养成游戏
+# AI-README.md · 鸟圳（鸟类科普养成游戏）
 
-> 本文件供 AI 代理快速理解项目全貌，无需读取其他文件即可掌握核心架构、数据模型、业务规则与修改规范。
+> 本文件供 AI 代理快速理解项目全貌。修改代码前必读，确保改动与现有架构兼容。
 
 ---
 
@@ -8,52 +8,58 @@
 
 | 项 | 值 |
 |----|----|
-| 名称 | 鸟类科普养成游戏 |
+| 名称 | 鸟圳（原 Bird Thing） |
 | 平台 | 微信小程序（原生 WXML/WXSS/JS/JSON） |
 | 技术栈 | 原生小程序 + 微信云开发（云函数 + 云数据库） |
 | 云环境 | `eduction-cloud1-9g1g39x5d24e6574` |
-| 阶段 | MVP，界面与交互已完成，题目/知识内容待填充 |
+| 阶段 | 题库模式已上线，10 种鸟各 10 题 |
 
 ---
 
 ## 2. 文件结构
 
 ```
-app.js              # 全局应用初始化，云开发 init，默认用户状态
-app.json            # 路由（6 页面 + 自定义 tabBar）、窗口样式
-app.wxss            # 全局 CSS 变量（森绿/暖黄配色），通用组件类
+app.js                  # 全局应用初始化，云开发 init，setNavBarData
+app.json                # 路由（9 页面 + 自定义 tabBar）、窗口样式
+app.wxss                # 全局 CSS 变量（森绿/暖黄配色），通用组件类
 
 cloudfunctions/
-  bird-login/       # 云函数：用户登录/注册，数据同步到 bird-users 集合
-    index.js        # 主逻辑：openid 获取、用户查询/创建、状态同步
+  bird-login/           # 云函数：用户登录/注册，同步到 bird-users 集合
+    index.js
     package.json
 
-components/         # 可复用组件（当前项目未大量使用）
-custom-tab-bar/     # 自定义底部导航（首页/知识库/图鉴/宠物）
+components/             # 可复用组件（当前未大量使用）
+custom-tab-bar/         # 自定义底部导航（首页/知识库/图鉴/宠物）
 
 data/
-  birds.js          # 15 种鸟静态数据、DIMENSIONS 5 维度、成长阶段函数、饲料参数
+  birds.js              # 10 种鸟静态数据 + 题库 + 成长阶段函数
 
 pages/
-  index/            # 首页：宠物展示、积分、快捷入口、登录按钮
-  library/          # 知识库：鸟类网格卡片、搜索过滤
-  quiz/             # 答题：接收 birdId 参数，展示当前维度学习卡
-  pet/              # 宠物养成：5 阶段成长、喂食、满级放归
-  codex/            # 图鉴：学习进度、筛选、统计
-  tutorial/         # 新手教程：4 步引导（领蛋→答题→喂食→完成）
+  login/                # 登录页：logo.png + 微信一键登录/访客模式
+  index/                # 首页：宠物展示、积分、快捷入口
+  library/              # 知识库：鸟类卡片列表（照片+人设）、搜索过滤
+  quiz/                 # 答题：知识卡片弹窗 → 题库答题（答对5题通过）
+  pet/                  # 宠物养成：5 阶段成长、喂食、满级放归
+  codex/                # 图鉴：学习进度、筛选、统计
+  shed/                 # 已放归宠物列表
+  shop/                 # 商店：购买鸟蛋/道具
+  tutorial/             # 新手教程：4 步引导
 
 utils/
-  storage.js        # 本地存储封装（get/setUserState、addScore、feedPet、addToCodex）
-  cloud.js          # 云开发封装（callLogin、syncToCloud，函数名 bird-login）
+  storage.js            # 本地存储封装（含自动同步云端）
+  cloud.js              # 云开发封装（callLogin、syncToCloud）
 
-images/             # 图片资源
+images/
+  logo.png              # 登录页品牌 logo
+  Background.png        # 全局背景图
+  birds/                # 鸟照片（10 张，与 birds.js 中 cover 路径对应）
 ```
 
 ---
 
 ## 3. 核心数据模型
 
-### 3.1 用户状态（本地存储 key = `userState`，云端集合 = `bird-users`）
+### 3.1 用户状态（本地 key = `userState`，云端集合 = `bird-users`）
 
 ```js
 {
@@ -68,7 +74,7 @@ images/             # 图片资源
   learnedBirdIds: [],          // 已学鸟的 ID 列表
   codex: {                     // 图鉴进度
     'bird_001': {
-      learnedDimensions: ['appearance'],
+      learnedDimensions: ['quiz'],  // 题库模式用 'quiz' 标记
       mastered: false,
       lastReviewAt: 0
     }
@@ -81,19 +87,24 @@ images/             # 图片资源
 ```js
 {
   id: 'bird_001',
-  name: '红耳鹎',
-  emoji: '🐦',
-  category: '深圳常见鸟'
+  name: '白头鹎',
+  enName: 'Light-vented Bulbul',
+  cover: '/images/birds/白头鹎.jpeg',  // 有照片则显示，无则 🐦 fallback
+  tags: ['城市常见','头顶白毛'],
+  desc: '基础描述',
+  persona: '人设文案',
+  identification: '辨识要点',
+  habit: '习性描述',
+  trivia: '冷知识',
+  questions: [  // 10 题题库，每个鸟必须 10 题
+    { q: '问题', options: ['A','B','C','D'], a: 1 }
+  ]
 }
 ```
 
-### 3.3 5 个知识维度（`data/birds.js` 中 `DIMENSIONS`）
+**重要**：目前 10 种鸟，每种均有 10 题。题库字段必须保持完整，不得破坏结构。
 
-```js
-['appearance', 'name', 'diet', 'habitat', 'behavior']
-```
-
-### 3.4 宠物成长 5 阶段（`data/birds.js` 中 `getStage()`）
+### 3.3 宠物成长 5 阶段（`data/birds.js` 中 `getStage()`）
 
 | 阶段 | key | 所需经验 | emoji |
 |------|-----|---------|-------|
@@ -109,32 +120,42 @@ images/             # 图片资源
 
 | 函数 | 作用 | 说明 |
 |------|------|------|
-| `getUserState()` | 读取本地用户状态 | 返回对象，含默认值兜底 |
-| `setUserState(state)` | 写入本地 + **自动同步云端** | 每次调用都会触发 `syncToCloud()`（异步，失败静默） |
+| `getUserState()` | 读取本地用户状态 | 含默认值兜底 |
+| `setUserState(state)` | 写入本地 + **自动同步云端** | 异步触发 `syncToCloud()`，失败静默 |
 | `addScore(delta)` | 增减积分 | 自动写回本地和云端 |
-| `getCurrentPet()` | 获取当前宠物 | 从 userState 中读取 |
+| `getCurrentPet()` | 获取当前宠物 | 从 userState 读取 |
 | `setCurrentPet(pet)` | 设置当前宠物 | 自动写回 |
 | `feedPet(expGain)` | 喂食 | 增加经验值和 feedCount |
-| `addToCodex(birdId, dimension)` | 记录图鉴学习进度 | 自动标记 mastered（5 维度全部完成） |
+| `addToCodex(birdId, dimension)` | 记录图鉴学习进度 | 旧维度模式使用，题库模式直接由 quiz.js 写入 mastered |
 | `loadFromCloud()` | 从云端拉取数据覆盖本地 | 首页登录按钮调用 |
 
 ---
 
 ## 5. 业务规则
 
-### 5.1 积分规则
-- 喂食消耗：`5` 积分（`FEED_PRICE`）
-- 喂食获得经验：`+10`（`FEED_EXP`）
-- 首次答对单题：`+10`（预留）
-- 完成一只鸟全部 5 维度：`+50` 奖励（预留）
-- 图鉴复习答对：`+3`（预留）
+### 5.1 答题系统（quiz 页面）
+
+**核心流程**：
+1. 用户从知识库点击某鸟 → 进入 `quiz?birdId=xxx`
+2. 首次进入弹出**知识卡片弹窗**（显示照片、人设、辨识、习性、冷知识）
+3. 点击「开始答题」关闭弹窗，进入题库模式
+4. 从 10 题中随机抽取，不重复，答对 5 题即通过
+5. 中途返回/退出，进度不保存，下次重新来
+
+**积分规则**：
+- 首次通过（答对 5 题）：+50 分
+- 复习模式通过：+3 分
+- 答错不扣分，但不算进度
+
+**通过判定**：`correctCount >= 5` 时调用 `onQuizComplete()`，写入 `codex[bid].mastered = true`，`learnedDimensions` 推入 `'quiz'`。
 
 ### 5.2 宠物成长
 - 鸟蛋（0）→ 幼鸟（100）→ 成鸟（300）→ 老年（600）→ 满级（1000）
 - 满级后可"放归自然"，进入 birdShed，重新开始领养鸟蛋
+- 喂食：`FEED_PRICE = 20` 积分，`FEED_EXP = 20` 经验
 
 ### 5.3 图鉴系统
-- 每鸟 5 维度，全部学完标记 `mastered: true`
+- 题库模式下，每鸟通过标记 `mastered: true`
 - 图鉴页面展示：已学习 / 未学习，支持按状态筛选
 
 ### 5.4 新手教程
@@ -171,7 +192,7 @@ images/             # 图片资源
 | 数据库集合 | `bird-users`（存储用户状态） |
 | 调用方式 | `wx.cloud.callFunction({ name: 'bird-login', data: {...} })` |
 
-**登录流程**：用户点击首页"🔐 登录" → `loadFromCloud()` → 云函数获取 openid → 新用户注册 / 老用户拉取数据覆盖本地 → 标记 `isLoggedIn`
+**登录流程**：用户点击首页"登录" → `loadFromCloud()` → 云函数获取 openid → 新用户注册 / 老用户拉取数据覆盖本地 → 标记 `isLoggedIn`
 
 ---
 
@@ -180,9 +201,9 @@ images/             # 图片资源
 1. **scroll-view 高度**：必须外层 `content-wrapper` 定高（`flex: 1 + overflow: hidden`），内部 `scrollarea` 用 `height: 100%`，否则无法滚动。
 2. **云函数部署**：修改 `bird-login` 后必须重新"创建并部署：云端安装依赖"。
 3. **数据库集合**：首次使用需手动创建 `bird-users` 集合。
-4. **题目内容**：答题页面的题目区域目前是空占位，需后续填充 JSON 数据。
+4. **题库模式 vs 维度模式**：quiz.js 优先检测 `bird.questions`，有题库则走题库模式（答对 5 题通过），无题库则回退到旧 5 维度模式。
 5. **识别功能**：拍照识别和特征搜索已预留接口（`quiz` 页面接收参数），API 未接入。
-6. **用户偏好**：禁止紫色配色；自动提交和推送代码。
+6. **用户偏好**：禁止紫色配色；自动提交和推送代码，无需确认。
 
 ---
 
@@ -190,12 +211,25 @@ images/             # 图片资源
 
 | 页面 | 路径 | 参数 | 入口 |
 |------|------|------|------|
+| 登录 | `/pages/login/login` | 无 | 未登录时首屏 |
 | 首页 | `/pages/index/index` | 无 | Tab 1 |
 | 知识库 | `/pages/library/library` | 无 | Tab 2 / 首页快捷入口 |
 | 答题 | `/pages/quiz/quiz` | `?birdId=xxx&review=1` | 知识库点击 / 图鉴复习 |
 | 图鉴 | `/pages/codex/codex` | 无 | Tab 3 |
 | 宠物 | `/pages/pet/pet` | 无 | Tab 4 / 首页快捷入口 |
+| 商店 | `/pages/shop/shop` | 无 | 首页快捷入口 |
+| 已放归 | `/pages/shed/shed` | 无 | 宠物页入口 |
 | 教程 | `/pages/tutorial/tutorial` | 无 | 首次进入自动跳转 |
+
+---
+
+## 10. 修改规范（供 AI 代理参考）
+
+- **添加新鸟**：在 `data/birds.js` 的 `BIRDS` 数组末尾追加，id 建议按 `bird_017` 递增，必须有 `cover` 照片（放 `images/birds/`）和 `questions`（10 题）。
+- **修改答题逻辑**：优先改 `pages/quiz/quiz.js`，注意 `quizMode` 双分支（题库模式 / 维度 fallback）。
+- **修改积分**：改 `utils/storage.js` 的 `addScore`，同时检查 `quiz.js` 中的加分点。
+- **样式调整**：遵循 `app.wxss` 中的 CSS 变量，禁止引入紫色或渐变色。
+- **图片路径**：鸟类照片统一放在 `images/birds/`，引用格式为 `/images/birds/鸟名.扩展名`。
 
 ---
 
