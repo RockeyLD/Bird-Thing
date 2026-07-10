@@ -1,6 +1,17 @@
-const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
-const { BIRDS, getStage, FEED_PRICE, FEED_EXP } = require('../../data/birds');
+const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP } = require('../../data/birds');
+
+function getPetBird(birdId) {
+  return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
+}
+
+function getPetImage(pet) {
+  if (!pet) return '';
+  const bird = getPetBird(pet.birdId);
+  const stage = getStage(pet.exp);
+  return bird.stages[stage.key] || bird.stages.egg;
+}
 
 Page({
   data: {
@@ -11,6 +22,7 @@ Page({
     feedExp: FEED_EXP,
     isLoggedIn: false,
     isGuest: false,
+    petImage: '',
     quickActions: [
       { label: '答题学鸟', icon: '💡', page: '/pages/library/library', color: '#4CAF82' },
       { label: '我的图鉴', icon: '📖', page: '/pages/codex/codex', color: '#2196F3' },
@@ -50,13 +62,14 @@ Page({
     const pet = getCurrentPet();
     const stageInfo = pet ? getStage(pet.exp) : null;
     if (stageInfo) {
-      stageInfo.isMax = stageInfo.nextExp === Infinity;
-      stageInfo.nextExpLabel = stageInfo.isMax ? '满级' : stageInfo.nextExp;
+      stageInfo.isMax = stageInfo.key === 'ultimate';
+      stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
     }
     this.setData({
       user,
       pet,
-      stageInfo
+      stageInfo,
+      petImage: getPetImage(pet)
     });
   },
 
@@ -97,15 +110,10 @@ Page({
   },
 
   onAdoptTap() {
-    const pet = {
-      birdId: BIRDS[0].id,
-      exp: 0,
-      feedCount: 0,
-      isRetired: false
-    };
+    const pet = createRandomPet();
     setCurrentPet(pet);
     this.refresh();
-    wx.showToast({ title: '领养成功！', icon: 'success' });
+    wx.showToast({ title: `获得${getPetBird(pet.birdId).name}蛋！`, icon: 'success' });
   },
 
   onQuickTap(e) {
@@ -114,14 +122,42 @@ Page({
   },
 
   onFeedTap() {
+    const pet = getCurrentPet();
+    if (!pet) {
+      wx.showToast({ title: '先领养一只鸟吧', icon: 'none' });
+      return;
+    }
     const stock = getFeedStock();
     if (stock <= 0) {
       wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
+    const oldStageIndex = getStageIndex(pet.exp);
     consumeFeed();
     const updated = feedPet(FEED_EXP);
     this.refresh();
-    wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });
+    const newStage = getStageIndex(updated.exp);
+    if (oldStageIndex === 3 && pet.exp < 1000 && updated.exp >= 1000) {
+      const oldBird = getPetBird(pet.birdId);
+      wx.showModal({
+        title: '恭喜！',
+        content: `${oldBird.name}已经究极满级！获得一颗新的鸟蛋！`,
+        showCancel: false,
+        success: () => {
+          const newPet = createRandomPet();
+          setCurrentPet(newPet);
+          this.refresh();
+          wx.showToast({ title: `获得${getPetBird(newPet.birdId).name}蛋！`, icon: 'success' });
+        }
+      });
+    } else if (newStage > oldStageIndex) {
+      wx.showModal({
+        title: '恭喜升级！',
+        content: `宠物鸟进化到了「${getStage(updated.exp).label}」阶段！`,
+        showCancel: false
+      });
+    } else {
+      wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });
+    }
   }
 });

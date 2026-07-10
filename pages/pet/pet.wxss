@@ -96,7 +96,8 @@ page { background: transparent; overflow: hidden; }
 }
 
 .pet-avatar {
-  font-size: 400rpx;
+  width: 500rpx;
+  height: 500rpx;
   display: inline-block;
   transition: transform 0.3s ease;
   line-height: 1;
@@ -114,7 +115,7 @@ page { background: transparent; overflow: hidden; }
   animation: bounce 2.5s ease-in-out infinite;
 }
 
-.pet-avatar.elder {
+.pet-avatar.ultimate {
   animation: float 4s ease-in-out infinite;
 }
 
@@ -197,19 +198,6 @@ page { background: transparent; overflow: hidden; }
   height: 64rpx;
   line-height: 64rpx;
   font-size: 26rpx;
-}
-
-.release-card {
-  margin-bottom: 0;
-  border: 2rpx solid var(--accent);
-}
-
-.release-action-btn {
-  margin-top: 8rpx;
-  height: 64rpx;
-  line-height: 64rpx;
-  font-size: 26rpx;
-  background: var(--accent);
 }
 
 @keyframes float {

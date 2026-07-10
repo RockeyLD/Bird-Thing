@@ -32,13 +32,7 @@
             <button class="btn-primary adopt-btn" bindtap="onAdoptTap">领养鸟蛋</button>
           </view>
           <view wx:else class="pet-show">
-            <view class="pet-avatar {{stageInfo.key}}">
-              <text wx:if="{{stageInfo.key === 'egg'}}">🥚</text>
-              <text wx:elif="{{stageInfo.key === 'chick'}}">🐣</text>
-              <text wx:elif="{{stageInfo.key === 'adult'}}">🐦</text>
-              <text wx:elif="{{stageInfo.key === 'elder'}}">🦅</text>
-              <text wx:else>🦜</text>
-            </view>
+            <image class="pet-avatar {{stageInfo.key}}" src="{{petImage}}" mode="aspectFit" />
             <view class="pet-info">
               <view class="title-md">{{stageInfo.label}}</view>
               <view class="text-sm">经验 {{pet.exp}} / {{stageInfo.nextExpLabel}}</view>

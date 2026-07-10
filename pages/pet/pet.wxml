@@ -1,5 +1,5 @@
 <view class="page">
-  <image class="bg-image" src="/images/Background.png" mode="aspectFill" />
+  <image class="bg-image" src="{{petBg}}" mode="aspectFill" />
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="nav-title">宠物养成</view>
   </view>
@@ -20,13 +20,7 @@
     </view>
 
     <view wx:else class="pet-avatar-wrap">
-      <view class="pet-avatar {{stageInfo.key}}">
-        <text wx:if="{{stageInfo.key === 'egg'}}">🥚</text>
-        <text wx:elif="{{stageInfo.key === 'chick'}}">🐣</text>
-        <text wx:elif="{{stageInfo.key === 'adult'}}">🐦</text>
-        <text wx:elif="{{stageInfo.key === 'elder'}}">🦅</text>
-        <text wx:else>🦜✨</text>
-      </view>
+      <image class="pet-avatar {{stageInfo.key}}" src="{{petImage}}" mode="aspectFit" />
       <view class="stage-label">{{stageInfo.label}}</view>
     </view>
   </view>
@@ -55,13 +49,6 @@
         <view class="stock-tag">库存: {{feedStock}}</view>
       </view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
-    </view>
-
-    <!-- 放归 -->
-    <view wx:if="{{stageInfo.key === 'max'}}" class="card release-card">
-      <view class="title-md">🌳 放归自然</view>
-      <view class="text-sm">你的宠物鸟已经达到满级，可以选择放归自然，开启下一只鸟的养成。</view>
-      <button class="btn-primary release-action-btn" bindtap="onReleaseTap">放归自然</button>
     </view>
   </view>
 </view>
