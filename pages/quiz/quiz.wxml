@@ -5,17 +5,6 @@
     <view class="score-badge">⭐ {{user.totalScore}}</view>
   </view>
 
-  <!-- 维度标签 -->
-  <view class="dim-tabs">
-    <view
-      class="dim-tab {{index === dimIndex ? 'active' : ''}}"
-      wx:for="{{dimensions}}"
-      wx:key="key"
-    >
-      {{item.label}}
-    </view>
-  </view>
-
   <!-- 鸟类知识卡片弹窗 -->
   <view wx:if="{{showCard}}" class="card-modal" catchtap="onMaskTap">
     <view class="card-modal-content" catchtap="onContentTap">
@@ -40,7 +29,10 @@
       <view class="container">
         <!-- 模拟答题区（题目后续补充） -->
         <view class="card quiz-card">
-          <view class="quiz-title">📝 知识问答</view>
+          <view class="quiz-header">
+            <view class="quiz-title">📝 知识问答</view>
+            <view class="dim-tag">{{dimension.label}}</view>
+          </view>
           <view class="quiz-question">{{bird.name}} 的以下特征，哪个是正确的？</view>
           <view class="options">
             <view class="option {{selected === 0 ? (isCorrect ? 'correct' : 'wrong') : ''}} {{answered && selected !== 0 && isCorrect ? '' : ''}}" bindtap="onOptionTap" data-idx="0">

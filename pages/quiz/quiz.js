@@ -21,13 +21,19 @@ Page({
     getApp().setNavBarData(this);
     const bird = BIRDS.find(b => b.id === options.birdId) || BIRDS[0];
     const review = options.review === '1';
-    this.setData({ bird, review, dimIndex: 0 });
-    this.loadDimension(0);
+    this.setData({ bird, review });
+    this.loadRandomDimension();
   },
 
-  loadDimension(idx) {
-    const dim = DIMENSIONS[idx];
-    if (!dim) {
+  getRemainingDimensions() {
+    const user = getUserState();
+    const learned = user.codex[this.data.bird.id]?.learnedDimensions || [];
+    return DIMENSIONS.filter(d => !learned.includes(d.key));
+  },
+
+  loadRandomDimension() {
+    const remaining = this.getRemainingDimensions();
+    if (remaining.length === 0) {
       wx.showModal({
         title: '学习完成',
         content: '你已经完成了这只鸟的所有维度学习！',
@@ -36,6 +42,8 @@ Page({
       });
       return;
     }
+    const dim = remaining[Math.floor(Math.random() * remaining.length)];
+    const idx = DIMENSIONS.findIndex(d => d.key === dim.key);
     this.setData({
       dimension: dim,
       dimIndex: idx,
@@ -49,7 +57,6 @@ Page({
   onOptionTap(e) {
     if (this.data.answered) return;
     const idx = e.currentTarget.dataset.idx;
-    // MVP 阶段无真实题目，模拟答题
     const isCorrect = idx === 0;
     const score = this.data.review ? 3 : 10;
     if (isCorrect) {
@@ -61,7 +68,7 @@ Page({
   },
 
   onNextTap() {
-    this.loadDimension(this.data.dimIndex + 1);
+    this.loadRandomDimension();
   },
 
   onStartQuiz() {
