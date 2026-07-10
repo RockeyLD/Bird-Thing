@@ -43,46 +43,6 @@
   font-weight: 600;
 }
 
-/* 鸟舍展开面板 */
-.shed-panel {
-  background: var(--bg);
-  padding: 0 30rpx 20rpx;
-  max-height: 320rpx;
-  overflow-y: auto;
-  flex-shrink: 0;
-}
-
-.shed-panel-title {
-  font-size: 28rpx;
-  font-weight: 600;
-  margin-bottom: 16rpx;
-  color: var(--text);
-}
-
-.shed-empty {
-  text-align: center;
-  padding: 40rpx 0;
-  grid-column: 1 / -1;
-}
-
-.shed-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20rpx;
-}
-
-.shed-item {
-  background: var(--card);
-  border-radius: 20rpx;
-  padding: 20rpx;
-  text-align: center;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
-}
-
-.shed-emoji {
-  font-size: 60rpx;
-}
-
 /* 中间区域：宠物展示，垂直居中 */
 .pet-center {
   flex: 1;

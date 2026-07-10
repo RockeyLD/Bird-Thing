@@ -6,7 +6,8 @@
     "pages/quiz/quiz",
     "pages/pet/pet",
     "pages/codex/codex",
-    "pages/tutorial/tutorial"
+    "pages/tutorial/tutorial",
+    "pages/shed/shed"
   ],
   "tabBar": {
     "custom": true,

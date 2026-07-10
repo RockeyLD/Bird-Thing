@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
+    <view class="back-btn" bindtap="onBackTap">←</view>
+    <view class="nav-title">我的鸟舍</view>
+    <view></view>
+  </view>
+
+  <view class="content-wrapper">
+    <scroll-view scroll-y class="scrollarea">
+      <view class="container">
+        <view wx:if="{{birdShed.length === 0}}" class="empty-state">
+          <view class="empty-emoji">🪹</view>
+          <view class="title-md">鸟舍空空</view>
+          <view class="text-sm">还没有放归的鸟，继续养成吧！</view>
+        </view>
+
+        <view wx:else class="shed-grid">
+          <view class="shed-item" wx:for="{{birdShed}}" wx:key="birdId">
+            <view class="shed-emoji">🦜</view>
+            <view class="shed-label">已放归</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
