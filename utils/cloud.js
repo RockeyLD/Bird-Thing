@@ -1,5 +1,5 @@
 /** 云开发封装 */
-const CLOUD_ENV = 'your-env-id';
+const CLOUD_ENV = 'eduction-cloud1-9g1g39x5d24e6574';
 
 function isCloudReady() {
   const app = getApp();
@@ -25,7 +25,7 @@ function callLogin(localState = {}) {
       return reject(e);
     }
     wx.cloud.callFunction({
-      name: 'login',
+      name: 'bird-login',
       data: { localState },
       success: res => {
         if (res.result && res.result.openid) {
@@ -48,7 +48,7 @@ function syncToCloud(state) {
       return reject(e);
     }
     wx.cloud.callFunction({
-      name: 'login',
+      name: 'bird-login',
       data: { action: 'sync', state },
       success: res => resolve(res.result),
       fail: reject
