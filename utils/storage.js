@@ -12,7 +12,8 @@ function getDefaultState() {
     currentBird: null,
     birdShed: [],
     learnedBirdIds: [],
-    codex: {}
+    codex: {},
+    feedStock: 0
   };
 }
 
@@ -124,9 +125,33 @@ function addToCodex(birdId, dimension) {
   return entry;
 }
 
+function getFeedStock() {
+  const state = getUserState();
+  return state.feedStock || 0;
+}
+
+function addFeedStock(delta) {
+  const state = getUserState();
+  state.feedStock = Math.max(0, (state.feedStock || 0) + delta);
+  setUserState(state);
+  return state.feedStock;
+}
+
+function consumeFeed() {
+  const state = getUserState();
+  const stock = state.feedStock || 0;
+  if (stock > 0) {
+    state.feedStock = stock - 1;
+    setUserState(state);
+    return true;
+  }
+  return false;
+}
+
 module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
+  getFeedStock, addFeedStock, consumeFeed,
   loadFromCloud, setIsGuestMode, getIsGuestMode
 };

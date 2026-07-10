@@ -7,6 +7,7 @@
   <view class="top-info" style="margin-top: {{scoreBarOffset}}px;">
     <view class="score-badge">⭐ {{user.totalScore}}</view>
     <view class="shed-btn" bindtap="goToShed">🦜 鸟舍</view>
+    <view class="shop-btn" bindtap="goToShop">🛒 商店</view>
   </view>
 
   <!-- 中间区域：鸟蛋/宠物，在剩余空间垂直居中 -->
@@ -51,7 +52,7 @@
           <view class="title-md">🌾 基础饲料</view>
           <view class="text-sm">喂食一次 +{{feedExp}} 经验</view>
         </view>
-        <view class="price-tag">-{{feedPrice}} 积分</view>
+        <view class="stock-tag">库存: {{feedStock}}</view>
       </view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
     </view>
