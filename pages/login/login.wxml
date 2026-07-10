@@ -2,7 +2,6 @@
   <view class="login-wrapper">
   <view class="brand">
     <image class="brand-logo" src="/images/logo.png" mode="aspectFit" />
-    <view class="brand-subtitle">鸟类科普养成游戏</view>
   </view>
 
     <view class="actions">
