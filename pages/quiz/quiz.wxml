@@ -18,8 +18,25 @@
         </view>
       </view>
       <view class="knowledge-card-modal">
-        <view class="dim-title">{{dimension.icon}} {{dimension.label}}</view>
-        <view class="knowledge-text">{{bird.desc}}</view>
+        <view wx:if="{{bird.persona}}" class="knowledge-section">
+          <view class="knowledge-section-title">🎭 人设</view>
+          <view class="knowledge-text">{{bird.persona}}</view>
+        </view>
+        <view wx:if="{{bird.identification}}" class="knowledge-section">
+          <view class="knowledge-section-title">👁 辨识</view>
+          <view class="knowledge-text">{{bird.identification}}</view>
+        </view>
+        <view wx:if="{{bird.habit}}" class="knowledge-section">
+          <view class="knowledge-section-title">🌿 习性</view>
+          <view class="knowledge-text">{{bird.habit}}</view>
+        </view>
+        <view wx:if="{{bird.trivia}}" class="knowledge-section">
+          <view class="knowledge-section-title">💡 冷知识</view>
+          <view class="knowledge-text">{{bird.trivia}}</view>
+        </view>
+        <view wx:if="{{!bird.persona}}" class="knowledge-section">
+          <view class="knowledge-text">{{bird.desc}}</view>
+        </view>
       </view>
       <button class="btn-primary" bindtap="onStartQuiz">开始答题</button>
     </view>

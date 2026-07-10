@@ -22,7 +22,7 @@
               <view class="title-md">{{item.name}}</view>
               <view class="tag">{{item.enName}}</view>
             </view>
-            <view class="text-sm">{{item.desc}}</view>
+            <view class="text-sm">{{item.persona || item.desc}}</view>
             <view class="bird-tags">
               <text class="tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
             </view>
