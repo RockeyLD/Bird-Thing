@@ -8,28 +8,30 @@
     <text class="search-icon">🔍</text>
   </view>
 
-  <scroll-view class="scrollarea" scroll-y>
-    <view class="container">
-      <view class="bird-card" wx:for="{{filtered}}" wx:key="id" bindtap="onBirdTap" data-id="{{item.id}}">
-        <view class="bird-cover">
-          <text class="bird-emoji">🐦</text>
-        </view>
-        <view class="bird-info">
-          <view class="flex-between">
-            <view class="title-md">{{item.name}}</view>
-            <view class="tag">{{item.enName}}</view>
+  <view class="content-wrapper">
+    <scroll-view scroll-y class="scrollarea">
+      <view class="container">
+        <view class="bird-card" wx:for="{{filtered}}" wx:key="id" bindtap="onBirdTap" data-id="{{item.id}}">
+          <view class="bird-cover">
+            <text class="bird-emoji">🐦</text>
           </view>
-          <view class="text-sm">{{item.desc}}</view>
-          <view class="bird-tags">
-            <text class="tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+          <view class="bird-info">
+            <view class="flex-between">
+              <view class="title-md">{{item.name}}</view>
+              <view class="tag">{{item.enName}}</view>
+            </view>
+            <view class="text-sm">{{item.desc}}</view>
+            <view class="bird-tags">
+              <text class="tag" wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+            </view>
           </view>
         </view>
-      </view>
 
-      <view wx:if="{{filtered.length === 0}}" class="empty-state">
-        <text>🍃</text>
-        <view class="text-sm">没有找到匹配的鸟类</view>
+        <view wx:if="{{filtered.length === 0}}" class="empty-state">
+          <text>🍃</text>
+          <view class="text-sm">没有找到匹配的鸟类</view>
+        </view>
       </view>
-    </view>
-  </scroll-view>
+    </scroll-view>
+  </view>
 </view>

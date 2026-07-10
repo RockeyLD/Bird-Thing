@@ -28,7 +28,8 @@
   font-weight: 600;
 }
 
-.scrollarea { flex: 1; overflow-y: hidden; }
+.content-wrapper { flex: 1; overflow: hidden; }
+.scrollarea { height: 100%; }
 
 .bird-header { text-align: center; padding: 40rpx; }
 .bird-emoji { font-size: 100rpx; margin-bottom: 12rpx; }

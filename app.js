@@ -3,18 +3,33 @@ App({
   globalData: {
     userInfo: null,
     openid: null,
+    cloudInited: false,
     statusBarHeight: 0,
     navBarHeight: 44,
     menuButtonRight: 0
   },
 
   onLaunch() {
+    this.initCloud();
     const systemInfo = wx.getSystemInfoSync();
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
     this.globalData.statusBarHeight = systemInfo.statusBarHeight;
     this.globalData.navBarHeight = (menuButtonInfo.top - systemInfo.statusBarHeight) * 2 + menuButtonInfo.height;
     this.globalData.menuButtonRight = systemInfo.screenWidth - menuButtonInfo.left;
     this.initStorage();
+  },
+
+  initCloud() {
+    if (!wx.cloud) {
+      console.warn('当前基础库不支持云开发');
+      return;
+    }
+    try {
+      wx.cloud.init({ env: 'eduction-cloud1-9g1g39x5d24e6574' });
+      this.globalData.cloudInited = true;
+    } catch (e) {
+      console.warn('云开发初始化失败', e);
+    }
   },
 
   setNavBarData(page) {
