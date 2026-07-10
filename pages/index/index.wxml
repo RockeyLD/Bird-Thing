@@ -2,7 +2,7 @@
   <image class="bg-image" src="/images/Background.png" mode="aspectFill" />
   <!-- 顶部导航栏 -->
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
-    <view class="nav-title">Bird Thing</view>
+    <view class="nav-title">鸟圳</view>
     <view class="nav-right">
       <view class="login-badge" wx:if="{{!isLoggedIn}}" bindtap="onLoginTap">
         <text>🔐 登录</text>
