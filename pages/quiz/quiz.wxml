@@ -9,7 +9,8 @@
   <view wx:if="{{showCard}}" class="card-modal" catchtap="onMaskTap">
     <view class="card-modal-content" catchtap="onContentTap">
       <view class="bird-header-modal">
-        <view class="bird-emoji">🐦</view>
+        <image wx:if="{{bird.cover}}" class="bird-cover-img" src="{{bird.cover}}" mode="aspectFit" />
+        <view wx:else class="bird-emoji">🐦</view>
         <view class="title-lg">{{bird.name}}</view>
         <view class="text-sm">{{bird.enName}}</view>
         <view class="bird-tags">

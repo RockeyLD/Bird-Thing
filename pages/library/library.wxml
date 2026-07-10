@@ -14,7 +14,8 @@
       <view class="container">
         <view class="bird-card" wx:for="{{filtered}}" wx:key="id" bindtap="onBirdTap" data-id="{{item.id}}">
           <view class="bird-cover">
-            <text class="bird-emoji">🐦</text>
+            <image wx:if="{{item.cover}}" class="bird-cover-img" src="{{item.cover}}" mode="aspectFill" />
+            <text wx:else class="bird-emoji">🐦</text>
           </view>
           <view class="bird-info">
             <view class="flex-between">
