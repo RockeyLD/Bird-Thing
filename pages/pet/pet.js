@@ -9,7 +9,8 @@ Page({
     stageInfo: null,
     stageIndex: 0,
     feedPrice: FEED_PRICE,
-    feedExp: FEED_EXP
+    feedExp: FEED_EXP,
+    showShed: false
   },
 
   onLoad() {
@@ -37,6 +38,10 @@ Page({
       stageInfo,
       stageIndex: pet ? getStageIndex(pet.exp) : 0
     });
+  },
+
+  toggleShed() {
+    this.setData({ showShed: !this.data.showShed });
   },
 
   onAdoptTap() {
