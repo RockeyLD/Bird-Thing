@@ -25,8 +25,8 @@
   font-size: 32rpx;
 }
 
-.content-wrapper { flex: 1; overflow: hidden; }
-.scrollarea { height: 100%; }
+.content-wrapper { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.scrollarea { flex: 1; }
 
 .bird-card {
   background: var(--card);

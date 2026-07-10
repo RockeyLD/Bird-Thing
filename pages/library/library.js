@@ -12,7 +12,11 @@ Page({
     getApp().setNavBarData(this);
   },
 
-  onSearch(e) {
+  onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
+  },
     const keyword = e.detail.value.toLowerCase();
     this.setData({
       keyword,
