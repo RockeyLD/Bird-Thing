@@ -1,0 +1,76 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.nav-bar {
+  padding-bottom: 20rpx;
+  padding-left: 30rpx;
+  background: var(--bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  font-size: 40rpx;
+  width: 60rpx;
+}
+
+.nav-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  flex: 1;
+  text-align: center;
+}
+
+.content-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.scrollarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 120rpx 40rpx;
+}
+
+.empty-emoji {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.shed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+}
+
+.shed-item {
+  background: var(--card);
+  border-radius: 24rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+
+.shed-emoji {
+  font-size: 80rpx;
+  margin-bottom: 12rpx;
+}
+
+.shed-label {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}

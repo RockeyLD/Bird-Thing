@@ -9,8 +9,7 @@ Page({
     stageInfo: null,
     stageIndex: 0,
     feedPrice: FEED_PRICE,
-    feedExp: FEED_EXP,
-    showShed: false
+    feedExp: FEED_EXP
   },
 
   onLoad() {
@@ -40,8 +39,8 @@ Page({
     });
   },
 
-  toggleShed() {
-    this.setData({ showShed: !this.data.showShed });
+  goToShed() {
+    wx.navigateTo({ url: '/pages/shed/shed' });
   },
 
   onAdoptTap() {
