@@ -25,7 +25,8 @@
   font-weight: 600;
 }
 
-.scrollarea { flex: 1; overflow-y: auto; }
+.content-wrapper { flex: 1; overflow: hidden; }
+.scrollarea { height: 100%; }
 
 .codex-grid {
   display: grid;

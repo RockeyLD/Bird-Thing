@@ -11,45 +11,47 @@
     <view class="filter-item {{filter === 'learning' ? 'active' : ''}}" bindtap="onFilterTap" data-filter="learning">学习中</view>
   </view>
 
-  <scroll-view class="scrollarea" scroll-y>
-    <view class="container">
-      <view class="codex-grid">
-        <view
-          class="codex-item {{item.mastered ? 'mastered' : item.progress > 0 ? 'learning' : 'locked'}}"
-          wx:for="{{birds}}"
-          wx:key="id"
-          wx:if="{{filter === 'all' || (filter === 'mastered' && item.mastered) || (filter === 'learning' && item.progress > 0 && !item.mastered)}}"
-          bindtap="onBirdTap"
-          data-id="{{item.id}}"
-        >
-          <view class="codex-emoji">{{item.mastered ? '🦜' : item.progress > 0 ? '🐣' : '❓'}}</view>
-          <view class="codex-name">{{item.name}}</view>
-          <view class="codex-progress">
-            <view class="progress-mini">
-              <view class="progress-mini-fill" style="width: {{item.progress / 5 * 100}}%"></view>
+  <view class="content-wrapper">
+    <scroll-view scroll-y class="scrollarea">
+      <view class="container">
+        <view class="codex-grid">
+          <view
+            class="codex-item {{item.mastered ? 'mastered' : item.progress > 0 ? 'learning' : 'locked'}}"
+            wx:for="{{birds}}"
+            wx:key="id"
+            wx:if="{{filter === 'all' || (filter === 'mastered' && item.mastered) || (filter === 'learning' && item.progress > 0 && !item.mastered)}}"
+            bindtap="onBirdTap"
+            data-id="{{item.id}}"
+          >
+            <view class="codex-emoji">{{item.mastered ? '🦜' : item.progress > 0 ? '🐣' : '❓'}}</view>
+            <view class="codex-name">{{item.name}}</view>
+            <view class="codex-progress">
+              <view class="progress-mini">
+                <view class="progress-mini-fill" style="width: {{item.progress / 5 * 100}}%"></view>
+              </view>
+              <text class="progress-text">{{item.progress}}/5</text>
             </view>
-            <text class="progress-text">{{item.progress}}/5</text>
           </view>
         </view>
-      </view>
 
-      <view class="stats-card">
-        <view class="stats-title">学习统计</view>
-        <view class="stats-row">
-          <view class="stats-block">
-            <view class="stats-num">{{user.learnedBirdIds.length}}</view>
-            <view class="stats-label">已学习</view>
-          </view>
-          <view class="stats-block">
-            <view class="stats-num">{{masteredCount}}</view>
-            <view class="stats-label">已精通</view>
-          </view>
-          <view class="stats-block">
-            <view class="stats-num">{{15 - user.learnedBirdIds.length}}</view>
-            <view class="stats-label">待探索</view>
+        <view class="stats-card">
+          <view class="stats-title">学习统计</view>
+          <view class="stats-row">
+            <view class="stats-block">
+              <view class="stats-num">{{user.learnedBirdIds.length}}</view>
+              <view class="stats-label">已学习</view>
+            </view>
+            <view class="stats-block">
+              <view class="stats-num">{{masteredCount}}</view>
+              <view class="stats-label">已精通</view>
+            </view>
+            <view class="stats-block">
+              <view class="stats-num">{{15 - user.learnedBirdIds.length}}</view>
+              <view class="stats-label">待探索</view>
+            </view>
           </view>
         </view>
       </view>
-    </view>
-  </scroll-view>
+    </scroll-view>
+  </view>
 </view>

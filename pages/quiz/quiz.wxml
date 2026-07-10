@@ -16,51 +16,53 @@
     </view>
   </view>
 
-  <scroll-view class="scrollarea" scroll-y>
-    <view class="container">
-      <!-- 鸟信息卡 -->
-      <view class="card bird-header">
-        <view class="bird-emoji">🐦</view>
-        <view class="title-lg">{{bird.name}}</view>
-        <view class="text-sm">{{bird.enName}}</view>
-        <view class="bird-tags">
-          <text class="tag" wx:for="{{bird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
-        </view>
-      </view>
-
-      <!-- 知识内容 -->
-      <view class="card knowledge-card">
-        <view class="dim-title">{{dimension.icon}} {{dimension.label}}</view>
-        <view class="knowledge-text">{{bird.desc}}</view>
-      </view>
-
-      <!-- 模拟答题区（题目后续补充） -->
-      <view class="card quiz-card">
-        <view class="quiz-title">📝 知识问答</view>
-        <view class="quiz-question">{{bird.name}} 的以下特征，哪个是正确的？</view>
-        <view class="options">
-          <view class="option {{selected === 0 ? (isCorrect ? 'correct' : 'wrong') : ''}} {{answered && selected !== 0 && isCorrect ? '' : ''}}" bindtap="onOptionTap" data-idx="0">
-            <text class="opt-letter">A</text>
-            <text>{{bird.tags[0] || '体型较小'}}</text>
-          </view>
-          <view class="option {{selected === 1 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="1">
-            <text class="opt-letter">B</text>
-            <text>生活在深海</text>
-          </view>
-          <view class="option {{selected === 2 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="2">
-            <text class="opt-letter">C</text>
-            <text>以肉类为食</text>
-          </view>
-          <view class="option {{selected === 3 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="3">
-            <text class="opt-letter">D</text>
-            <text>不会飞</text>
+  <view class="content-wrapper">
+    <scroll-view scroll-y class="scrollarea">
+      <view class="container">
+        <!-- 鸟信息卡 -->
+        <view class="card bird-header">
+          <view class="bird-emoji">🐦</view>
+          <view class="title-lg">{{bird.name}}</view>
+          <view class="text-sm">{{bird.enName}}</view>
+          <view class="bird-tags">
+            <text class="tag" wx:for="{{bird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
           </view>
         </view>
-      </view>
 
-      <button wx:if="{{answered}}" class="btn-primary" bindtap="onNextTap">
-        {{dimIndex < 4 ? '下一维度 →' : '完成学习'}}
-      </button>
-    </view>
-  </scroll-view>
+        <!-- 知识内容 -->
+        <view class="card knowledge-card">
+          <view class="dim-title">{{dimension.icon}} {{dimension.label}}</view>
+          <view class="knowledge-text">{{bird.desc}}</view>
+        </view>
+
+        <!-- 模拟答题区（题目后续补充） -->
+        <view class="card quiz-card">
+          <view class="quiz-title">📝 知识问答</view>
+          <view class="quiz-question">{{bird.name}} 的以下特征，哪个是正确的？</view>
+          <view class="options">
+            <view class="option {{selected === 0 ? (isCorrect ? 'correct' : 'wrong') : ''}} {{answered && selected !== 0 && isCorrect ? '' : ''}}" bindtap="onOptionTap" data-idx="0">
+              <text class="opt-letter">A</text>
+              <text>{{bird.tags[0] || '体型较小'}}</text>
+            </view>
+            <view class="option {{selected === 1 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="1">
+              <text class="opt-letter">B</text>
+              <text>生活在深海</text>
+            </view>
+            <view class="option {{selected === 2 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="2">
+              <text class="opt-letter">C</text>
+              <text>以肉类为食</text>
+            </view>
+            <view class="option {{selected === 3 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="3">
+              <text class="opt-letter">D</text>
+              <text>不会飞</text>
+            </view>
+          </view>
+        </view>
+
+        <button wx:if="{{answered}}" class="btn-primary" bindtap="onNextTap">
+          {{dimIndex < 4 ? '下一维度 →' : '完成学习'}}
+        </button>
+      </view>
+    </scroll-view>
+  </view>
 </view>
