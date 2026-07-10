@@ -7,7 +7,8 @@
     "pages/pet/pet",
     "pages/codex/codex",
     "pages/tutorial/tutorial",
-    "pages/shed/shed"
+    "pages/shed/shed",
+    "pages/shop/shop"
   ],
   "tabBar": {
     "custom": true,

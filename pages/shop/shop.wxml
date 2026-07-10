@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
+    <view class="back-btn" bindtap="onBackTap">←</view>
+    <view class="nav-title">商店</view>
+    <view></view>
+  </view>
+
+  <view class="content-wrapper">
+    <scroll-view scroll-y class="scrollarea">
+      <view class="container">
+        <view class="wallet">
+          <view class="score-badge">⭐ {{user.totalScore}} 积分</view>
+          <view class="stock-badge">🌾 饲料: {{user.feedStock || 0}}</view>
+        </view>
+
+        <view class="section-title">饲料</view>
+        <view class="shop-grid">
+          <view class="shop-item">
+            <view class="item-icon">🌾</view>
+            <view class="item-name">基础饲料</view>
+            <view class="item-desc">喂食一次 +20 经验</view>
+            <view class="item-price">{{FEED_PRICE}} 积分</view>
+            <button class="buy-btn" bindtap="onBuyFeed">购买</button>
+          </view>
+        </view>
+
+        <view class="section-title">其他商品</view>
+        <view class="shop-grid">
+          <view class="shop-item coming-soon">
+            <view class="item-icon">🎁</view>
+            <view class="item-name">敬请期待</view>
+            <view class="item-desc">更多商品即将上架</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
