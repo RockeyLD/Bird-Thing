@@ -5,7 +5,9 @@ const { BIRDS, DIMENSIONS } = require('../../data/birds');
 Page({
   data: {
     birds: [],
-    filter: 'all' // all, mastered, learning
+    filter: 'all', // all, mastered, learning
+    showCard: false,
+    cardBird: null
   },
 
   onLoad() {
@@ -44,12 +46,21 @@ Page({
 
   onBirdTap(e) {
     const { id } = e.currentTarget.dataset;
-    const user = getUserState();
-    const entry = user.codex[id];
-    if (!entry || entry.learnedDimensions.length === 0) {
-      wx.showToast({ title: '先去学习这只鸟吧', icon: 'none' });
-      return;
-    }
+    const bird = BIRDS.find(b => b.id === id);
+    this.setData({ showCard: true, cardBird: bird });
+  },
+
+  onStartQuiz() {
+    const id = this.data.cardBird.id;
+    this.setData({ showCard: false });
     wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${id}&review=1` });
+  },
+
+  onMaskTap() {
+    this.setData({ showCard: false });
+  },
+
+  onContentTap() {
+    // 阻止事件冒泡
   }
 });
