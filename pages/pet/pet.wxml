@@ -2,78 +2,76 @@
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="nav-title">宠物养成</view>
   </view>
-  <view class="score-bar" style="margin-top: {{scoreBarOffset}}px; padding-left: 30rpx;">
+
+  <view class="top-info" style="margin-top: {{scoreBarOffset}}px;">
     <view class="score-badge">⭐ {{user.totalScore}}</view>
+    <view class="shed-btn" bindtap="toggleShed">🦜 鸟舍</view>
   </view>
 
-  <view class="content-wrapper">
-    <scroll-view scroll-y class="scrollarea">
-      <view class="container">
-        <!-- 无宠物 -->
-        <view wx:if="{{!pet}}" class="card pet-empty">
-          <view class="pet-emoji">🥚</view>
-          <view class="title-lg">还没有宠物鸟</view>
-          <view class="text-sm">领养一颗鸟蛋，开始你的养成之旅</view>
-          <button class="btn-primary" style="margin-top: 40rpx;" bindtap="onAdoptTap">领养鸟蛋</button>
-        </view>
-
-        <!-- 宠物展示 -->
-        <view wx:else class="pet-stage">
-          <view class="pet-avatar-wrap">
-            <view class="pet-avatar {{stageInfo.key}}">
-              <text wx:if="{{stageInfo.key === 'egg'}}">🥚</text>
-              <text wx:elif="{{stageInfo.key === 'chick'}}">🐣</text>
-              <text wx:elif="{{stageInfo.key === 'adult'}}">🐦</text>
-              <text wx:elif="{{stageInfo.key === 'elder'}}">🦅</text>
-              <text wx:else>🦜✨</text>
-            </view>
-            <view class="stage-label">{{stageInfo.label}}</view>
-          </view>
-
-          <!-- 经验进度 -->
-          <view class="card exp-card">
-            <view class="flex-between">
-              <text class="title-md">经验值</text>
-              <text class="text-sm">{{pet.exp}} / {{stageInfo.nextExpLabel}}</text>
-            </view>
-            <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
-              <view class="progress-fill" style="width: {{pet.exp / stageInfo.nextExp * 100}}%"></view>
-            </view>
-            <view wx:else class="max-badge">已满级</view>
-          </view>
-
-          <!-- 喂食 -->
-          <view class="card feed-card">
-            <view class="flex-between">
-              <view>
-                <view class="title-md">🌾 基础饲料</view>
-                <view class="text-sm">喂食一次 +{{feedExp}} 经验</view>
-              </view>
-              <view class="price-tag">-{{feedPrice}} 积分</view>
-            </view>
-            <button class="btn-primary" style="margin-top: 24rpx;" bindtap="onFeedTap">立即喂食</button>
-          </view>
-
-          <!-- 放归 -->
-          <view wx:if="{{stageInfo.key === 'max'}}" class="card release-card">
-            <view class="title-md">🌳 放归自然</view>
-            <view class="text-sm">你的宠物鸟已经达到满级，可以选择放归自然，开启下一只鸟的养成。</view>
-            <button class="btn-primary" style="margin-top: 24rpx; background: var(--accent);" bindtap="onReleaseTap">放归自然</button>
-          </view>
-
-          <!-- 鸟舍 -->
-          <view class="section-title">我的鸟舍</view>
-          <view class="shed-grid">
-            <view class="shed-item" wx:for="{{user.birdShed}}" wx:key="birdId">
-              <view class="shed-emoji">🦜</view>
-              <view class="text-sm">已放归</view>
-            </view>
-            <view wx:if="{{user.birdShed.length === 0}}" class="text-sm" style="text-align: center; padding: 40rpx 0;">
-              还没有放归的鸟，继续养成吧！
-            </view>
-          </view>
-        </view>
+  <!-- 鸟舍展开面板 -->
+  <view wx:if="{{showShed}}" class="shed-panel">
+    <view class="shed-panel-title">我的鸟舍</view>
+    <view class="shed-grid">
+      <view class="shed-item" wx:for="{{user.birdShed}}" wx:key="birdId">
+        <view class="shed-emoji">🦜</view>
+        <view class="text-sm">已放归</view>
       </view>
-    </scroll-view>
+      <view wx:if="{{user.birdShed.length === 0}}" class="text-sm shed-empty">还没有放归的鸟，继续养成吧！</view>
+    </view>
+  </view>
+
+  <!-- 中间区域：鸟蛋/宠物，在剩余空间垂直居中 -->
+  <view class="pet-center">
+    <view wx:if="{{!pet}}" class="pet-empty">
+      <view class="pet-emoji">🥚</view>
+      <view class="title-lg">还没有宠物鸟</view>
+      <view class="text-sm">领养一颗鸟蛋，开始你的养成之旅</view>
+      <button class="btn-primary adopt-btn" bindtap="onAdoptTap">领养鸟蛋</button>
+    </view>
+
+    <view wx:else class="pet-avatar-wrap">
+      <view class="pet-avatar {{stageInfo.key}}">
+        <text wx:if="{{stageInfo.key === 'egg'}}">🥚</text>
+        <text wx:elif="{{stageInfo.key === 'chick'}}">🐣</text>
+        <text wx:elif="{{stageInfo.key === 'adult'}}">🐦</text>
+        <text wx:elif="{{stageInfo.key === 'elder'}}">🦅</text>
+        <text wx:else>🦜✨</text>
+      </view>
+      <view class="stage-label">{{stageInfo.label}}</view>
+    </view>
+  </view>
+
+  <!-- 底部固定面板：经验值 + 饲料 -->
+  <view wx:if="{{pet}}" class="bottom-panel">
+    <!-- 经验进度 -->
+    <view class="card exp-card">
+      <view class="flex-between">
+        <text class="title-md">经验值</text>
+        <text class="text-sm">{{pet.exp}} / {{stageInfo.nextExpLabel}}</text>
+      </view>
+      <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
+        <view class="progress-fill" style="width: {{pet.exp / stageInfo.nextExp * 100}}%"></view>
+      </view>
+      <view wx:else class="max-badge">已满级</view>
+    </view>
+
+    <!-- 喂食 -->
+    <view class="card feed-card">
+      <view class="flex-between">
+        <view>
+          <view class="title-md">🌾 基础饲料</view>
+          <view class="text-sm">喂食一次 +{{feedExp}} 经验</view>
+        </view>
+        <view class="price-tag">-{{feedPrice}} 积分</view>
+      </view>
+      <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
+    </view>
+
+    <!-- 放归 -->
+    <view wx:if="{{stageInfo.key === 'max'}}" class="card release-card">
+      <view class="title-md">🌳 放归自然</view>
+      <view class="text-sm">你的宠物鸟已经达到满级，可以选择放归自然，开启下一只鸟的养成。</view>
+      <button class="btn-primary release-action-btn" bindtap="onReleaseTap">放归自然</button>
+    </view>
   </view>
 </view>
