@@ -25,6 +25,7 @@ Page({
       const entry = user.codex[b.id];
       return {
         ...b,
+        iconPath: `/images/Bird Icon/${b.name}.png`,
         learnedDimensions: entry ? entry.learnedDimensions : [],
         mastered: entry ? entry.mastered : false,
         progress: entry ? entry.learnedDimensions.length : 0

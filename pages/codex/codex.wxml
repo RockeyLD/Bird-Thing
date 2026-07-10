@@ -24,7 +24,7 @@
             bindtap="onBirdTap"
             data-id="{{item.id}}"
           >
-            <view class="codex-emoji">{{item.mastered ? '🦜' : item.progress > 0 ? '🐣' : '❓'}}</view>
+            <image class="codex-img" src="{{item.iconPath}}" mode="aspectFill" />
             <view class="codex-name">{{item.name}}</view>
             <view class="codex-progress">
               <view class="progress-mini">
