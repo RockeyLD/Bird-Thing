@@ -1,6 +1,6 @@
 .page { display: flex; flex-direction: column; height: 100vh; }
 
-.nav-bar { padding: 120rpx 30rpx 20rpx; background: var(--bg); display: flex; align-items: center; gap: 20rpx; }
+.nav-bar { padding-bottom: 20rpx; padding-left: 30rpx; background: var(--bg); display: flex; align-items: center; gap: 20rpx; }
 .back-btn { font-size: 40rpx; width: 60rpx; }
 .nav-title { font-size: 36rpx; font-weight: 700; flex: 1; }
 

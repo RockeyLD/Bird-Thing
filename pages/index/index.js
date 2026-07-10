@@ -17,6 +17,7 @@ Page({
   },
 
   onLoad() {
+    getApp().setNavBarData(this);
     if (!getTutorialCompleted()) {
       wx.redirectTo({ url: '/pages/tutorial/tutorial' });
       return;

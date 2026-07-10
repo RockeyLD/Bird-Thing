@@ -8,6 +8,10 @@ Page({
     filter: 'all' // all, mastered, learning
   },
 
+  onLoad() {
+    getApp().setNavBarData(this);
+  },
+
   onShow() {
     this.refresh();
   },

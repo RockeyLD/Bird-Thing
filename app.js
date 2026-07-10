@@ -2,11 +2,27 @@
 App({
   globalData: {
     userInfo: null,
-    openid: null
+    openid: null,
+    statusBarHeight: 0,
+    navBarHeight: 44,
+    menuButtonRight: 0
   },
 
   onLaunch() {
+    const systemInfo = wx.getSystemInfoSync();
+    const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+    this.globalData.statusBarHeight = systemInfo.statusBarHeight;
+    this.globalData.navBarHeight = (menuButtonInfo.top - systemInfo.statusBarHeight) * 2 + menuButtonInfo.height;
+    this.globalData.menuButtonRight = systemInfo.screenWidth - menuButtonInfo.left;
     this.initStorage();
+  },
+
+  setNavBarData(page) {
+    page.setData({
+      statusBarHeight: this.globalData.statusBarHeight,
+      navBarHeight: this.globalData.navBarHeight,
+      menuButtonRight: this.globalData.menuButtonRight
+    });
   },
 
   initStorage() {

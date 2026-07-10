@@ -8,6 +8,10 @@ Page({
     keyword: ''
   },
 
+  onLoad() {
+    getApp().setNavBarData(this);
+  },
+
   onSearch(e) {
     const keyword = e.detail.value.toLowerCase();
     this.setData({

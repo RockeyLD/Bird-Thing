@@ -1,6 +1,6 @@
 <view class="page">
   <!-- 顶部导航栏 -->
-  <view class="nav-bar">
+  <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="nav-title">Bird Thing</view>
     <view class="score-badge">
       <text>⭐</text>

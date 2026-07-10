@@ -12,6 +12,10 @@ Page({
     feedExp: FEED_EXP
   },
 
+  onLoad() {
+    getApp().setNavBarData(this);
+  },
+
   onShow() {
     this.refresh();
   },

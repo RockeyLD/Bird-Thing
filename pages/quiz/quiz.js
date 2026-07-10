@@ -17,6 +17,7 @@ Page({
   },
 
   onLoad(options) {
+    getApp().setNavBarData(this);
     const bird = BIRDS.find(b => b.id === options.birdId) || BIRDS[0];
     const review = options.review === '1';
     this.setData({ bird, review, dimIndex: 0 });
