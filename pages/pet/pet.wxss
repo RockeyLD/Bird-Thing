@@ -3,8 +3,8 @@
 .nav-bar { padding-bottom: 20rpx; padding-left: 30rpx; background: var(--bg); display: flex; justify-content: space-between; align-items: center; }
 .nav-title { font-size: 40rpx; font-weight: 700; }
 
-.content-wrapper { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-.scrollarea { flex: 1; }
+.content-wrapper { flex: 1; overflow: hidden; position: relative; }
+.scrollarea { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
 
 .pet-empty { text-align: center; padding: 80rpx 40rpx; }
 .pet-emoji { font-size: 140rpx; margin-bottom: 20rpx; }
