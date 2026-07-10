@@ -38,8 +38,6 @@
 .content-wrapper { flex: 1; overflow: hidden; position: relative; }
 .scrollarea { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
 
-.container { padding-bottom: calc(100rpx + env(safe-area-inset-bottom) + 40rpx); }
-
 .pet-card { text-align: center; padding: 50rpx 30rpx; }
 
 .pet-egg { font-size: 120rpx; margin-bottom: 20rpx; }
