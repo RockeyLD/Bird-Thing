@@ -1,7 +1,7 @@
-/** 15 种深圳常见鸟基础数据（题目后续补充） */
+/** 16 种深圳常见鸟基础数据（题目后续补充） */
 const BIRDS = [
   { id: 'bird_001', name: '白头鹎', enName: 'Light-vented Bulbul', cover: '/images/birds/白头鹎.jpeg', tags: ['城市常见','头顶白毛'], desc: '深圳最常见的留鸟之一，头顶白色羽冠非常醒目。' },
-  { id: 'bird_002', name: '珠颈斑鸠', enName: 'Spotted Dove', cover: '/images/birds/朱颈斑鸠.png', tags: ['公园常见','颈有斑点'], desc: '颈后有珍珠状斑点，常在地面上觅食。' },
+  { id: 'bird_002', name: '珠颈斑鸠', enName: 'Spotted Dove', cover: '/images/birds/珠颈斑鸠.png', tags: ['公园常见','颈有斑点'], desc: '颈后有珍珠状斑点，常在地面上觅食。' },
   { id: 'bird_003', name: '鹊鸲', enName: 'Oriental Magpie-Robin', cover: '/images/birds/鹊鸲.jpeg', tags: ['黑白相间','尾巴翘'], desc: '黑白相间的羽毛，喜欢翘着尾巴站在枝头。' },
   { id: 'bird_004', name: '乌鸫', enName: 'Chinese Blackbird', cover: '', tags: ['全黑','黄嘴'], desc: '全身黑色，黄色喙，叫声清脆多变。' },
   { id: 'bird_005', name: '红耳鹎', enName: 'Red-whiskered Bulbul', cover: '/images/birds/红耳鹎.jpeg', tags: ['红脸颊','冠羽'], desc: '眼睛下方有一块醒目的红色斑块。' },
@@ -14,7 +14,8 @@ const BIRDS = [
   { id: 'bird_012', name: '大山雀', enName: 'Great Tit', cover: '/images/birds/大山雀.jpeg', tags: ['脸颊白','黑头'], desc: '头部黑色，脸颊白色，活泼好动。' },
   { id: 'bird_013', name: '普通翠鸟', enName: 'Common Kingfisher', cover: '', tags: ['蓝色闪光','捕鱼'], desc: '羽毛蓝绿相间，常在河边捕食小鱼。' },
   { id: 'bird_014', name: '池鹭', enName: 'Chinese Pond Heron', cover: '', tags: ['水边','棕色头'], desc: '常站在池塘边，繁殖期头部呈红棕色。' },
-  { id: 'bird_015', name: '大白鹭', enName: 'Great Egret', cover: '/images/birds/大白鹭.jpeg', tags: ['全身白','黑脚黄趾'], desc: '全身洁白，脚黑色，趾黄色，常见于水边。' }
+  { id: 'bird_015', name: '大白鹭', enName: 'Great Egret', cover: '/images/birds/大白鹭.jpeg', tags: ['全身白','黑脚黄趾'], desc: '全身洁白，脚黑色，趾黄色，常见于水边。' },
+  { id: 'bird_016', name: '白鹡鸰', enName: 'White Wagtail', cover: '/images/birds/白鹡鸰.jpeg', tags: ['黑白相间','摇尾巴'], desc: '黑白相间的羽毛，尾巴常常上下摆动，喜欢在水边或地面活动。' }
 ];
 
 const DIMENSIONS = [
