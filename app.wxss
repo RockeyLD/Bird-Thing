@@ -14,7 +14,7 @@ page {
 
 .container {
   padding: 30rpx;
-  padding-bottom: calc(100rpx + env(safe-area-inset-bottom) + 40rpx);
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom) + 60rpx);
   box-sizing: border-box;
 }
 
