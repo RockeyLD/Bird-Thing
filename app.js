@@ -25,7 +25,7 @@ App({
       return;
     }
     try {
-      wx.cloud.init({ env: 'eduction-cloud1-9g1g39x5d24e6574' });
+      wx.cloud.init();
       this.globalData.cloudInited = true;
     } catch (e) {
       console.warn('云开发初始化失败', e);

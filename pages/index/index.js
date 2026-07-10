@@ -57,7 +57,10 @@ Page({
 
   onLoginTap() {
     if (!isCloudReady()) {
-      wx.showToast({ title: '云开发未配置', icon: 'none' });
+      // 云开发不可用时，直接本地模拟登录
+      wx.setStorageSync('openid', 'local-user');
+      this.setData({ isLoggedIn: true });
+      wx.showToast({ title: '欢迎！', icon: 'success' });
       return;
     }
     wx.showLoading({ title: '登录中...' });
