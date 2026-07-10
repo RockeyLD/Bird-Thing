@@ -63,18 +63,6 @@
           </view>
         </view>
 
-        <!-- 今日推荐 -->
-        <view class="section-title">今日推荐</view>
-        <view class="card recommend-card">
-          <view class="recommend-content">
-            <view class="recommend-icon">🌿</view>
-            <view>
-              <view class="title-md">红耳鹎</view>
-              <view class="text-sm">眼睛下方有一块醒目的红色斑块</view>
-            </view>
-          </view>
-          <button class="btn-primary" style="margin-top: 20rpx;" bindtap="onQuickTap" data-page="/pages/library/library">去学习</button>
-        </view>
       </view>
     </scroll-view>
   </view>

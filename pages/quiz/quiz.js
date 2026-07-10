@@ -60,8 +60,18 @@ Page({
     }
     const idx = available[Math.floor(Math.random() * available.length)];
     const q = bird.questions[idx];
+    // 打乱选项顺序，保持正确答案不变
+    const originalOptions = [...q.options];
+    const originalAnswer = q.a;
+    const answerText = originalOptions[originalAnswer];
+    // Fisher-Yates 洗牌
+    for (let i = originalOptions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [originalOptions[i], originalOptions[j]] = [originalOptions[j], originalOptions[i]];
+    }
+    const newAnswer = originalOptions.indexOf(answerText);
     this.setData({
-      currentQuestion: q,
+      currentQuestion: { q: q.q, options: originalOptions, a: newAnswer },
       selected: -1,
       answered: false,
       isCorrect: false,
