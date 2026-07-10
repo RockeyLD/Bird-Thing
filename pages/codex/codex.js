@@ -53,7 +53,7 @@ Page({
   onStartQuiz() {
     const id = this.data.cardBird.id;
     this.setData({ showCard: false });
-    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${id}&review=1` });
+    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${id}&review=1&skipCard=1` });
   },
 
   onMaskTap() {

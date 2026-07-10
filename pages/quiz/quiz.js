@@ -29,7 +29,9 @@ Page({
     const review = options.review === '1';
     const quizMode = !!(bird.questions && bird.questions.length > 0);
     this.setData({ bird, review, quizMode });
-    if (quizMode) {
+    if (options.skipCard === '1') {
+      this.startQuizMode();
+    } else if (quizMode) {
       this.setData({ showCard: true });
     } else {
       this.loadRandomDimension(true);
