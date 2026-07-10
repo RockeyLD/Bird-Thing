@@ -22,7 +22,7 @@ Page({
     const bird = BIRDS.find(b => b.id === options.birdId) || BIRDS[0];
     const review = options.review === '1';
     this.setData({ bird, review });
-    this.loadRandomDimension();
+    this.loadRandomDimension(true);
   },
 
   getRemainingDimensions() {
@@ -31,7 +31,7 @@ Page({
     return DIMENSIONS.filter(d => !learned.includes(d.key));
   },
 
-  loadRandomDimension() {
+  loadRandomDimension(showCard = false) {
     const remaining = this.getRemainingDimensions();
     if (remaining.length === 0) {
       wx.showModal({
@@ -50,7 +50,7 @@ Page({
       selected: -1,
       answered: false,
       isCorrect: false,
-      showCard: true
+      showCard
     });
   },
 
