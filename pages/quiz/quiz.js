@@ -13,7 +13,8 @@ Page({
     selected: -1,
     isCorrect: false,
     answered: false,
-    review: false
+    review: false,
+    showCard: false
   },
 
   onLoad(options) {
@@ -40,7 +41,8 @@ Page({
       dimIndex: idx,
       selected: -1,
       answered: false,
-      isCorrect: false
+      isCorrect: false,
+      showCard: true
     });
   },
 
@@ -60,6 +62,18 @@ Page({
 
   onNextTap() {
     this.loadDimension(this.data.dimIndex + 1);
+  },
+
+  onStartQuiz() {
+    this.setData({ showCard: false });
+  },
+
+  onMaskTap() {
+    this.setData({ showCard: false });
+  },
+
+  onContentTap() {
+    // 阻止事件冒泡
   },
 
   onBackTap() {

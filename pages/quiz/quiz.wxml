@@ -16,25 +16,28 @@
     </view>
   </view>
 
+  <!-- 鸟类知识卡片弹窗 -->
+  <view wx:if="{{showCard}}" class="card-modal" catchtap="onMaskTap">
+    <view class="card-modal-content" catchtap="onContentTap">
+      <view class="bird-header-modal">
+        <view class="bird-emoji">🐦</view>
+        <view class="title-lg">{{bird.name}}</view>
+        <view class="text-sm">{{bird.enName}}</view>
+        <view class="bird-tags">
+          <text class="tag" wx:for="{{bird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
+        </view>
+      </view>
+      <view class="knowledge-card-modal">
+        <view class="dim-title">{{dimension.icon}} {{dimension.label}}</view>
+        <view class="knowledge-text">{{bird.desc}}</view>
+      </view>
+      <button class="btn-primary" bindtap="onStartQuiz">开始答题</button>
+    </view>
+  </view>
+
   <view class="content-wrapper">
     <scroll-view scroll-y class="scrollarea">
       <view class="container">
-        <!-- 鸟信息卡 -->
-        <view class="card bird-header">
-          <view class="bird-emoji">🐦</view>
-          <view class="title-lg">{{bird.name}}</view>
-          <view class="text-sm">{{bird.enName}}</view>
-          <view class="bird-tags">
-            <text class="tag" wx:for="{{bird.tags}}" wx:for-item="t" wx:key="*this">{{t}}</text>
-          </view>
-        </view>
-
-        <!-- 知识内容 -->
-        <view class="card knowledge-card">
-          <view class="dim-title">{{dimension.icon}} {{dimension.label}}</view>
-          <view class="knowledge-text">{{bird.desc}}</view>
-        </view>
-
         <!-- 模拟答题区（题目后续补充） -->
         <view class="card quiz-card">
           <view class="quiz-title">📝 知识问答</view>
