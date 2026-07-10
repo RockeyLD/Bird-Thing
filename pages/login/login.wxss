@@ -19,9 +19,13 @@
   margin-bottom: 120rpx;
 }
 
-.brand-icon {
-  font-size: 160rpx;
+.brand-logo {
+  width: 200rpx;
+  height: 200rpx;
   margin-bottom: 24rpx;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .brand-title {
