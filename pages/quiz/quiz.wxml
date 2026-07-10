@@ -65,9 +65,10 @@
             <view class="quiz-question">{{currentQuestion.q}}</view>
             <view class="options">
               <view
-                class="option {{selected === idx ? (isCorrect ? 'correct' : 'wrong') : ''}}"
+                class="option {{answered && idx === currentQuestion.a ? 'correct' : ''}} {{answered && selected === idx && !isCorrect ? 'wrong' : ''}}"
                 wx:for="{{currentQuestion.options}}"
                 wx:for-index="idx"
+                wx:key="*this"
                 bindtap="onOptionTap"
                 data-idx="{{idx}}"
               >
@@ -81,19 +82,19 @@
           <view wx:if="{{!quizMode}}">
             <view class="quiz-question">{{bird.name}} 的以下特征，哪个是正确的？</view>
             <view class="options">
-              <view class="option {{selected === 0 ? (isCorrect ? 'correct' : 'wrong') : ''}} {{answered && selected !== 0 && isCorrect ? '' : ''}}" bindtap="onOptionTap" data-idx="0">
+              <view class="option {{answered && 0 === 0 ? 'correct' : ''}} {{answered && selected === 0 && !isCorrect ? 'wrong' : ''}}" bindtap="onOptionTap" data-idx="0">
                 <text class="opt-letter">A</text>
                 <text>{{bird.tags[0] || '体型较小'}}</text>
               </view>
-              <view class="option {{selected === 1 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="1">
+              <view class="option {{answered && 0 === 1 ? 'correct' : ''}} {{answered && selected === 1 && !isCorrect ? 'wrong' : ''}}" bindtap="onOptionTap" data-idx="1">
                 <text class="opt-letter">B</text>
                 <text>生活在深海</text>
               </view>
-              <view class="option {{selected === 2 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="2">
+              <view class="option {{answered && 0 === 2 ? 'correct' : ''}} {{answered && selected === 2 && !isCorrect ? 'wrong' : ''}}" bindtap="onOptionTap" data-idx="2">
                 <text class="opt-letter">C</text>
                 <text>以肉类为食</text>
               </view>
-              <view class="option {{selected === 3 ? (isCorrect ? 'correct' : 'wrong') : ''}}" bindtap="onOptionTap" data-idx="3">
+              <view class="option {{answered && 0 === 3 ? 'correct' : ''}} {{answered && selected === 3 && !isCorrect ? 'wrong' : ''}}" bindtap="onOptionTap" data-idx="3">
                 <text class="opt-letter">D</text>
                 <text>不会飞</text>
               </view>
@@ -101,8 +102,8 @@
           </view>
         </view>
 
-        <button wx:if="{{answered}}" class="btn-primary" bindtap="onNextTap">
-          {{quizMode ? '下一题' : '下一维度 →'}}
+        <button wx:if="{{answered}}" class="btn-primary {{isCorrect ? '' : 'btn-danger'}}" bindtap="onNextTap">
+          {{isCorrect ? (quizMode ? '下一题' : '下一维度 →') : '退出'}}
         </button>
       </view>
     </scroll-view>

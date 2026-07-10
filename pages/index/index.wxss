@@ -105,6 +105,13 @@
 
 .action-label { font-size: 28rpx; font-weight: 600; }
 
+.daily-recommend { padding: 24rpx; }
+.recommend-row { display: flex; align-items: center; gap: 24rpx; }
+.recommend-img { width: 140rpx; height: 140rpx; border-radius: 20rpx; object-fit: cover; background: #eee; flex-shrink: 0; }
+.recommend-info { display: flex; flex-direction: column; gap: 12rpx; }
+.recommend-name { font-size: 34rpx; font-weight: 700; color: var(--text); }
+.recommend-hook { font-size: 26rpx; color: var(--text-secondary); line-height: 1.4; }
+
 .recommend-card { padding: 30rpx; }
 .recommend-content { display: flex; align-items: center; gap: 20rpx; }
 .recommend-icon { font-size: 80rpx; }

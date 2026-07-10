@@ -57,6 +57,17 @@
           </view>
         </view>
 
+        <!-- 每日推荐 -->
+        <view class="section-title">每日推荐</view>
+        <view class="card daily-recommend" bindtap="onRecommendTap" wx:if="{{recommendBird}}">
+          <view class="recommend-row">
+            <image class="recommend-img" src="{{recommendBird.cover}}" mode="aspectFill" />
+            <view class="recommend-info">
+              <view class="recommend-name">{{recommendBird.name}}</view>
+              <view class="recommend-hook">{{recommendHook}}</view>
+            </view>
+          </view>
+        </view>
       </view>
     </scroll-view>
   </view>

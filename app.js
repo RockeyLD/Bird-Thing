@@ -12,14 +12,14 @@ App({
 
   onLaunch() {
     this.initCloud();
-    const systemInfo = wx.getSystemInfoSync();
+    const windowInfo = wx.getWindowInfo();
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
-    this.globalData.statusBarHeight = systemInfo.statusBarHeight;
-    this.globalData.navBarHeight = (menuButtonInfo.top - systemInfo.statusBarHeight) * 2 + menuButtonInfo.height;
-    this.globalData.menuButtonRight = systemInfo.screenWidth - menuButtonInfo.left;
+    this.globalData.statusBarHeight = windowInfo.statusBarHeight;
+    this.globalData.navBarHeight = (menuButtonInfo.top - windowInfo.statusBarHeight) * 2 + menuButtonInfo.height;
+    this.globalData.menuButtonRight = windowInfo.screenWidth - menuButtonInfo.left;
     this.globalData.menuButtonBottom = menuButtonInfo.bottom;
     // 计算积分显示区域需要下移的距离，确保在胶囊按钮下方
-    const navBarRealBottom = systemInfo.statusBarHeight + this.globalData.navBarHeight;
+    const navBarRealBottom = windowInfo.statusBarHeight + this.globalData.navBarHeight;
     this.globalData.scoreBarOffset = Math.max(0, menuButtonInfo.bottom - navBarRealBottom + 8);
     this.initStorage();
   },
