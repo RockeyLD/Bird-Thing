@@ -125,9 +125,7 @@ Page({
   },
 
   onRecommendTap() {
-    const bird = this.data.recommendBird;
-    if (!bird) return;
-    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}` });
+    wx.switchTab({ url: '/pages/library/library' });
   },
 
   onFeedTap() {
