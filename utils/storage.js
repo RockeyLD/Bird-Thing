@@ -1,4 +1,5 @@
-/** 本地存储封装 */
+/** 本地存储封装，支持自动同步云端 */
+const { syncToCloud } = require('./cloud');
 const USER_KEY = 'userState';
 const TUTORIAL_KEY = 'tutorialCompleted';
 
@@ -23,6 +24,24 @@ function getUserState() {
 
 function setUserState(state) {
   wx.setStorageSync(USER_KEY, state);
+  try {
+    syncToCloud(state).catch(() => {});
+  } catch {
+    // 忽略云同步失败，保证本地可用
+  }
+}
+
+function loadFromCloud() {
+  return new Promise((resolve, reject) => {
+    const { callLogin } = require('./cloud');
+    const localState = getUserState();
+    callLogin(localState).then(res => {
+      if (res && res.userData) {
+        wx.setStorageSync(USER_KEY, res.userData);
+      }
+      resolve(res);
+    }).catch(reject);
+  });
 }
 
 function getTutorialCompleted() {
@@ -87,5 +106,6 @@ function addToCodex(birdId, dimension) {
 module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
-  addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex
+  addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
+  loadFromCloud
 };

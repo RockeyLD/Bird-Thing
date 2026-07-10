@@ -1,4 +1,5 @@
-const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud } = require('../../utils/storage');
+const { isCloudReady } = require('../../utils/cloud');
 const { BIRDS, getStage, FEED_PRICE, FEED_EXP } = require('../../data/birds');
 
 Page({
@@ -8,6 +9,7 @@ Page({
     stageInfo: null,
     feedPrice: FEED_PRICE,
     feedExp: FEED_EXP,
+    isLoggedIn: false,
     quickActions: [
       { label: '答题学鸟', icon: '💡', page: '/pages/library/library', color: '#4CAF82' },
       { label: '我的图鉴', icon: '📖', page: '/pages/codex/codex', color: '#2196F3' },
@@ -21,13 +23,20 @@ Page({
       wx.redirectTo({ url: '/pages/tutorial/tutorial' });
       return;
     }
+    this.checkLogin();
     this.refresh();
   },
 
   onShow() {
     if (getTutorialCompleted()) {
+      this.checkLogin();
       this.refresh();
     }
+  },
+
+  checkLogin() {
+    const openid = wx.getStorageSync('openid');
+    this.setData({ isLoggedIn: !!openid });
   },
 
   refresh() {
@@ -42,6 +51,24 @@ Page({
       user,
       pet,
       stageInfo
+    });
+  },
+
+  onLoginTap() {
+    if (!isCloudReady()) {
+      wx.showToast({ title: '云开发未配置', icon: 'none' });
+      return;
+    }
+    wx.showLoading({ title: '登录中...' });
+    loadFromCloud().then(res => {
+      wx.hideLoading();
+      this.checkLogin();
+      this.refresh();
+      wx.showToast({ title: res.isNew ? '登录成功' : '同步成功', icon: 'success' });
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('登录失败', err);
+      wx.showToast({ title: '登录失败', icon: 'none' });
     });
   },
 

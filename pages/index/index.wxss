@@ -1,3 +1,22 @@
+.nav-right { display: flex; align-items: center; gap: 16rpx; }
+
+.login-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  background: rgba(76, 175, 130, 0.12);
+  color: var(--primary);
+  padding: 6rpx 16rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.login-badge.logged {
+  background: rgba(76, 175, 130, 0.08);
+  color: var(--primary);
+}
+
 .page { display: flex; flex-direction: column; height: 100vh; }
 
 .nav-bar {

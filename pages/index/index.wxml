@@ -2,9 +2,17 @@
   <!-- 顶部导航栏 -->
   <view class="nav-bar">
     <view class="nav-title">Bird Thing</view>
-    <view class="score-badge">
-      <text>⭐</text>
-      <text>{{user.totalScore}}</text>
+    <view class="nav-right">
+      <view class="login-badge" wx:if="{{!isLoggedIn}}" bindtap="onLoginTap">
+        <text>🔐 登录</text>
+      </view>
+      <view class="login-badge logged" wx:else>
+        <text>✅ 已登录</text>
+      </view>
+      <view class="score-badge">
+        <text>⭐</text>
+        <text>{{user.totalScore}}</text>
+      </view>
     </view>
   </view>
 
