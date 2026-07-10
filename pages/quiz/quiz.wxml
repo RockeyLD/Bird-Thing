@@ -68,6 +68,7 @@
                 class="option {{answered && idx === currentQuestion.a ? 'correct' : ''}} {{answered && selected === idx && !isCorrect ? 'wrong' : ''}}"
                 wx:for="{{currentQuestion.options}}"
                 wx:for-index="idx"
+                wx:key="*this"
                 bindtap="onOptionTap"
                 data-idx="{{idx}}"
               >
