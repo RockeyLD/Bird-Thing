@@ -145,9 +145,6 @@ Page({
         this.setData({ correctCount: this.data.correctCount + 1 });
       }
       this.setData({ selected: idx, answered: true, isCorrect });
-      if (!isCorrect) {
-        setTimeout(() => wx.navigateBack(), 2000);
-      }
     } else {
       const isCorrect = idx === 0;
       const score = this.data.review ? 3 : 10;
@@ -156,13 +153,14 @@ Page({
         addToCodex(this.data.bird.id, this.data.dimension.key);
       }
       this.setData({ selected: idx, answered: true, isCorrect });
-      if (!isCorrect) {
-        setTimeout(() => wx.navigateBack(), 2000);
-      }
     }
   },
 
   onNextTap() {
+    if (!this.data.isCorrect) {
+      wx.navigateBack();
+      return;
+    }
     if (this.data.quizMode) {
       this.loadNextQuestion();
     } else {

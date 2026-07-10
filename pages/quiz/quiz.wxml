@@ -102,7 +102,7 @@
         </view>
 
         <button wx:if="{{answered}}" class="btn-primary" bindtap="onNextTap">
-          {{quizMode ? '下一题' : '下一维度 →'}}
+          {{isCorrect ? (quizMode ? '下一题' : '下一维度 →') : '退出'}}
         </button>
       </view>
     </scroll-view>
