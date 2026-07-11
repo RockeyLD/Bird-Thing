@@ -30,6 +30,7 @@ exports.main = async (event, context) => {
       await db.collection('bird-users').add({
         data: {
           ...state,
+          _openid: OPENID,
           updatedAt: db.serverDate(),
           createdAt: db.serverDate()
         }
@@ -50,6 +51,7 @@ exports.main = async (event, context) => {
     const localState = event.localState || {};
     const defaultData = {
       ...pickState(localState),
+      _openid: OPENID,
       createdAt: db.serverDate(),
       updatedAt: db.serverDate()
     };
