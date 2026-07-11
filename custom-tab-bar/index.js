@@ -4,9 +4,9 @@ Component({
     safeAreaBottom: 0,
     list: [
       { pagePath: '/pages/index/index', text: '首页', icon: '🏠' },
-      { pagePath: '/pages/library/library', text: '知识库', icon: '📚' },
+      { pagePath: '/pages/library/library', text: '答题学鸟', icon: '📚' },
       { pagePath: '/pages/codex/codex', text: '图鉴', icon: '📖' },
-      { pagePath: '/pages/pet/pet', text: '宠物', icon: '🐣' }
+      { pagePath: '/pages/pet/pet', text: '宠物养成', icon: '🐣' }
     ]
   },
   lifetimes: {

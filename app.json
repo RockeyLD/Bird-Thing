@@ -18,9 +18,9 @@
     "borderStyle": "white",
     "list": [
       { "pagePath": "pages/index/index", "text": "首页" },
-      { "pagePath": "pages/library/library", "text": "知识库" },
+      { "pagePath": "pages/library/library", "text": "答题学鸟" },
       { "pagePath": "pages/codex/codex", "text": "图鉴" },
-      { "pagePath": "pages/pet/pet", "text": "宠物" }
+      { "pagePath": "pages/pet/pet", "text": "宠物养成" }
     ]
   },
   "window": {

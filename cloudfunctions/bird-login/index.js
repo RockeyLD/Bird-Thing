@@ -9,6 +9,8 @@ function pickState(data) {
     birdShed: data.birdShed || [],
     learnedBirdIds: data.learnedBirdIds || [],
     codex: data.codex || {},
+    feedStock: data.feedStock || 0,
+    ownedPetTypes: data.ownedPetTypes || [],
     userInfo: data.userInfo || {}
   };
 }

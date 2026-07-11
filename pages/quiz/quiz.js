@@ -82,8 +82,6 @@ Page({
   },
 
   onQuizComplete() {
-    const score = this.data.review ? 3 : 50;
-    addScore(score);
     const state = getUserState();
     if (!state.codex[this.data.bird.id]) {
       state.codex[this.data.bird.id] = { learnedDimensions: [], mastered: false, lastReviewAt: 0 };
@@ -91,13 +89,19 @@ Page({
     const entry = state.codex[this.data.bird.id];
     entry.mastered = true;
     entry.lastReviewAt = Date.now();
-    if (entry.learnedDimensions.length < 5) {
+    const alreadyFull = entry.learnedDimensions.length >= 5;
+    if (!alreadyFull) {
       entry.learnedDimensions.push('quiz');
     }
     if (!state.learnedBirdIds.includes(this.data.bird.id)) {
       state.learnedBirdIds.push(this.data.bird.id);
     }
     setUserState(state);
+
+    const score = this.data.review ? (alreadyFull ? 0 : 3) : 50;
+    if (score > 0) {
+      addScore(score);
+    }
     wx.showModal({
       title: '恭喜通过！',
       content: `你答对了 5 题，成功解锁了 ${this.data.bird.name}！`,

@@ -25,12 +25,13 @@ Page({
     const user = getUserState();
     const list = BIRDS.map(b => {
       const entry = user.codex[b.id];
+      const progress = entry ? entry.learnedDimensions.length : 0;
       return {
         ...b,
         iconPath: `/images/Bird Icon/${b.name}.png`,
         learnedDimensions: entry ? entry.learnedDimensions : [],
-        mastered: entry ? entry.mastered : false,
-        progress: entry ? entry.learnedDimensions.length : 0
+        mastered: progress >= 5,
+        progress
       };
     });
     this.setData({

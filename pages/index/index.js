@@ -23,12 +23,6 @@ Page({
     isLoggedIn: false,
     isGuest: false,
     petImage: '',
-    quickActions: [
-      { label: '答题学鸟', icon: '💡', page: '/pages/library/library', color: '#4CAF82' },
-      { label: '我的图鉴', icon: '📖', page: '/pages/codex/codex', color: '#2196F3' },
-      { label: '宠物养成', icon: '🐣', page: '/pages/pet/pet', color: '#FF9800' },
-      { label: '知识库', icon: '🔍', page: '/pages/library/library', color: '#9C27B0' }
-    ],
     recommendBird: null,
     recommendHook: ''
   },
@@ -127,13 +121,10 @@ Page({
     wx.showToast({ title: `获得${getPetBird(pet.birdId).name}蛋！`, icon: 'success' });
   },
 
-  onQuickTap(e) {
-    const { page } = e.currentTarget.dataset;
-    wx.switchTab({ url: page });
-  },
-
   onRecommendTap() {
-    wx.switchTab({ url: '/pages/library/library' });
+    const bird = this.data.recommendBird;
+    if (!bird) return;
+    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}` });
   },
 
   onFeedTap() {

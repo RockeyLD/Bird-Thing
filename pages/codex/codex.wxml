@@ -15,6 +15,24 @@
   <view class="content-wrapper">
     <scroll-view scroll-y class="scrollarea">
       <view class="container">
+        <view class="stats-card">
+          <view class="stats-title">学习统计</view>
+          <view class="stats-row">
+            <view class="stats-block">
+              <view class="stats-num">{{user.learnedBirdIds.length}}</view>
+              <view class="stats-label">已学习</view>
+            </view>
+            <view class="stats-block">
+              <view class="stats-num">{{masteredCount}}</view>
+              <view class="stats-label">已精通</view>
+            </view>
+            <view class="stats-block">
+              <view class="stats-num">{{15 - user.learnedBirdIds.length}}</view>
+              <view class="stats-label">待探索</view>
+            </view>
+          </view>
+        </view>
+
         <view class="codex-grid">
           <view
             class="codex-item {{item.mastered ? 'mastered' : item.progress > 0 ? 'learning' : 'locked'}}"
@@ -31,24 +49,6 @@
                 <view class="progress-mini-fill" style="width: {{item.progress / 5 * 100}}%"></view>
               </view>
               <text class="progress-text">{{item.progress}}/5</text>
-            </view>
-          </view>
-        </view>
-
-        <view class="stats-card">
-          <view class="stats-title">学习统计</view>
-          <view class="stats-row">
-            <view class="stats-block">
-              <view class="stats-num">{{user.learnedBirdIds.length}}</view>
-              <view class="stats-label">已学习</view>
-            </view>
-            <view class="stats-block">
-              <view class="stats-num">{{masteredCount}}</view>
-              <view class="stats-label">已精通</view>
-            </view>
-            <view class="stats-block">
-              <view class="stats-num">{{15 - user.learnedBirdIds.length}}</view>
-              <view class="stats-label">待探索</view>
             </view>
           </view>
         </view>

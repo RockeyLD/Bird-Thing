@@ -23,6 +23,18 @@
   <view class="content-wrapper">
     <scroll-view scroll-y class="scrollarea">
       <view class="container">
+        <!-- 每日推荐 -->
+        <view class="section-title">每日推荐</view>
+        <view class="card daily-recommend" bindtap="onRecommendTap" wx:if="{{recommendBird}}">
+          <view class="recommend-row">
+            <image class="recommend-img" src="{{recommendBird.cover}}" mode="aspectFill" />
+            <view class="recommend-info">
+              <view class="recommend-name">{{recommendBird.name}}</view>
+              <view class="recommend-hook">{{recommendHook}}</view>
+            </view>
+          </view>
+        </view>
+
         <!-- 宠物展示区 -->
         <view class="card pet-card">
           <view wx:if="{{!pet}}" class="pet-empty">
@@ -43,29 +55,6 @@
             <button class="btn-secondary feed-btn" bindtap="onFeedTap">
               立即喂食
             </button>
-          </view>
-        </view>
-
-        <!-- 快捷入口 -->
-        <view class="section-title">快捷入口</view>
-        <view class="grid-2">
-          <view class="action-card" wx:for="{{quickActions}}" wx:key="label" bindtap="onQuickTap" data-page="{{item.page}}">
-            <view class="action-icon" style="background: {{item.color}}20; color: {{item.color}}">
-              {{item.icon}}
-            </view>
-            <view class="action-label">{{item.label}}</view>
-          </view>
-        </view>
-
-        <!-- 每日推荐 -->
-        <view class="section-title">每日推荐</view>
-        <view class="card daily-recommend" bindtap="onRecommendTap" wx:if="{{recommendBird}}">
-          <view class="recommend-row">
-            <image class="recommend-img" src="{{recommendBird.cover}}" mode="aspectFill" />
-            <view class="recommend-info">
-              <view class="recommend-name">{{recommendBird.name}}</view>
-              <view class="recommend-hook">{{recommendHook}}</view>
-            </view>
           </view>
         </view>
       </view>
