@@ -260,6 +260,7 @@ function addFeedInventory(type, delta) {
   state.feedInventory[type] = Math.max(0, (state.feedInventory[type] || 0) + delta);
   state.feedStock = (state.feedStock || 0) + delta;
   setUserState(state);
+  scheduleSync(state);
   return state.feedInventory;
 }
 
@@ -271,6 +272,7 @@ function consumeFeedInventory(type) {
   state.feedInventory[type] -= 1;
   state.feedStock = Math.max(0, (state.feedStock || 0) - 1);
   setUserState(state);
+  scheduleSync(state);
   return true;
 }
 
