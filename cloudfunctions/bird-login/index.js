@@ -10,6 +10,7 @@ function pickState(data) {
     learnedBirdIds: data.learnedBirdIds || [],
     codex: data.codex || {},
     feedStock: data.feedStock || 0,
+    feedInventory: data.feedInventory || { fruit: 0, worm: 0, beetle: 0 },
     ownedPetTypes: data.ownedPetTypes || [],
     userInfo: data.userInfo || {},
     tutorialCompleted: data.tutorialCompleted || false
