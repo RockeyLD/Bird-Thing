@@ -405,11 +405,11 @@ const FEED_PRICE = 20;
 const FEED_EXP = 20;
 
 function getStage(exp) {
-  if (exp < 100) return STAGES[0];
-  if (exp < 300) return STAGES[1];
-  if (exp < 600) return STAGES[2];
-  if (exp < 1000) return STAGES[3];
-  return { ...STAGES[3], isMax: true, nextExpLabel: 'MAX' };
+  if (exp < 100) return { ...STAGES[0], baseExp: 0 };
+  if (exp < 300) return { ...STAGES[1], baseExp: 100 };
+  if (exp < 600) return { ...STAGES[2], baseExp: 300 };
+  if (exp < 1000) return { ...STAGES[3], baseExp: 600 };
+  return { ...STAGES[3], isMax: true, nextExpLabel: 'MAX', baseExp: 600 };
 }
 
 function getStageIndex(exp) {

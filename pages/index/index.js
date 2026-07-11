@@ -25,7 +25,9 @@ Page({
     petImage: '',
     recommendBird: null,
     recommendHook: '',
-    showRecommendCard: false
+    showRecommendCard: false,
+    feedStock: 0,
+    currentExp: 0
   },
 
   onLoad() {
@@ -62,6 +64,7 @@ Page({
       stageInfo.isMax = stageInfo.key === 'ultimate';
       stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
     }
+    const currentExp = pet && stageInfo ? pet.exp - stageInfo.baseExp : 0;
 
     const dueReviews = getDueReviews().map(({ birdId, progress }) => {
       const bird = BIRDS.find(b => b.id === birdId);
@@ -86,7 +89,9 @@ Page({
       user,
       pet,
       stageInfo,
+      currentExp,
       petImage: getPetImage(pet),
+      feedStock: getFeedStock(),
       dueReviews,
       recommendBird,
       recommendHook,

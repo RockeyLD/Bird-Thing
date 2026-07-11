@@ -51,7 +51,7 @@
         <view class="section-title">宠物养成</view>
         <view class="card pet-card">
           <view wx:if="{{!pet}}" class="pet-empty">
-            <view class="pet-egg">🥚</view>
+            <image class="pet-egg" src="/images/unclaimed_egg.png" mode="aspectFit" />
             <view class="title-md">还没有宠物鸟</view>
             <view class="text-sm">领养一颗鸟蛋，开启你的鸟类之旅</view>
             <button class="btn-primary adopt-btn" bindtap="onAdoptTap">领养鸟蛋</button>
@@ -60,11 +60,12 @@
             <image class="pet-avatar {{stageInfo.key}}" src="{{petImage}}" mode="aspectFit" />
             <view class="pet-info">
               <view class="title-md">{{stageInfo.label}}</view>
-              <view class="text-sm">经验 {{pet.exp}} / {{stageInfo.nextExpLabel}}</view>
+              <view class="text-sm">经验 {{currentExp}} / {{stageInfo.nextExpLabel}}</view>
             </view>
             <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
-              <view class="progress-fill" style="width: {{pet.exp / stageInfo.nextExp * 100}}%"></view>
+              <view class="progress-fill" style="width: {{currentExp / stageInfo.nextExp * 100}}%"></view>
             </view>
+            <view wx:else class="max-badge">已满级</view>
             <button class="btn-secondary feed-btn" bindtap="onFeedTap">
               立即喂食
             </button>
