@@ -42,7 +42,11 @@ Page({
     petImage: '',
     petBg: '/images/Background.png',
     showFeedModal: false,
-    modalFeeds: []
+    modalFeeds: [],
+    showLevelUp: false,
+    levelUpImage: '',
+    levelUpText: '',
+    levelUpReqExp: 0
   },
 
   onLoad() {
@@ -85,6 +89,10 @@ Page({
 
   goToShop() {
     wx.navigateTo({ url: '/pages/shop/shop' });
+  },
+
+  hideLevelUp() {
+    this.setData({ showLevelUp: false });
   },
 
   onAdoptTap() {
@@ -144,10 +152,19 @@ Page({
         }
       });
     } else if (newStage > oldStageIndex) {
-      wx.showModal({
-        title: '恭喜升级！',
-        content: `你的宠物鸟进化到了「${getStage(updated.exp).label}」阶段！`,
-        showCancel: false
+      const stage = getStage(updated.exp);
+      const LEVELUP_TEXTS = {
+        egg: '一个鸟蛋',
+        chick: '一只幼年鸟',
+        adult: '一只成年鸟',
+        prime: '一只盛年鸟',
+        ultimate: '一只究极鸟'
+      };
+      this.setData({
+        showLevelUp: true,
+        levelUpImage: getPetImage(updated),
+        levelUpText: LEVELUP_TEXTS[stage.key] || '一只宠物鸟',
+        levelUpReqExp: stage.reqExp
       });
     } else {
       wx.showToast({ title: `喂食成功 +${item.exp}经验`, icon: 'success' });

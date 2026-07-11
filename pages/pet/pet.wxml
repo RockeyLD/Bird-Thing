@@ -43,7 +43,7 @@
     <!-- 喂食 -->
     <view class="card feed-card">
       <view class="stock-row">
-        <view class="stock-tag">🌾 库存: {{feedStock}}</view>
+        <view class="stock-tag">🌾 总库存: {{feedStock}}</view>
         <view wx:if="{{user.feedInventory.fruit}}" class="stock-tag">🍈 果实: {{user.feedInventory.fruit}}</view>
         <view wx:if="{{user.feedInventory.worm}}" class="stock-tag">🪱 蚯蚓: {{user.feedInventory.worm}}</view>
         <view wx:if="{{user.feedInventory.beetle}}" class="stock-tag">🪲 甲虫: {{user.feedInventory.beetle}}</view>
@@ -74,6 +74,17 @@
         <view class="text-sm">没有可用的食物，去商店看看吧～</view>
       </view>
       <button class="btn-secondary modal-close" bindtap="hideFeedModal">取消</button>
+    </view>
+  </view>
+
+  <!-- 升级弹窗 -->
+  <view wx:if="{{showLevelUp}}" class="levelup-overlay">
+    <view class="levelup-content">
+      <view class="levelup-title">恭喜你升级了！</view>
+      <view class="levelup-subtitle">获得{{levelUpText}}！</view>
+      <image class="levelup-image" src="{{levelUpImage}}" mode="aspectFit" />
+      <view class="levelup-hint">还需{{levelUpReqExp}}经验值可再次升级</view>
+      <button class="levelup-btn" bindtap="hideLevelUp">太棒了</button>
     </view>
   </view>
 </view>

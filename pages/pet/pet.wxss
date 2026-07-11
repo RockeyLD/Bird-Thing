@@ -322,3 +322,65 @@ page { background: transparent; overflow: hidden; }
     transform: scale(1.08);
   }
 }
+
+/* 升级弹窗 */
+.levelup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #E8F5E9;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.levelup-content {
+  text-align: center;
+  padding: 60rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.levelup-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #2E7D32;
+  margin-bottom: 20rpx;
+}
+
+.levelup-subtitle {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #388E3C;
+  margin-bottom: 40rpx;
+}
+
+.levelup-image {
+  width: 400rpx;
+  height: 400rpx;
+  margin-bottom: 40rpx;
+}
+
+.levelup-hint {
+  font-size: 28rpx;
+  color: #66BB6A;
+  margin-bottom: 60rpx;
+}
+
+.levelup-btn {
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #fff;
+  background: #4CAF82;
+  border-radius: 44rpx;
+  padding: 0 80rpx;
+  border: none;
+}
