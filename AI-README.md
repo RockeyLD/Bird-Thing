@@ -63,20 +63,19 @@ images/
 
 ```js
 {
-  totalScore: 0,               // 积分
-  currentBird: {               // 当前宠物
-    birdId: 'bird_001',
-    exp: 0,
-    feedCount: 0,
-    isRetired: false
-  },
-  birdShed: [],                // 已放归的宠物列表
-  learnedBirdIds: [],          // 已学鸟的 ID 列表
-  codex: {                     // 图鉴进度
+  totalScore: 0,
+  currentBird: { birdId: 'bird_001', exp: 0, feedCount: 0, isRetired: false },
+  birdShed: [],
+  learnedBirdIds: [],
+  codex: {
     'bird_001': {
-      learnedDimensions: ['quiz'],  // 每通过一次 push 一条 'quiz'，最多 5 条
-      mastered: false,
-      lastReviewAt: 0
+      learnedDimensions: ['quiz'],  // 学过的维度记录
+      learned: false,               // 是否完成首次学习测验
+      mastered: false,              // 是否真正精通（走完所有间隔）
+      progress: 1,                  // 当前进度：1~5（1=刚学完，5=精通）
+      learnedAt: 0,               // 首次学完时间戳
+      lastReviewAt: 0,              // 上次复习时间戳
+      nextReviewAt: 0               // 下次可复习时间戳（0=无需/已精通）
     }
   }
 }
@@ -130,7 +129,12 @@ images/
 | `getCurrentPet()` | 获取当前宠物 | 从 userState 读取 |
 | `setCurrentPet(pet)` | 设置当前宠物 | 自动写回 |
 | `feedPet(expGain)` | 喂食 | 增加经验值和 feedCount |
-| `addToCodex(birdId, dimension)` | 记录图鉴学习进度 | 旧维度模式使用，题库模式直接由 quiz.js 写入 mastered |
+| `addToCodex(birdId, dimension)` | 记录旧维度模式学习进度 | 5 维度全通过时自动触发 `learned=true` 并安排首次复习 |
+| `completeFirstLearning(birdId)` | 记录题库模式首次测验通过 | 返回 `{alreadyFull, entry}`，首次设 `progress=1` + `nextReviewAt=+1天` |
+| `recordReview(birdId, passed)` | 记录延后复习结果 | 通过则 `progress++`、加 10 分、推进间隔；失败则重置当前间隔 |
+| `getDueReviews()` | 获取所有到期的复习任务 | 返回数组，供首页/图鉴展示入口 |
+| `getReviewStatus(birdId)` | 获取某鸟复习状态 | 返回 `{canReview, daysLeft, progress}` |
+| `getProgress(entry)` | 计算进度（1~5） | 兼容新旧数据 |
 | `loadFromCloud()` | 从云端拉取数据覆盖本地 | 首页登录按钮调用 |
 
 ---
@@ -155,31 +159,63 @@ images/
 - 按钮与选项均添加 `active` 按压缩放动效（`transform: scale()`）。
 
 **积分规则**：
-- 首次通过（答对 5 题）：+50 分
-- 复习模式通过：+3 分
-- 答错不扣分，但不算进度
+- 首次学习通过（答对 5 题）：+50 分
+- 复习通过：+10 分
+- 答错：0 分（不扣），但复习间隔重置
 
-**通过判定**：`correctCount >= 5` 时调用 `onQuizComplete()`，写入：
-- `codex[bid].mastered = true`
-- `learnedDimensions` 推入 `'quiz'`（最多 5 条，即进度从 1 到 5）
+**首次学习判定**：`correctCount >= 5` 时调用 `onQuizComplete()`，写入：
+- `codex[bid].learned = true`
+- `codex[bid].progress = 1`
+- `codex[bid].nextReviewAt = now + 1天`
 
-### 5.2 宠物成长
+**延后复习判定**：`quiz?birdId=xxx&mode=delayed` 时，进入复习模式：
+- 若 `nextReviewAt > now`：页面加载时拦截，toast 提示剩余天数并自动返回
+- 答对 5/5：调用 `recordReview(birdId, true)`，推进 `progress` 和 `nextReviewAt`（间隔 1→2→4→7 天），弹窗提示"下次 X 天后复习"
+- 答错：调用 `recordReview(birdId, false)`，重置当前级间隔，弹窗提示"复习间隔已重置"
+- 到达 `progress = 5`：设 `mastered = true`，弹窗"真正精通！"
+
+---
+
+### 5.2 延后复习系统（Spaced Retrieval）
+
+**核心机制**：学完≠精通，即时记忆不可靠，需经过 4 次间隔复习（1→2→4→7 天）后才算真正掌握。
+
+**状态流转**：
+```
+首次测验通过  →  progress=1, nextReviewAt=+1天
+复习1通过     →  progress=2, nextReviewAt=+2天
+复习2通过     →  progress=3, nextReviewAt=+4天
+复习3通过     →  progress=4, nextReviewAt=+7天
+复习4通过     →  progress=5, mastered=true
+```
+
+**锁定机制**：没到时间点击复习 → 系统提示"还差 X 天才能复习"，无法进入答题。
+
+**失败处理**：复习答错后，`nextReviewAt` 重置为当前级间隔（即再等同样的天数重考），进度不变。
+
+**入口展示**：
+- 首页：有到期复习时，每日推荐下方置顶"待复习"卡片（橙色边框，显示进度）
+- 图鉴：筛选器"待复习"tab，每张卡显示进度条和"X天后"或"可复习"标签
+
+---
+
+### 5.3 宠物成长
 - 鸟蛋（0）→ 幼鸟（100）→ 成鸟（300）→ 老年（600）→ 满级（1000）
 - 满级后可"放归自然"，进入 birdShed，重新开始领养鸟蛋
 - 喂食：`FEED_PRICE = 20` 积分，`FEED_EXP = 20` 经验
 
-### 5.3 图鉴系统
-- 题库模式下，每鸟通过标记 `mastered: true`
-- `learnedDimensions` 长度代表学习进度（1~5）
-- 图鉴页面展示：已学习 / 未学习，支持按状态筛选
+### 5.4 图鉴系统
+- 真正精通标记为 `mastered: true`（走完 4 次间隔复习）
+- `progress` 表示当前复习进度（1~5），1=刚学完，5=精通
+- 图鉴页面展示：已学习 / 已精通 / 待复习，支持按状态筛选
 
-### 5.4 每日推荐（首页 index）
+### 5.5 每日推荐（首页 index）
 - 从 `BIRDS.filter(b => b.hooks && b.hooks.length > 0)` 中随机抽取一鸟
 - 再从该鸟 `hooks` 数组中随机抽取一条 hook
 - 展示：左侧鸟图，上方鸟名，下方 hook 文案
 - 点击后 `wx.switchTab` 跳转至 `/pages/library/library`
 
-### 5.5 新手教程
+### 5.6 新手教程
 - 首次进入若 `tutorialCompleted === false`，自动重定向到 `/pages/tutorial/tutorial`
 - 4 步：欢迎 → 领蛋 → 答题演示 → 喂食演示
 - 完成后 `tutorialCompleted = true`，存储于本地和云端
@@ -237,7 +273,7 @@ images/
 | 登录 | `/pages/login/login` | 无 | 未登录时首屏 |
 | 首页 | `/pages/index/index` | 无 | Tab 1 |
 | 知识库 | `/pages/library/library` | 无 | Tab 2 / 首页快捷入口 / 每日推荐 |
-| 答题 | `/pages/quiz/quiz` | `?birdId=xxx&review=1` | 知识库点击 / 图鉴复习 |
+| 答题 | `/pages/quiz/quiz` | `?birdId=xxx&review=1&mode=delayed` | 知识库点击 / 图鉴复习 / 首页待复习卡片 |
 | 图鉴 | `/pages/codex/codex` | 无 | Tab 3 |
 | 宠物 | `/pages/pet/pet` | 无 | Tab 4 / 首页快捷入口 |
 | 商店 | `/pages/shop/shop` | 无 | 首页快捷入口 |
@@ -258,4 +294,4 @@ images/
 
 ---
 
-*最后更新：2026-07-10*
+*最后更新：2026-07-11* · 新增延后复习系统（Spaced Retrieval）
