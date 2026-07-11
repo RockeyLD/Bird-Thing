@@ -147,7 +147,7 @@ Page({
         const daysLeft = Math.ceil((result.nextReviewAt - Date.now()) / DAY_MS);
         wx.showModal({
           title: '复习通过！',
-          content: `复习通过！+10 分，下次 ${daysLeft} 天后复习。`,
+          content: `复习通过！+20 分，下次 ${daysLeft} 天后复习。`,
           showCancel: false,
           success: () => wx.navigateBack()
         });
@@ -157,7 +157,7 @@ Page({
 
     const { alreadyFull } = completeFirstLearning(this.data.bird.id);
     if (!alreadyFull) {
-      addScore(50);
+      addScore(15);
     }
     wx.showModal({
       title: '恭喜通过！',

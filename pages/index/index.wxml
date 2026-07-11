@@ -77,7 +77,7 @@
           <view class="stats-row">
             <view class="stats-item">
               <view class="stats-num">{{learnedCount}}<text class="stats-total">/{{totalBirds}}</text></view>
-              <view class="stats-label">已学习</view>
+              <view class="stats-label">正在学习</view>
             </view>
             <view class="stats-divider"></view>
             <view class="stats-item">

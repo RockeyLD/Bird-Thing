@@ -173,7 +173,7 @@ function recordReview(birdId, passed) {
     } else {
       entry.nextReviewAt = now + REVIEW_INTERVALS[entry.progress - 1] * DAY_MS;
     }
-    addScore(10);
+    addScore(20);
   } else {
     // Reset current interval on failure
     entry.nextReviewAt = now + REVIEW_INTERVALS[entry.progress - 1] * DAY_MS;
