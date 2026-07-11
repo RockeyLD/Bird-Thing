@@ -21,6 +21,10 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const OPENID = wxContext.OPENID;
 
+  if (!OPENID) {
+    return { error: '无法获取用户身份' };
+  }
+
   const userRes = await db.collection('bird-users').where({ openid: OPENID }).get();
   let userData = userRes.data[0] || null;
 
@@ -28,14 +32,26 @@ exports.main = async (event, context) => {
   if (event.action === 'sync') {
     const state = pickState(event.state || {});
     if (!userData) {
-      await db.collection('bird-users').add({
-        data: {
-          ...state,
-          openid: OPENID,
-          updatedAt: db.serverDate(),
-          createdAt: db.serverDate()
+      // 二次确认，防止并发创建重复用户
+      const doubleCheck = await db.collection('bird-users').where({ openid: OPENID }).get();
+      if (doubleCheck.data.length > 0) {
+        userData = doubleCheck.data[0];
+        const updateData = {};
+        for (const k in state) {
+          updateData[k] = state[k];
         }
-      });
+        updateData.updatedAt = db.serverDate();
+        await db.collection('bird-users').doc(userData._id).update({ data: updateData });
+      } else {
+        await db.collection('bird-users').add({
+          data: {
+            ...state,
+            openid: OPENID,
+            updatedAt: db.serverDate(),
+            createdAt: db.serverDate()
+          }
+        });
+      }
     } else {
       const updateData = {};
       for (const k in state) {
@@ -49,15 +65,21 @@ exports.main = async (event, context) => {
 
   // 默认登录：获取或创建用户
   if (!userData) {
-    const localState = event.localState || {};
-    const defaultData = {
-      ...pickState(localState),
-      openid: OPENID,
-      createdAt: db.serverDate(),
-      updatedAt: db.serverDate()
-    };
-    const addRes = await db.collection('bird-users').add({ data: defaultData });
-    userData = { _id: addRes._id, ...defaultData };
+    // 二次确认，防止并发创建重复用户
+    const doubleCheck = await db.collection('bird-users').where({ openid: OPENID }).get();
+    if (doubleCheck.data.length > 0) {
+      userData = doubleCheck.data[0];
+    } else {
+      const localState = event.localState || {};
+      const defaultData = {
+        ...pickState(localState),
+        openid: OPENID,
+        createdAt: db.serverDate(),
+        updatedAt: db.serverDate()
+      };
+      const addRes = await db.collection('bird-users').add({ data: defaultData });
+      userData = { _id: addRes._id, ...defaultData };
+    }
   }
 
   return {

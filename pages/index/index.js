@@ -27,7 +27,8 @@ Page({
     recommendHook: '',
     showRecommendCard: false,
     feedStock: 0,
-    currentExp: 0
+    currentExp: 0,
+    isLoggingIn: false
   },
 
   onLoad() {
@@ -103,6 +104,7 @@ Page({
   },
 
   onLoginTap() {
+    if (this.data.isLoggingIn) return;
     if (getIsGuestMode()) {
       wx.showModal({
         title: '切换账号',
@@ -122,6 +124,7 @@ Page({
       wx.showToast({ title: '欢迎！', icon: 'success' });
       return;
     }
+    this.setData({ isLoggingIn: true });
     wx.showLoading({ title: '登录中...' });
     loadFromCloud().then(res => {
       wx.hideLoading();
@@ -135,6 +138,8 @@ Page({
       wx.setStorageSync('openid', 'local-user');
       this.setData({ isLoggedIn: true });
       wx.showToast({ title: '欢迎！', icon: 'success' });
+    }).finally(() => {
+      this.setData({ isLoggingIn: false });
     });
   },
 

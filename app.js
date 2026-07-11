@@ -1,5 +1,7 @@
 const { BIRDS } = require('./data/birds');
 
+const CLOUD_ENV = 'eduction-cloud1-9g1g39x5d24e6574';
+
 /** 全局应用数据 */
 App({
   globalData: {
@@ -33,7 +35,7 @@ App({
       return;
     }
     try {
-      wx.cloud.init();
+      wx.cloud.init({ env: CLOUD_ENV });
       this.globalData.cloudInited = true;
     } catch (e) {
       console.warn('云开发初始化失败', e);
