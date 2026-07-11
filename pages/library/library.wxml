@@ -43,7 +43,7 @@
       <scroll-view scroll-y class="card-scroll">
         <view class="card-inner-padding">
           <view class="bird-header-modal">
-            <image wx:if="{{cardBird.cover}}" class="bird-cover-img" src="{{cardBird.cover}}" mode="aspectFit" />
+            <image wx:if="{{cardBird.cover}}" class="bird-cover-img {{isImageZoomed ? 'zoomed' : ''}}" src="{{cardBird.cover}}" mode="aspectFit" bindtap="onImageTap" />
             <view wx:else class="bird-emoji">🐦</view>
             <view class="title-lg">{{cardBird.name}}</view>
             <view class="text-sm">{{cardBird.enName}}</view>

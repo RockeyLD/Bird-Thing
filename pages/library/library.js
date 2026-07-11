@@ -9,6 +9,7 @@ Page({
     keyword: '',
     showCard: false,
     cardBird: null,
+    isImageZoomed: false,
     bgImage: getImageUrl('/images/Background.png'),
     searchIcon: getImageUrl('/images/icons/搜索.png')
   },
@@ -58,7 +59,11 @@ Page({
   onBirdTap(e) {
     const { id } = e.currentTarget.dataset;
     const bird = BIRDS.find(b => b.id === id);
-    this.setData({ showCard: true, cardBird: bird ? { ...bird, cover: getImageUrl(bird.cover) } : null });
+    this.setData({ showCard: true, cardBird: bird ? { ...bird, cover: getImageUrl(bird.cover) } : null, isImageZoomed: false });
+  },
+
+  onImageTap() {
+    this.setData({ isImageZoomed: !this.data.isImageZoomed });
   },
 
   onStartQuiz() {
