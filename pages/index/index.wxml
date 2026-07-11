@@ -20,7 +20,6 @@
         <text>💰</text>
         <text>{{user.totalScore}}</text>
       </view>
-      <view class="save-btn" bindtap="onSaveTap">保存</view>
     </view>
   </view>
 

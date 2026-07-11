@@ -1,5 +1,5 @@
 const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
-const { isCloudReady, syncToCloud } = require('../../utils/cloud');
+const { isCloudReady } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
 
 function getPetBird(birdId) {
@@ -355,19 +355,6 @@ Page({
         this.refresh();
         wx.showToast({ title: `获得${getPetBird(newPet.birdId).name}蛋！`, icon: 'success' });
       }
-    });
-  },
-
-  onSaveTap() {
-    const state = getUserState();
-    wx.showLoading({ title: '保存中...' });
-    syncToCloud(state).then(() => {
-      wx.hideLoading();
-      wx.showToast({ title: '已保存到云端', icon: 'success' });
-    }).catch(err => {
-      wx.hideLoading();
-      console.error('保存失败', err);
-      wx.showToast({ title: '保存失败', icon: 'none' });
     });
   },
 

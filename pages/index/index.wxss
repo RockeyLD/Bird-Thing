@@ -24,18 +24,6 @@
   color: var(--primary);
 }
 
-.save-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6rpx;
-  background: rgba(76, 175, 130, 0.12);
-  color: var(--primary);
-  padding: 6rpx 16rpx;
-  border-radius: 24rpx;
-  font-size: 24rpx;
-  font-weight: 600;
-}
-
 .page { display: flex; flex-direction: column; height: 100vh; position: relative; }
 
 .nav-bar {
