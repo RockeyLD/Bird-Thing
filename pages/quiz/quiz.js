@@ -97,6 +97,19 @@ Page({
       this.onQuizComplete();
       return;
     }
+    if (usedIndices.length >= 5) {
+      if (!hasWrong && correctCount >= QUIZ_PASS_COUNT) {
+        this.onQuizComplete();
+      } else {
+        wx.showModal({
+          title: '很遗憾，就差一点点',
+          content: `你答对了 ${correctCount} 题，再接再厉！`,
+          showCancel: false,
+          success: () => wx.navigateBack()
+        });
+      }
+      return;
+    }
     const available = bird.questions.map((_, i) => i).filter(i => !usedIndices.includes(i));
     if (available.length === 0) {
       wx.showModal({
