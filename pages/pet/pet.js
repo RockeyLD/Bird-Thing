@@ -11,7 +11,12 @@ function getPetImage(pet) {
   if (!pet) return '';
   const bird = getPetBird(pet.birdId);
   const stage = getStage(pet.exp);
-  return bird.stages[stage.key] || bird.stages.egg;
+  const stageKeys = ['egg', 'chick', 'adult', 'ultimate'];
+  let idx = stageKeys.indexOf(stage.key);
+  while (idx >= 0 && !bird.stages[stageKeys[idx]]) {
+    idx--;
+  }
+  return idx >= 0 ? bird.stages[stageKeys[idx]] : bird.stages.egg;
 }
 
 function getPetBg(pet) {
@@ -159,7 +164,7 @@ Page({
     const updated = feedPet(item.exp);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 4 && oldExp < 1350 && updated.exp >= 1350) {
+    if (oldStageIndex === 3 && oldExp < 1350 && updated.exp >= 1350) {
       const oldBird = getPetBird(oldPet.birdId);
       retirePet(oldPet);
       wx.showModal({
@@ -176,10 +181,9 @@ Page({
     } else if (newStage > oldStageIndex) {
       const stage = getStage(updated.exp);
       const LEVELUP_TEXTS = {
-        egg: '一个鸟蛋',
+        egg: '一只鸟蛋',
         chick: '一只幼年鸟',
         adult: '一只成年鸟',
-        prime: '一只盛年鸟',
         ultimate: '一只究极鸟'
       };
       this.setData({

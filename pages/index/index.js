@@ -11,7 +11,7 @@ function getPetImage(pet) {
   if (!pet) return '';
   const bird = getPetBird(pet.birdId);
   const stage = getStage(pet.exp);
-  const stageKeys = ['egg', 'chick', 'adult', 'prime', 'ultimate'];
+  const stageKeys = ['egg', 'chick', 'adult', 'ultimate'];
   let idx = stageKeys.indexOf(stage.key);
   while (idx >= 0 && !bird.stages[stageKeys[idx]]) {
     idx--;
@@ -426,7 +426,7 @@ Page({
     this.setData({ showFeedModal: false });
 
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 4 && oldExp < 1350 && updated.exp >= 1350) {
+    if (oldStageIndex === 3 && oldExp < 1350 && updated.exp >= 1350) {
       const oldBird = getPetBird(pet.birdId);
       retirePet(pet);
       wx.showModal({
