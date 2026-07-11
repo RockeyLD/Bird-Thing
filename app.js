@@ -1,5 +1,6 @@
 const { BIRDS } = require('./data/birds');
-const { initCloudImages } = require('./utils/imageUrls');
+const { initCloudImages, resolveBirdImages } = require('./utils/imageUrls');
+const { PET_BIRDS, FEED_ITEMS } = require('./data/birds');
 
 const CLOUD_ENV = 'eduction-cloud1-9g1g39x5d24e6574';
 
@@ -19,6 +20,15 @@ App({
     this.initCloud();
     initCloudImages().then(() => {
       this.globalData.imagesReady = true;
+      // 临时链接已获取，将 birds.js 中的本地路径替换为临时链接
+      resolveBirdImages(BIRDS, PET_BIRDS, FEED_ITEMS);
+      // 刷新所有已打开的页面，使其使用新的图片链接
+      const pages = getCurrentPages();
+      pages.forEach(page => {
+        if (typeof page.refresh === 'function') {
+          try { page.refresh(); } catch (e) {}
+        }
+      });
     });
     const windowInfo = wx.getWindowInfo();
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect();

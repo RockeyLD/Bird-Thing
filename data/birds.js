@@ -445,6 +445,3 @@ module.exports = {
   BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_ITEMS, PET_FEED_MAP, FEED_PRICE, FEED_EXP, getStage, getStageIndex
 };
 
-// 将静态图片路径解析为云存储临时链接（优先）或本地路径（兜底）
-const { resolveBirdImages } = require('../utils/imageUrls');
-resolveBirdImages(BIRDS, PET_BIRDS, FEED_ITEMS);

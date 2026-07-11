@@ -93,15 +93,20 @@ function initCloudImages() {
       fileList: fileIDs,
       success: res => {
         const list = res.fileList || [];
-        const localPaths = Object.keys(IMAGE_MAP);
-        list.forEach((item, idx) => {
-          const localPath = localPaths[idx];
-          if (item.tempFileURL) {
-            tempUrlCache[localPath] = item.tempFileURL;
+        const imageMapEntries = Object.entries(IMAGE_MAP);
+        list.forEach(item => {
+          if (item.status === 0 && item.tempFileURL) {
+            const found = imageMapEntries.find(([localPath, cloudPath]) => cloudPath === item.fileID);
+            if (found) {
+              tempUrlCache[found[0]] = item.tempFileURL;
+            } else {
+              console.warn('无法匹配临时链接:', item.fileID);
+            }
           } else {
-            console.warn('获取临时链接失败:', item.fileID, item.status);
+            console.warn('获取临时链接失败:', item.fileID, item.status, item.errMsg);
           }
         });
+        console.log('云存储图片临时链接已获取，共', Object.keys(tempUrlCache).length, '个');
         resolve(true);
       },
       fail: err => {
@@ -112,27 +117,17 @@ function initCloudImages() {
   });
 }
 
-/** 获取图片临时链接；若获取失败则回退到本地路径 */
+/** 获取图片临时链接；若获取失败则回退到本地路径，永不返回 cloud:// */
 function getImageUrl(localPath) {
-  // 优先返回已缓存的临时链接
   if (tempUrlCache[localPath]) {
     return tempUrlCache[localPath];
   }
-  // 如果没有缓存，但云存储路径存在，返回云存储路径（小程序会自动解析）
-  const cloudPath = getCloudFileID(localPath);
-  if (cloudPath) {
-    return cloudPath;
-  }
-  // 兜底：本地路径
+  // 兜底：直接返回本地路径，不返回 cloud://
+  // cloud:// 只能用于 API 调用，不能用于 WXML 的 src
   return localPath;
 }
 
-/** 获取 tabBar 可以直接使用的云存储路径（cloud://） */
-function getTabBarIcon(localPath) {
-  return getCloudFileID(localPath) || localPath;
-}
-
-/** 将 birds.js 中的静态图片路径转换为动态获取 */
+/** 将 birds.js 中的静态图片路径转换为临时链接（应在 initCloudImages 成功后调用） */
 function resolveBirdImages(birds, petBirds, feedItems) {
   birds.forEach(b => {
     if (b.cover) b.cover = getImageUrl(b.cover);
@@ -153,7 +148,6 @@ function resolveBirdImages(birds, petBirds, feedItems) {
 module.exports = {
   initCloudImages,
   getImageUrl,
-  getTabBarIcon,
   resolveBirdImages,
   getCloudFileID
 };
