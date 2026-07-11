@@ -35,7 +35,7 @@
         <text wx:else class="text-sm">MAX</text>
       </view>
       <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
-        <view class="progress-fill" style="width: {{currentExp / stageInfo.reqExp * 100}}%"></view>
+        <view class="progress-fill" style="{{progressStyle}}"></view>
       </view>
       <view wx:else class="max-badge">已满级</view>
     </view>

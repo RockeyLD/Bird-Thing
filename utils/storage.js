@@ -5,6 +5,10 @@ const TUTORIAL_KEY = 'tutorialCompleted';
 const DAY_MS = 24 * 60 * 60 * 1000;
 const REVIEW_INTERVALS = [1, 2, 4, 7]; // days between reviews: 1/5→2/5, 2/5→3/5, 3/5→4/5, 4/5→5/5
 
+let syncTimer = null;
+let pendingState = null;
+const SYNC_DELAY = 3000; // 3秒防抖
+
 let isGuestMode = false;
 let guestState = getDefaultState();
 
@@ -18,8 +22,10 @@ function getDefaultState() {
     learnedBirdIds: [],
     codex: {},
     feedStock: 0,
+<<<<<<< HEAD
     feedInventory: { fruit: 0, worm: 0, beetle: 0 },
-    ownedPetTypes: []
+    ownedPetTypes: [],
+    tutorialCompleted: false
   };
 }
 
@@ -52,11 +58,18 @@ function setUserState(state) {
     return;
   }
   wx.setStorageSync(USER_KEY, state);
-  try {
-    syncToCloud(state).catch(() => {});
-  } catch {
-    // 忽略云同步失败，保证本地可用
-  }
+}
+
+function scheduleSync(state) {
+  if (isGuestMode) return;
+  pendingState = state;
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    const s = pendingState || getUserState();
+    syncToCloud(s).catch(() => {});
+    syncTimer = null;
+    pendingState = null;
+  }, SYNC_DELAY);
 }
 
 function loadFromCloud() {
@@ -74,6 +87,8 @@ function loadFromCloud() {
 
 function getTutorialCompleted() {
   try {
+    const state = getUserState();
+    if (typeof state.tutorialCompleted === 'boolean') return state.tutorialCompleted;
     return wx.getStorageSync(TUTORIAL_KEY) || false;
   } catch {
     return false;
@@ -81,13 +96,17 @@ function getTutorialCompleted() {
 }
 
 function setTutorialCompleted(v) {
-  wx.setStorageSync(TUTORIAL_KEY, v);
+  const state = getUserState();
+  state.tutorialCompleted = v;
+  setUserState(state);
+  scheduleSync(state);
 }
 
 function addScore(delta) {
   const state = getUserState();
   state.totalScore = Math.max(0, state.totalScore + delta);
   setUserState(state);
+  scheduleSync(state);
   return state.totalScore;
 }
 
@@ -100,6 +119,7 @@ function setCurrentPet(pet) {
   const state = getUserState();
   state.currentBird = pet;
   setUserState(state);
+  scheduleSync(state);
 }
 
 function feedPet(expGain) {
@@ -108,6 +128,7 @@ function feedPet(expGain) {
   state.currentBird.exp += expGain;
   state.currentBird.feedCount += 1;
   setUserState(state);
+  scheduleSync(state);
   return state.currentBird;
 }
 
@@ -133,6 +154,7 @@ function addToCodex(birdId, dimension) {
     state.learnedBirdIds.push(birdId);
   }
   setUserState(state);
+  scheduleSync(state);
   return entry;
 }
 
@@ -156,6 +178,7 @@ function completeFirstLearning(birdId) {
     state.learnedBirdIds.push(birdId);
   }
   setUserState(state);
+  scheduleSync(state);
   return { alreadyFull, entry };
 }
 
@@ -180,6 +203,7 @@ function recordReview(birdId, passed) {
     entry.nextReviewAt = now + REVIEW_INTERVALS[entry.progress - 1] * DAY_MS;
   }
   setUserState(state);
+  scheduleSync(state);
   return entry;
 }
 
@@ -222,6 +246,7 @@ function addFeedStock(delta) {
   const state = getUserState();
   state.feedStock = Math.max(0, (state.feedStock || 0) + delta);
   setUserState(state);
+  scheduleSync(state);
   return state.feedStock;
 }
 
@@ -256,6 +281,7 @@ function consumeFeed() {
   if (stock > 0) {
     state.feedStock = stock - 1;
     setUserState(state);
+    scheduleSync(state);
     return true;
   }
   return false;
@@ -272,6 +298,7 @@ function recordOwnedPetType(typeId) {
   if (!state.ownedPetTypes.includes(typeId)) {
     state.ownedPetTypes.push(typeId);
     setUserState(state);
+    scheduleSync(state);
   }
 }
 
@@ -303,6 +330,7 @@ function retirePet(pet) {
   }
   state.currentBird = null;
   setUserState(state);
+  scheduleSync(state);
   return state;
 }
 

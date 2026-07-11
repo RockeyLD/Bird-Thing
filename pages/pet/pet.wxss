@@ -1,6 +1,6 @@
 page { background: transparent; overflow: hidden; }
 
-.page { display: flex; flex-direction: column; height: calc(100vh - 75rpx - env(safe-area-inset-bottom)); position: relative; overflow: hidden; }
+.page { display: flex; flex-direction: column; height: calc(100vh - 100rpx - env(safe-area-inset-bottom)); position: relative; overflow: hidden; }
 
 .bg-image { z-index: 0; }
 
@@ -132,10 +132,11 @@ page { background: transparent; overflow: hidden; }
 }
 
 .bottom-panel {
-  padding: 8rpx 30rpx;
-  padding-bottom: calc(8rpx + env(safe-area-inset-bottom));
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
   background: transparent;
   flex-shrink: 0;
+  margin-top: 80rpx;
 }
 
 .bottom-panel .card {
@@ -147,7 +148,7 @@ page { background: transparent; overflow: hidden; }
 }
 
 .exp-card {
-  margin-bottom: 0;
+  margin-bottom: 20rpx;
 }
 
 .progress-bar {
