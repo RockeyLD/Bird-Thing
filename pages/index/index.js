@@ -1,5 +1,5 @@
 const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews } = require('../../utils/storage');
-const { isCloudReady } = require('../../utils/cloud');
+const { isCloudReady, syncToCloud } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
 
 function getPetBird(birdId) {
@@ -42,7 +42,7 @@ Page({
     guideText: '',
     guideTooltipPos: 'bottom',
     guideScrollTop: 0,
-    windowHeight: 0
+    isDueReview: false,
   },
 
   onLoad() {
@@ -212,12 +212,19 @@ Page({
     }).filter(Boolean);
 
     const app = getApp();
-    const recommend = app.globalData.dailyRecommend || wx.getStorageSync('dailyRecommend');
-    let recommendBird = this.data.recommendBird;
-    let recommendHook = this.data.recommendHook;
-    if (recommend && recommend.bird) {
-      recommendBird = recommend.bird;
-      recommendHook = recommend.hook;
+    let isDueReview = false;
+    let recommendBird = null;
+    let recommendHook = '';
+    if (dueReviews.length > 0) {
+      isDueReview = true;
+      recommendBird = dueReviews[0];
+      recommendHook = '有一种鸟待复习';
+    } else {
+      const recommend = app.globalData.dailyRecommend || wx.getStorageSync('dailyRecommend');
+      if (recommend && recommend.bird) {
+        recommendBird = recommend.bird;
+        recommendHook = recommend.hook;
+      }
     }
 
     const codexEntries = Object.values(user.codex || {});
@@ -235,6 +242,7 @@ Page({
       petImage: getPetImage(pet),
       feedStock: getFeedStock(),
       dueReviews,
+      isDueReview,
       recommendBird,
       recommendHook,
       learnedCount,
@@ -325,7 +333,24 @@ Page({
     if (this.data.guideStep === 2) {
       this.nextGuideStep();
     }
-    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
+    if (this.data.isDueReview) {
+      wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&mode=delayed&review=1&skipCard=1` });
+    } else {
+      wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
+    }
+  },
+
+  onSaveTap() {
+    const state = getUserState();
+    wx.showLoading({ title: '保存中...' });
+    syncToCloud(state).then(() => {
+      wx.hideLoading();
+      wx.showToast({ title: '已保存到云端', icon: 'success' });
+    }).catch(err => {
+      wx.hideLoading();
+      console.error('保存失败', err);
+      wx.showToast({ title: '保存失败', icon: 'none' });
+    });
   },
 
   onDueReviewTap(e) {

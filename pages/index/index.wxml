@@ -20,6 +20,7 @@
         <text>💰</text>
         <text>{{user.totalScore}}</text>
       </view>
+      <view class="save-btn" bindtap="onSaveTap">保存</view>
     </view>
   </view>
 
@@ -27,7 +28,7 @@
     <scroll-view scroll-y class="scrollarea" scroll-top="{{guideScrollTop}}" scroll-with-animation>
       <view class="container">
         <!-- 每日推荐 -->
-        <view class="section-title">每日推荐</view>
+        <view class="section-title">{{isDueReview ? '待复习' : '每日推荐'}}</view>
         <view class="card daily-recommend" bindtap="onRecommendTap" wx:if="{{recommendBird}}">
           <view class="recommend-row">
             <image class="recommend-img" src="{{recommendBird.cover}}" mode="aspectFill" />
@@ -39,16 +40,18 @@
         </view>
 
         <!-- 待复习 -->
-        <view wx:if="{{dueReviews.length > 0}}" class="section-title">待复习</view>
-        <view class="card daily-recommend due-review" wx:for="{{dueReviews}}" wx:key="id" bindtap="onDueReviewTap" data-bird-id="{{item.id}}">
-          <view class="recommend-row">
-            <image class="recommend-img" src="{{item.cover}}" mode="aspectFill" />
-            <view class="recommend-info">
-              <view class="recommend-name">{{item.name}}</view>
-              <view class="recommend-hook">复习进度 {{item.progress}}/5，点击开始复习</view>
+        <block wx:if="{{!isDueReview}}">
+          <view wx:if="{{dueReviews.length > 0}}" class="section-title">待复习</view>
+          <view class="card daily-recommend due-review" wx:for="{{dueReviews}}" wx:key="id" bindtap="onDueReviewTap" data-bird-id="{{item.id}}">
+            <view class="recommend-row">
+              <image class="recommend-img" src="{{item.cover}}" mode="aspectFill" />
+              <view class="recommend-info">
+                <view class="recommend-name">{{item.name}}</view>
+                <view class="recommend-hook">复习进度 {{item.progress}}/5，点击开始复习</view>
+              </view>
             </view>
           </view>
-        </view>
+        </block>
 
         <!-- 宠物展示区 -->
         <view class="section-title">宠物养成</view>
