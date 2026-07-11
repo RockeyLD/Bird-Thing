@@ -11,7 +11,7 @@
       <view class="container">
         <view class="wallet">
           <view class="score-badge">💰 {{user.totalScore}} 积分</view>
-          <view class="stock-badge">🌾 饲料: {{user.feedStock || 0}}</view>
+          <view class="stock-badge">🌾 总库存: {{user.feedStock || 0}}</view>
         </view>
 
         <view class="section-title"></view>
