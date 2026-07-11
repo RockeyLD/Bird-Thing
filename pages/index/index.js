@@ -248,7 +248,7 @@ Page({
       feedStock: getFeedStock(),
       dueReviews,
       isDueReview,
-      recommendBird,
+      recommendBird: recommendBird ? { ...recommendBird } : null,
       recommendHook,
       learnedCount,
       masteredCount,

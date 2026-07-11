@@ -47,7 +47,7 @@ Page({
     const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
     this.setData({
       birds: list,
-      cardBird,
+      cardBird: cardBird ? { ...cardBird, iconPath: getImageUrl(`/images/Bird Icon/${cardBird.name}.png`) } : null,
       user,
       masteredCount: list.filter(b => b.mastered).length,
       dueCount: list.filter(b => b.canReview).length

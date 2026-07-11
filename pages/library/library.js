@@ -28,9 +28,9 @@ Page({
       : BIRDS;
     const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
     this.setData({
-      birds: BIRDS,
-      filtered,
-      cardBird,
+      birds: [...BIRDS],
+      filtered: [...filtered],
+      cardBird: cardBird ? { ...cardBird } : null,
       bgImage: getImageUrl('/images/Background.png'),
       searchIcon: getImageUrl('/images/icons/搜索.png')
     });
