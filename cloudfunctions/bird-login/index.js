@@ -11,7 +11,8 @@ function pickState(data) {
     codex: data.codex || {},
     feedStock: data.feedStock || 0,
     ownedPetTypes: data.ownedPetTypes || [],
-    userInfo: data.userInfo || {}
+    userInfo: data.userInfo || {},
+    tutorialCompleted: data.tutorialCompleted || false
   };
 }
 
