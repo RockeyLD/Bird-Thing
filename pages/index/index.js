@@ -86,6 +86,8 @@ Page({
     const masteredCount = codexEntries.filter(e => e.mastered).length;
     const totalBirds = BIRDS.length;
 
+    const progress = (masteredCount * 10 + (learnedCount - masteredCount) * 5) / (totalBirds * 10) * 100;
+
     this.setData({
       user,
       pet,
@@ -99,7 +101,7 @@ Page({
       learnedCount,
       masteredCount,
       totalBirds,
-      learnProgress: totalBirds > 0 ? Math.round((learnedCount / totalBirds) * 100) : 0
+      learnProgress: totalBirds > 0 ? Math.round(progress) : 0
     });
   },
 
