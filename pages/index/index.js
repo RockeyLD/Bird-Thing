@@ -158,7 +158,7 @@ Page({
     const bird = this.data.recommendBird;
     if (!bird) return;
     this.setData({ showRecommendCard: false });
-    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}` });
+    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
   },
 
   onDueReviewTap(e) {
