@@ -37,23 +37,23 @@
         </view>
 
         <view class="shop-grid">
-          <view class="shop-item" bindtap="onBuyFeed">
-            <view class="item-icon">🌾</view>
-            <view class="item-name">基础饲料</view>
-            <view class="item-desc">喂食一次 +20 经验</view>
-            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          <view class="shop-item" bindtap="onBuyItem" data-type="mouse">
+            <image class="item-img" src="{{FEED_ITEMS[3].icon}}" mode="aspectFit" />
+            <view class="item-name">田鼠</view>
+            <view class="item-desc">喂食一次 +5 经验</view>
+            <view class="item-price">10 积分</view>
           </view>
-          <view class="shop-item" bindtap="onBuyFeed">
-            <view class="item-icon">🌾</view>
-            <view class="item-name">基础饲料</view>
-            <view class="item-desc">喂食一次 +20 经验</view>
-            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          <view class="shop-item" bindtap="onBuyItem" data-type="rabbit">
+            <image class="item-img" src="{{FEED_ITEMS[4].icon}}" mode="aspectFit" />
+            <view class="item-name">野兔</view>
+            <view class="item-desc">喂食一次 +15 经验</view>
+            <view class="item-price">30 积分</view>
           </view>
-          <view class="shop-item" bindtap="onBuyFeed">
-            <view class="item-icon">🌾</view>
-            <view class="item-name">基础饲料</view>
-            <view class="item-desc">喂食一次 +20 经验</view>
-            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          <view class="shop-item" bindtap="onBuyItem" data-type="fox">
+            <image class="item-img" src="{{FEED_ITEMS[5].icon}}" mode="aspectFit" />
+            <view class="item-name">狐狸</view>
+            <view class="item-desc">喂食一次 +30 经验</view>
+            <view class="item-price">50 积分</view>
           </view>
         </view>
 

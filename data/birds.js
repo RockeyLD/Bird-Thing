@@ -405,7 +405,10 @@ const STAGES = [
 const FEED_ITEMS = [
   { key: 'fruit', name: '榕树果实', price: 10, exp: 5, icon: '/images/shop/fruit.png' },
   { key: 'worm', name: '蚯蚓', price: 30, exp: 15, icon: '/images/shop/worm.png' },
-  { key: 'beetle', name: '金龟甲虫', price: 50, exp: 30, icon: '/images/shop/beetle.png' }
+  { key: 'beetle', name: '金龟甲虫', price: 50, exp: 30, icon: '/images/shop/beetle.png' },
+  { key: 'mouse', name: '田鼠', price: 10, exp: 5, icon: '/images/shop/mouse.png' },
+  { key: 'rabbit', name: '野兔', price: 30, exp: 15, icon: '/images/shop/rabbit.png' },
+  { key: 'fox', name: '狐狸', price: 50, exp: 30, icon: '/images/shop/fox.png' }
 ];
 
 const FEED_PRICE = 50;

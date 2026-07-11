@@ -20,8 +20,11 @@ function getPetBg(pet) {
 
 function getBestFeedExp() {
   const inventory = getFeedInventory();
+  if (inventory.fox > 0) return { type: 'fox', exp: FEED_ITEMS.find(i => i.key === 'fox').exp };
   if (inventory.beetle > 0) return { type: 'beetle', exp: FEED_ITEMS.find(i => i.key === 'beetle').exp };
+  if (inventory.rabbit > 0) return { type: 'rabbit', exp: FEED_ITEMS.find(i => i.key === 'rabbit').exp };
   if (inventory.worm > 0) return { type: 'worm', exp: FEED_ITEMS.find(i => i.key === 'worm').exp };
+  if (inventory.mouse > 0) return { type: 'mouse', exp: FEED_ITEMS.find(i => i.key === 'mouse').exp };
   if (inventory.fruit > 0) return { type: 'fruit', exp: FEED_ITEMS.find(i => i.key === 'fruit').exp };
   return null;
 }

@@ -94,7 +94,7 @@
 }
 
 .shop-grid:last-child {
-  margin-top: 30rpx;
+  margin-top: 45rpx;
 }
 
 .shop-item {
@@ -118,9 +118,9 @@
 }
 
 .item-img {
-  width: 100rpx;
-  height: 100rpx;
-  margin: 0 auto 8rpx;
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto 6rpx;
   display: block;
 }
 
@@ -134,12 +134,12 @@
 .item-desc {
   font-size: 22rpx;
   color: var(--text-secondary);
-  margin-bottom: 4rpx;
+  margin-bottom: 2rpx;
 }
 
 .item-price {
   font-size: 24rpx;
   color: var(--accent);
   font-weight: 600;
-  margin-bottom: 4rpx;
+  margin-bottom: 2rpx;
 }

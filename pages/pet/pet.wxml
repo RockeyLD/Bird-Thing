@@ -47,6 +47,9 @@
         <view wx:if="{{user.feedInventory.fruit}}" class="stock-tag">🍈 果实: {{user.feedInventory.fruit}}</view>
         <view wx:if="{{user.feedInventory.worm}}" class="stock-tag">🪱 蚯蚓: {{user.feedInventory.worm}}</view>
         <view wx:if="{{user.feedInventory.beetle}}" class="stock-tag">🪲 甲虫: {{user.feedInventory.beetle}}</view>
+        <view wx:if="{{user.feedInventory.mouse}}" class="stock-tag">🐭 田鼠: {{user.feedInventory.mouse}}</view>
+        <view wx:if="{{user.feedInventory.rabbit}}" class="stock-tag">🐰 野兔: {{user.feedInventory.rabbit}}</view>
+        <view wx:if="{{user.feedInventory.fox}}" class="stock-tag">🦊 狐狸: {{user.feedInventory.fox}}</view>
       </view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
     </view>

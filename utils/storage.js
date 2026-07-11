@@ -22,8 +22,7 @@ function getDefaultState() {
     learnedBirdIds: [],
     codex: {},
     feedStock: 0,
-<<<<<<< HEAD
-    feedInventory: { fruit: 0, worm: 0, beetle: 0 },
+    feedInventory: { fruit: 0, worm: 0, beetle: 0, mouse: 0, rabbit: 0, fox: 0 },
     ownedPetTypes: [],
     tutorialCompleted: false
   };
@@ -252,7 +251,7 @@ function addFeedStock(delta) {
 
 function getFeedInventory() {
   const state = getUserState();
-  return state.feedInventory || { fruit: 0, worm: 0, beetle: 0 };
+  return state.feedInventory || { fruit: 0, worm: 0, beetle: 0, mouse: 0, rabbit: 0, fox: 0 };
 }
 
 function addFeedInventory(type, delta) {
