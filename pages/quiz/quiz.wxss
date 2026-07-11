@@ -40,6 +40,15 @@
 .knowledge-text { font-size: 28rpx; line-height: 1.6; color: var(--text-secondary); }
 
 .quiz-card { margin-bottom: 30rpx; }
+
+.quiz-bird-img {
+  width: 100%;
+  max-height: 200rpx;
+  margin-bottom: 24rpx;
+  border-radius: 16rpx;
+  display: block;
+}
+
 .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16rpx; }
 .quiz-title { font-size: 32rpx; font-weight: 700; }
 .dim-tag { background: var(--primary); color: #fff; padding: 6rpx 16rpx; border-radius: 24rpx; font-size: 24rpx; }

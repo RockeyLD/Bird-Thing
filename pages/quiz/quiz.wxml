@@ -52,6 +52,9 @@
           <view class="progress-text">{{usedIndices.length}}/5</view>
         </view>
 
+        <!-- 鸟类图片 -->
+        <image wx:if="{{bird.cover}}" class="quiz-bird-img" src="{{bird.cover}}" mode="aspectFit" />
+
         <!-- 答题区 -->
         <view class="card quiz-card">
           <view class="quiz-header">
