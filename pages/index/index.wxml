@@ -147,11 +147,11 @@
       <view class="guide-tooltip-arrow"></view>
       <view class="guide-tooltip-inner">
         <view class="guide-tooltip-text">{{guideText}}</view>
-        <view class="guide-step-badge">{{guideStep + 1}}/3</view>
+        <view class="guide-tooltip-right">
+          <view class="guide-step-badge">{{guideStep + 1}}/3</view>
+          <view class="guide-skip-link" catchtap="onSkipGuide">跳过</view>
+        </view>
       </view>
     </view>
-
-    <!-- 跳过按钮 -->
-    <view class="guide-skip" catchtap="onSkipGuide">跳过</view>
   </view>
 </view>

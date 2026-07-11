@@ -1,4 +1,5 @@
 <view class="tab-bar" style="padding-bottom: {{safeAreaBottom}}px;">
+  <view class="guide-overlay" wx:if="{{guideActive}}" catchtap="onOverlayTap"></view>
   <view class="tab-item {{selected === index ? 'active' : ''}}"
     wx:for="{{list}}" wx:key="index"
     data-index="{{index}}" data-url="{{item.pagePath}}"

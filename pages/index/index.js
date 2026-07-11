@@ -54,6 +54,9 @@ Page({
   onShow() {
     if (getTutorialCompleted() && this.data.guideStep >= 0) {
       this.setData({ guideStep: -1 });
+      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+        this.getTabBar().setData({ guideActive: false });
+      }
     }
     this.checkLogin();
     this.refresh();
@@ -61,6 +64,9 @@ Page({
       this.getTabBar().setData({ selected: 0 });
     }
     if (this.data.guideStep >= 0) {
+      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+        this.getTabBar().setData({ guideActive: true });
+      }
       wx.nextTick(() => this.updateGuidePosition(this.data.guideStep));
     }
   },
@@ -72,6 +78,9 @@ Page({
   initGuide() {
     if (getTutorialCompleted()) return;
     this.setData({ guideStep: 0 });
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ guideActive: true });
+    }
     wx.nextTick(() => this.updateGuidePosition(0));
   },
 
@@ -148,6 +157,9 @@ Page({
     if (nextStep >= 3) {
       setTutorialCompleted(true);
       this.setData({ guideStep: -1, guideScrollTop: 0 });
+      if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+        this.getTabBar().setData({ guideActive: false });
+      }
       wx.showToast({ title: '引导完成！', icon: 'success' });
     } else {
       this.setData({ guideStep: nextStep });
@@ -169,6 +181,9 @@ Page({
         if (res.confirm) {
           setTutorialCompleted(true);
           this.setData({ guideStep: -1, guideScrollTop: 0 });
+          if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+            this.getTabBar().setData({ guideActive: false });
+          }
           wx.showToast({ title: '已跳过教程', icon: 'success' });
         }
       }
