@@ -43,7 +43,8 @@ Page({
     showCard: false,
     showFeedback: false,
     feedbackText: '',
-    hasWrong: false
+    hasWrong: false,
+    isEarlyReview: false
   },
 
   onLoad(options) {
@@ -60,6 +61,8 @@ Page({
       isDelayed = true;
     }
 
+    let isEarlyReview = false;
+
     // Guard: not ready for delayed review yet
     if (isDelayed) {
       if (!entry || !entry.learned || entry.mastered) {
@@ -68,14 +71,11 @@ Page({
         return;
       }
       if (entry.nextReviewAt && Date.now() < entry.nextReviewAt) {
-        const daysLeft = Math.ceil((entry.nextReviewAt - Date.now()) / DAY_MS);
-        wx.showToast({ title: `还差 ${daysLeft} 天才能复习`, icon: 'none' });
-        setTimeout(() => wx.navigateBack(), 1500);
-        return;
+        isEarlyReview = true;
       }
     }
 
-    this.setData({ bird, review, quizMode, isDelayed });
+    this.setData({ bird, review, quizMode, isDelayed, isEarlyReview });
     if (options.skipCard === '1') {
       this.startQuizMode();
     } else if (quizMode) {
@@ -131,6 +131,15 @@ Page({
 
   onQuizComplete() {
     if (this.data.isDelayed) {
+      if (this.data.isEarlyReview) {
+        wx.showModal({
+          title: '练习完成',
+          content: `你答对了 5 题，但复习时间还没到，本次不记录进度和积分。`,
+          showCancel: false,
+          success: () => wx.navigateBack()
+        });
+        return;
+      }
       const result = recordReview(this.data.bird.id, true);
       if (!result) {
         wx.showToast({ title: '复习记录失败', icon: 'none' });
@@ -215,8 +224,9 @@ Page({
     } else {
       const isCorrect = idx === 0;
       const score = this.data.review ? 3 : 10;
-      const feedbackText = isCorrect ? getRandomCongrats() : '正确答案是 A：' + (this.data.bird.tags[0] || '体型较小') + '。';
-      if (isCorrect) {
+      const tags = (this.data.bird && this.data.bird.tags) || [];
+      const feedbackText = isCorrect ? getRandomCongrats() : '正确答案是 A：' + (tags[0] || '体型较小') + '。';
+      if (isCorrect && !this.data.isEarlyReview) {
         addScore(score);
         addToCodex(this.data.bird.id, this.data.dimension.key);
       }
