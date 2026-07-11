@@ -51,6 +51,7 @@ Page({
 
   onLoad() {
     getApp().setNavBarData(this);
+    this.refresh();
   },
 
   onShow() {
