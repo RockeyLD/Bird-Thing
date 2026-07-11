@@ -69,6 +69,7 @@
               立即喂食
             </button>
           </view>
+        </view>
         <!-- 学习统计 -->
         <view class="section-title">学习统计</view>
         <view class="card stats-card">
