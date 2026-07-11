@@ -1,6 +1,7 @@
 /** 答题页面 */
 const { BIRDS, DIMENSIONS } = require('../../data/birds');
 const { getUserState, addScore, addToCodex, completeFirstLearning, recordReview } = require('../../utils/storage');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
