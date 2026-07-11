@@ -65,6 +65,12 @@
   box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
 }
 
+.shed-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 12rpx;
+}
+
 .shed-emoji {
   font-size: 80rpx;
   margin-bottom: 12rpx;
