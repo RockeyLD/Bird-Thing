@@ -5,6 +5,23 @@ const { getUserState, addScore, setUserState, addToCodex } = require('../../util
 
 const QUIZ_PASS_COUNT = 5;
 
+const CONGRATS = [
+  '答对了！🎉',
+  '太棒了！✨',
+  '厉害！继续加油！💪',
+  '牛！🐮',
+  '答得好！👍',
+  '聪明！🧠',
+  '正确！✅',
+  '漂亮！🌟',
+  '赞！👏',
+  '完美！💯'
+];
+
+function getRandomCongrats() {
+  return CONGRATS[Math.floor(Math.random() * CONGRATS.length)];
+}
+
 Page({
   data: {
     bird: null,
@@ -20,7 +37,9 @@ Page({
     isCorrect: false,
     answered: false,
     review: false,
-    showCard: false
+    showCard: false,
+    showFeedback: false,
+    feedbackText: ''
   },
 
   onLoad(options) {
@@ -40,7 +59,7 @@ Page({
 
   // ===== 题库模式 =====
   startQuizMode() {
-    this.setData({ showCard: false, correctCount: 0, usedIndices: [] });
+    this.setData({ showCard: false, correctCount: 0, usedIndices: [], showFeedback: false });
     this.loadNextQuestion();
   },
 
@@ -73,10 +92,11 @@ Page({
     }
     const newAnswer = originalOptions.indexOf(answerText);
     this.setData({
-      currentQuestion: { q: q.q, options: originalOptions, a: newAnswer },
+      currentQuestion: { q: q.q, options: originalOptions, a: newAnswer, explanation: q.explanation || '' },
       selected: -1,
       answered: false,
       isCorrect: false,
+      showFeedback: false,
       usedIndices: [...usedIndices, idx]
     });
   },
@@ -136,7 +156,8 @@ Page({
       selected: -1,
       answered: false,
       isCorrect: false,
-      showCard
+      showCard,
+      showFeedback: false
     });
   },
 
@@ -147,18 +168,21 @@ Page({
     if (this.data.quizMode) {
       const q = this.data.currentQuestion;
       const isCorrect = idx === q.a;
+      const feedbackText = isCorrect ? getRandomCongrats() : ('正确答案是：' + q.options[q.a] + '。' + (q.explanation || '再想想~'));
       if (isCorrect) {
-        this.setData({ correctCount: this.data.correctCount + 1 });
+        this.setData({ correctCount: this.data.correctCount + 1, selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
+      } else {
+        this.setData({ selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
       }
-      this.setData({ selected: idx, answered: true, isCorrect });
     } else {
       const isCorrect = idx === 0;
       const score = this.data.review ? 3 : 10;
+      const feedbackText = isCorrect ? getRandomCongrats() : '正确答案是 A：' + (this.data.bird.tags[0] || '体型较小') + '。';
       if (isCorrect) {
         addScore(score);
         addToCodex(this.data.bird.id, this.data.dimension.key);
       }
-      this.setData({ selected: idx, answered: true, isCorrect });
+      this.setData({ selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
     }
   },
 
@@ -178,7 +202,7 @@ Page({
     if (this.data.quizMode) {
       this.startQuizMode();
     } else {
-      this.setData({ showCard: false });
+      this.setData({ showCard: false, showFeedback: false });
     }
   },
 

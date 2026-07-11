@@ -105,6 +105,10 @@
         <button wx:if="{{answered}}" class="btn-primary {{isCorrect ? '' : 'btn-danger'}}" bindtap="onNextTap">
           {{isCorrect ? (quizMode ? '下一题' : '下一维度 →') : '退出'}}
         </button>
+
+        <view wx:if="{{showFeedback}}" class="feedback-area {{isCorrect ? 'feedback-correct' : 'feedback-wrong'}}">
+          {{feedbackText}}
+        </view>
       </view>
     </scroll-view>
   </view>

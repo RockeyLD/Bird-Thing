@@ -6,8 +6,29 @@
 .filter-bar {
   display: flex;
   gap: 16rpx;
-  padding: 0 30rpx 20rpx;
+  padding: 0 30rpx 16rpx;
   background: var(--bg);
+}
+
+.search-bar {
+  display: flex;
+  padding: 0 30rpx 16rpx;
+  background: var(--bg);
+}
+
+.search-input {
+  flex: 1;
+  height: 72rpx;
+  background: var(--card);
+  border-radius: 36rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  color: var(--text);
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
 }
 
 .filter-item {

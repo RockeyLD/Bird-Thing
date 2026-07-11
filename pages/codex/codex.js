@@ -5,7 +5,8 @@ const { BIRDS, DIMENSIONS } = require('../../data/birds');
 Page({
   data: {
     birds: [],
-    filter: 'all', // all, mastered, learning
+    filter: 'all',
+    searchKeyword: '',
     showCard: false,
     cardBird: null
   },
@@ -23,7 +24,8 @@ Page({
 
   refresh() {
     const user = getUserState();
-    const list = BIRDS.map(b => {
+    const keyword = this.data.searchKeyword.trim();
+    const list = BIRDS.filter(b => !keyword || b.name.includes(keyword)).map(b => {
       const entry = user.codex[b.id];
       const progress = entry ? entry.learnedDimensions.length : 0;
       return {
@@ -43,6 +45,11 @@ Page({
 
   onFilterTap(e) {
     this.setData({ filter: e.currentTarget.dataset.filter });
+  },
+
+  onSearchInput(e) {
+    this.setData({ searchKeyword: e.detail.value });
+    this.refresh();
   },
 
   onBirdTap(e) {
