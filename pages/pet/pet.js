@@ -1,6 +1,6 @@
 /** 宠物养成 */
-const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, createRandomPet, retirePet } = require('../../utils/storage');
-const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP } = require('../../data/birds');
+const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, getFeedInventory, consumeFeedInventory, createRandomPet, retirePet } = require('../../utils/storage');
+const { PET_BIRDS, getStage, getStageIndex, FEED_ITEMS } = require('../../data/birds');
 
 function getPetBird(birdId) {
   return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
@@ -18,14 +18,21 @@ function getPetBg(pet) {
   return getPetBird(pet.birdId).bg || '/images/Background.png';
 }
 
+function getBestFeedExp() {
+  const inventory = getFeedInventory();
+  if (inventory.beetle > 0) return { type: 'beetle', exp: FEED_ITEMS.find(i => i.key === 'beetle').exp };
+  if (inventory.worm > 0) return { type: 'worm', exp: FEED_ITEMS.find(i => i.key === 'worm').exp };
+  if (inventory.fruit > 0) return { type: 'fruit', exp: FEED_ITEMS.find(i => i.key === 'fruit').exp };
+  return null;
+}
+
 Page({
   data: {
     user: null,
     pet: null,
     stageInfo: null,
     stageIndex: 0,
-    feedPrice: FEED_PRICE,
-    feedExp: FEED_EXP,
+    feedItems: FEED_ITEMS,
     feedStock: 0,
     petImage: '',
     petBg: '/images/Background.png'
@@ -87,14 +94,18 @@ Page({
       wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
+    const bestFeed = getBestFeedExp();
+    if (!bestFeed) {
+      wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
+      return;
+    }
     const oldStageIndex = this.data.stageIndex;
     const oldPet = this.data.pet;
-    consumeFeed();
-    const updated = feedPet(FEED_EXP);
+    consumeFeedInventory(bestFeed.type);
+    const updated = feedPet(bestFeed.exp);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
     if (oldStageIndex === 4 && oldPet.exp < 1350 && updated.exp >= 1350) {
-      // 究极满级，旧鸟移居鸟舍，获得新鸟蛋
       const oldBird = getPetBird(oldPet.birdId);
       retirePet(oldPet);
       wx.showModal({
@@ -115,7 +126,7 @@ Page({
         showCancel: false
       });
     } else {
-      wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });
+      wx.showToast({ title: `喂食成功 +${bestFeed.exp}经验`, icon: 'success' });
     }
   }
 });

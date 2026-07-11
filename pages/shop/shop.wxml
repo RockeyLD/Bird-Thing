@@ -10,11 +10,53 @@
     <scroll-view scroll-y class="scrollarea">
       <view class="container">
         <view class="wallet">
-          <view class="score-badge">⭐ {{user.totalScore}} 积分</view>
+          <view class="score-badge">💰 {{user.totalScore}} 积分</view>
           <view class="stock-badge">🌾 饲料: {{user.feedStock || 0}}</view>
         </view>
 
         <view class="section-title"></view>
+        <view class="shop-grid">
+          <view class="shop-item" bindtap="onBuyItem" data-type="fruit">
+            <image class="item-img" src="{{FEED_ITEMS[0].icon}}" mode="aspectFit" />
+            <view class="item-name">榕树果实</view>
+            <view class="item-desc">喂食一次 +5 经验</view>
+            <view class="item-price">10 积分</view>
+          </view>
+          <view class="shop-item" bindtap="onBuyItem" data-type="worm">
+            <image class="item-img" src="{{FEED_ITEMS[1].icon}}" mode="aspectFit" />
+            <view class="item-name">蚯蚓</view>
+            <view class="item-desc">喂食一次 +15 经验</view>
+            <view class="item-price">30 积分</view>
+          </view>
+          <view class="shop-item" bindtap="onBuyItem" data-type="beetle">
+            <image class="item-img" src="{{FEED_ITEMS[2].icon}}" mode="aspectFit" />
+            <view class="item-name">金龟甲虫</view>
+            <view class="item-desc">喂食一次 +30 经验</view>
+            <view class="item-price">50 积分</view>
+          </view>
+        </view>
+
+        <view class="shop-grid">
+          <view class="shop-item" bindtap="onBuyFeed">
+            <view class="item-icon">🌾</view>
+            <view class="item-name">基础饲料</view>
+            <view class="item-desc">喂食一次 +20 经验</view>
+            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          </view>
+          <view class="shop-item" bindtap="onBuyFeed">
+            <view class="item-icon">🌾</view>
+            <view class="item-name">基础饲料</view>
+            <view class="item-desc">喂食一次 +20 经验</view>
+            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          </view>
+          <view class="shop-item" bindtap="onBuyFeed">
+            <view class="item-icon">🌾</view>
+            <view class="item-name">基础饲料</view>
+            <view class="item-desc">喂食一次 +20 经验</view>
+            <view class="item-price">{{FEED_PRICE}} 积分</view>
+          </view>
+        </view>
+
         <view class="shop-grid">
           <view class="shop-item" bindtap="onBuyFeed">
             <view class="item-icon">🌾</view>

@@ -2,7 +2,7 @@
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="back-btn" bindtap="onBackTap">←</view>
     <view class="nav-title">{{bird.name}}</view>
-    <view class="score-badge">⭐ {{user.totalScore}}</view>
+    <view class="score-badge">💰 {{user.totalScore}}</view>
   </view>
 
   <!-- 鸟类知识卡片弹窗 -->

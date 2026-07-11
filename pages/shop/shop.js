@@ -1,11 +1,11 @@
 /** 商店 */
-const { getUserState, addScore, addFeedStock } = require('../../utils/storage');
-const { FEED_PRICE } = require('../../data/birds');
+const { getUserState, addScore, addFeedInventory } = require('../../utils/storage');
+const { FEED_ITEMS } = require('../../data/birds');
 
 Page({
   data: {
     user: null,
-    FEED_PRICE
+    FEED_ITEMS
   },
 
   onLoad(options) {
@@ -29,15 +29,19 @@ Page({
     wx.navigateBack();
   },
 
-  onBuyFeed() {
+  onBuyItem(e) {
+    const { type } = e.currentTarget.dataset;
+    const item = FEED_ITEMS.find(i => i.key === type);
+    if (!item) return;
+
     const user = getUserState();
-    if (user.totalScore < FEED_PRICE) {
+    if (user.totalScore < item.price) {
       wx.showToast({ title: '积分不足，去答题吧', icon: 'none' });
       return;
     }
-    addScore(-FEED_PRICE);
-    addFeedStock(1);
+    addScore(-item.price);
+    addFeedInventory(type, 1);
     this.refresh();
-    wx.showToast({ title: '购买成功！', icon: 'success' });
+    wx.showToast({ title: `购买${item.name}成功！`, icon: 'success' });
   }
 });

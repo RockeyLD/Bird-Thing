@@ -17,7 +17,7 @@
         <text>已登录</text>
       </view>
       <view class="score-badge">
-        <text>⭐</text>
+        <text>💰</text>
         <text>{{user.totalScore}}</text>
       </view>
     </view>

@@ -18,6 +18,7 @@ function getDefaultState() {
     learnedBirdIds: [],
     codex: {},
     feedStock: 0,
+    feedInventory: { fruit: 0, worm: 0, beetle: 0 },
     ownedPetTypes: []
   };
 }
@@ -224,6 +225,31 @@ function addFeedStock(delta) {
   return state.feedStock;
 }
 
+function getFeedInventory() {
+  const state = getUserState();
+  return state.feedInventory || { fruit: 0, worm: 0, beetle: 0 };
+}
+
+function addFeedInventory(type, delta) {
+  const state = getUserState();
+  if (!state.feedInventory) state.feedInventory = { fruit: 0, worm: 0, beetle: 0 };
+  state.feedInventory[type] = Math.max(0, (state.feedInventory[type] || 0) + delta);
+  state.feedStock = (state.feedStock || 0) + delta;
+  setUserState(state);
+  return state.feedInventory;
+}
+
+function consumeFeedInventory(type) {
+  const state = getUserState();
+  if (!state.feedInventory || !state.feedInventory[type] || state.feedInventory[type] <= 0) {
+    return false;
+  }
+  state.feedInventory[type] -= 1;
+  state.feedStock = Math.max(0, (state.feedStock || 0) - 1);
+  setUserState(state);
+  return true;
+}
+
 function consumeFeed() {
   const state = getUserState();
   const stock = state.feedStock || 0;
@@ -285,7 +311,7 @@ module.exports = {
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
   completeFirstLearning, recordReview, getDueReviews, getReviewStatus, getProgress,
-  getFeedStock, addFeedStock, consumeFeed,
+  getFeedStock, addFeedStock, consumeFeed, getFeedInventory, addFeedInventory, consumeFeedInventory,
   getOwnedPetTypes, recordOwnedPetType, createRandomPet, retirePet,
   loadFromCloud, setIsGuestMode, getIsGuestMode
 };

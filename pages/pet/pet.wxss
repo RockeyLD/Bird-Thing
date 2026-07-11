@@ -194,6 +194,13 @@ page { background: transparent; overflow: hidden; }
   font-size: 22rpx;
 }
 
+.stock-row {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-bottom: 8rpx;
+}
+
 .feed-card {
   margin-bottom: 0;
 }

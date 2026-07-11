@@ -2,7 +2,7 @@
   <image class="bg-image" src="/images/Background.png" mode="aspectFill" />
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="nav-title">我的图鉴</view>
-    <view class="score-badge">⭐ {{user.totalScore}}</view>
+    <view class="score-badge">💰 {{user.totalScore}}</view>
   </view>
 
   <!-- 筛选器 -->

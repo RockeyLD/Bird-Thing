@@ -402,7 +402,13 @@ const STAGES = [
   { key: 'ultimate', label: '究极', nextExp: 1350, reqExp: 450 }
 ];
 
-const FEED_PRICE = 20;
+const FEED_ITEMS = [
+  { key: 'fruit', name: '榕树果实', price: 10, exp: 5, icon: '/images/shop/fruit.png' },
+  { key: 'worm', name: '蚯蚓', price: 30, exp: 15, icon: '/images/shop/worm.png' },
+  { key: 'beetle', name: '金龟甲虫', price: 50, exp: 30, icon: '/images/shop/beetle.png' }
+];
+
+const FEED_PRICE = 50;
 const FEED_EXP = 20;
 
 function getStage(exp) {
@@ -424,5 +430,5 @@ function getStageIndex(exp) {
 }
 
 module.exports = {
-  BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_PRICE, FEED_EXP, getStage, getStageIndex
+  BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_ITEMS, FEED_PRICE, FEED_EXP, getStage, getStageIndex
 };

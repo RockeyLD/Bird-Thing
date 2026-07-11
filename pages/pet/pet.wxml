@@ -5,7 +5,7 @@
   </view>
 
   <view class="top-info" style="margin-top: {{scoreBarOffset}}px;">
-    <view class="score-badge">⭐ {{user.totalScore}}</view>
+    <view class="score-badge">💰 {{user.totalScore}}</view>
     <view class="shed-btn" bindtap="goToShed">🦜 鸟舍</view>
     <view class="shop-btn" bindtap="goToShop">🛒 商店</view>
   </view>
@@ -42,7 +42,12 @@
 
     <!-- 喂食 -->
     <view class="card feed-card">
-      <view class="stock-tag">库存: {{feedStock}}</view>
+      <view class="stock-row">
+        <view class="stock-tag">🌾 库存: {{feedStock}}</view>
+        <view wx:if="{{user.feedInventory.fruit}}" class="stock-tag">🍈 果实: {{user.feedInventory.fruit}}</view>
+        <view wx:if="{{user.feedInventory.worm}}" class="stock-tag">🪱 蚯蚓: {{user.feedInventory.worm}}</view>
+        <view wx:if="{{user.feedInventory.beetle}}" class="stock-tag">🪲 甲虫: {{user.feedInventory.beetle}}</view>
+      </view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
     </view>
   </view>

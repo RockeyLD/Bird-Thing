@@ -47,12 +47,13 @@
 }
 
 .container {
-  padding-top: 95rpx;
+  padding-top: 135rpx;
 }
 
 .wallet {
   display: flex;
   gap: 16rpx;
+  margin-top: -40rpx;
   margin-bottom: 20rpx;
   flex-wrap: wrap;
 }
@@ -85,12 +86,21 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rpx;
+  margin-top: 10rpx;
+}
+
+.shop-grid + .shop-grid {
+  margin-top: 25rpx;
+}
+
+.shop-grid:last-child {
+  margin-top: 30rpx;
 }
 
 .shop-item {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 24rpx;
-  padding: 8rpx;
+  padding: 80rpx 8rpx;
   text-align: center;
   box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
   backdrop-filter: blur(4rpx);
@@ -105,6 +115,13 @@
 .item-icon {
   font-size: 64rpx;
   margin-bottom: 2rpx;
+}
+
+.item-img {
+  width: 100rpx;
+  height: 100rpx;
+  margin: 0 auto 8rpx;
+  display: block;
 }
 
 .item-name {
