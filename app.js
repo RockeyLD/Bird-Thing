@@ -67,7 +67,11 @@ App({
       currentBird: null,
       birdShed: [],
       learnedBirdIds: [],
-      codex: {}
+      codex: {},
+      feedStock: 0,
+      feedInventory: { fruit: 0, worm: 0, beetle: 0, mouse: 0, rabbit: 0, fox: 0, ant: 0, caterpillar: 0, fig: 0 },
+      ownedPetTypes: [],
+      tutorialCompleted: false
     };
   },
 
