@@ -15,9 +15,10 @@
         </view>
 
         <view wx:else class="shed-grid">
-          <view class="shed-item" wx:for="{{birdShed}}" wx:key="birdId">
+          <view class="shed-item" wx:for="{{birdShed}}" wx:key="index">
             <view class="shed-emoji">🦜</view>
-            <view class="shed-label">已放归</view>
+            <view class="shed-name">{{item.name}}</view>
+            <view class="shed-stage">{{item.stageLabel}}</view>
           </view>
         </view>
       </view>
