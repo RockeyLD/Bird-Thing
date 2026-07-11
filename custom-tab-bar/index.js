@@ -1,13 +1,15 @@
+const { getImageUrl } = require('../utils/imageUrls');
+
 Component({
   data: {
     selected: 0,
     safeAreaBottom: 0,
     guideActive: false,
     list: [
-      { pagePath: '/pages/index/index', text: '首页', iconPath: '/images/icons/主页.png', selectedIconPath: '/images/icons/主页.png' },
-      { pagePath: '/pages/library/library', text: '答题学鸟', iconPath: '/images/icons/答题学鸟.png', selectedIconPath: '/images/icons/答题学鸟.png' },
-      { pagePath: '/pages/codex/codex', text: '图鉴', iconPath: '/images/icons/图鉴.png', selectedIconPath: '/images/icons/图鉴.png' },
-      { pagePath: '/pages/pet/pet', text: '宠物养成', iconPath: '/images/icons/宠物养成.png', selectedIconPath: '/images/icons/宠物养成.png' }
+      { pagePath: '/pages/index/index', text: '首页', iconPath: getImageUrl('/images/icons/主页.png'), selectedIconPath: getImageUrl('/images/icons/主页.png') },
+      { pagePath: '/pages/library/library', text: '答题学鸟', iconPath: getImageUrl('/images/icons/答题学鸟.png'), selectedIconPath: getImageUrl('/images/icons/答题学鸟.png') },
+      { pagePath: '/pages/codex/codex', text: '图鉴', iconPath: getImageUrl('/images/icons/图鉴.png'), selectedIconPath: getImageUrl('/images/icons/图鉴.png') },
+      { pagePath: '/pages/pet/pet', text: '宠物养成', iconPath: getImageUrl('/images/icons/宠物养成.png'), selectedIconPath: getImageUrl('/images/icons/宠物养成.png') }
     ]
   },
   lifetimes: {

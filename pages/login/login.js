@@ -1,9 +1,13 @@
 const { loadFromCloud, setIsGuestMode } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 Page({
   data: {
-    isLoggingIn: false
+    isLoggingIn: false,
+    logoImage: getImageUrl('/images/logo.png'),
+    loginIcon: getImageUrl('/images/icons/登录.png'),
+    guestIcon: getImageUrl('/images/icons/未登录.png')
   },
 
   onLoad() {

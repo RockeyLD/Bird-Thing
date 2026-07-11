@@ -1,4 +1,5 @@
 const { BIRDS } = require('./data/birds');
+const { initCloudImages } = require('./utils/imageUrls');
 
 const CLOUD_ENV = 'eduction-cloud1-9g1g39x5d24e6574';
 
@@ -16,6 +17,9 @@ App({
 
   onLaunch() {
     this.initCloud();
+    initCloudImages().then(() => {
+      this.globalData.imagesReady = true;
+    });
     const windowInfo = wx.getWindowInfo();
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
     this.globalData.statusBarHeight = windowInfo.statusBarHeight;

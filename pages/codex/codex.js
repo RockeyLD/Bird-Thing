@@ -1,6 +1,7 @@
 /** 图鉴 */
 const { getUserState, addScore, getReviewStatus, getProgress } = require('../../utils/storage');
 const { BIRDS, DIMENSIONS } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -10,7 +11,8 @@ Page({
     filter: 'all',
     searchKeyword: '',
     showCard: false,
-    cardBird: null
+    cardBird: null,
+    bgImage: getImageUrl('/images/Background.png')
   },
 
   onLoad() {
@@ -34,7 +36,7 @@ Page({
       const status = getReviewStatus(b.id);
       return {
         ...b,
-        iconPath: `/images/Bird Icon/${b.name}.png`,
+        iconPath: getImageUrl(`/images/Bird Icon/${b.name}.png`),
         learnedDimensions: entry ? entry.learnedDimensions : [],
         mastered,
         progress,

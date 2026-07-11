@@ -1,19 +1,19 @@
 <view class="page">
-  <image class="bg-image" src="/images/Background.png" mode="aspectFill" />
+  <image class="bg-image" src="{{bgImage}}" mode="aspectFill" />
   <!-- 顶部导航栏 -->
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="nav-title">鸟圳</view>
     <view class="nav-right">
       <view class="login-badge" wx:if="{{!isLoggedIn}}" bindtap="onLoginTap">
-        <image class="badge-icon" src="/images/icons/未登录.png" mode="aspectFit" />
+        <image class="badge-icon" src="{{guestIcon}}" mode="aspectFit" />
         <text>登录</text>
       </view>
       <view class="login-badge guest" wx:elif="{{isGuest}}">
-        <image class="badge-icon" src="/images/icons/未登录.png" mode="aspectFit" />
+        <image class="badge-icon" src="{{guestIcon}}" mode="aspectFit" />
         <text>访客</text>
       </view>
       <view class="login-badge logged" wx:else>
-        <image class="badge-icon" src="/images/icons/登录.png" mode="aspectFit" />
+        <image class="badge-icon" src="{{loginIcon}}" mode="aspectFit" />
         <text>已登录</text>
       </view>
       <view class="score-badge">
@@ -56,7 +56,7 @@
         <view class="section-title">宠物养成</view>
         <view class="card pet-card">
           <view wx:if="{{!pet}}" class="pet-empty">
-            <image class="pet-egg" src="/images/unclaimed_egg.png" mode="aspectFit" />
+            <image class="pet-egg" src="{{unclaimedEggImage}}" mode="aspectFit" />
             <view class="title-md">还没有宠物鸟</view>
             <view class="text-sm">领养一颗鸟蛋，开启你的鸟类之旅</view>
             <button class="btn-primary adopt-btn" bindtap="onAdoptTap">领养鸟蛋</button>

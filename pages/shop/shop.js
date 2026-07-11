@@ -1,6 +1,7 @@
 /** 商店 */
 const { getUserState, addScore, addFeedInventory, getCurrentPet } = require('../../utils/storage');
 const { FEED_ITEMS, PET_FEED_MAP } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 function getAvailableFeedKeys(pet) {
   if (!pet) return [];
@@ -18,7 +19,8 @@ Page({
     FEED_ITEMS,
     currentPet: null,
     availableKeys: [],
-    availableMap: {}
+    availableMap: {},
+    bgImage: getImageUrl('/images/shop-bg-new.png')
   },
 
   onLoad(options) {

@@ -1,5 +1,5 @@
 <view class="page">
-  <image class="bg-image" src="/images/shop-bg-new.png" mode="aspectFill"></image>
+  <image class="bg-image" src="{{bgImage}}" mode="aspectFill"></image>
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
     <view class="back-btn" bindtap="onBackTap">←</view>
     <view class="nav-title">商店</view>

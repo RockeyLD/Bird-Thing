@@ -1,6 +1,7 @@
 const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 function getPetBird(birdId) {
   return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
@@ -43,6 +44,10 @@ Page({
     guideTooltipPos: 'bottom',
     guideScrollTop: 0,
     isDueReview: false,
+    bgImage: getImageUrl('/images/Background.png'),
+    loginIcon: getImageUrl('/images/icons/登录.png'),
+    guestIcon: getImageUrl('/images/icons/未登录.png'),
+    unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png')
   },
 
   onLoad() {

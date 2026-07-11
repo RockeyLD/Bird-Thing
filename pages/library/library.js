@@ -1,5 +1,6 @@
 /** 知识库 */
 const { BIRDS } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 Page({
   data: {
@@ -7,7 +8,9 @@ Page({
     filtered: BIRDS,
     keyword: '',
     showCard: false,
-    cardBird: null
+    cardBird: null,
+    bgImage: getImageUrl('/images/Background.png'),
+    searchIcon: getImageUrl('/images/icons/搜索.png')
   },
 
   onLoad() {

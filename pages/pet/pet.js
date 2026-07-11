@@ -1,6 +1,7 @@
 /** 宠物养成 */
 const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, getFeedInventory, consumeFeedInventory, createRandomPet, retirePet } = require('../../utils/storage');
 const { PET_BIRDS, getStage, getStageIndex, FEED_ITEMS, PET_FEED_MAP } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 function getPetBird(birdId) {
   return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
@@ -14,8 +15,8 @@ function getPetImage(pet) {
 }
 
 function getPetBg(pet) {
-  if (!pet) return '/images/Background.png';
-  return getPetBird(pet.birdId).bg || '/images/Background.png';
+  if (!pet) return getImageUrl('/images/Background.png');
+  return getPetBird(pet.birdId).bg || getImageUrl('/images/Background.png');
 }
 
 function getAvailableFeeds(pet) {
@@ -40,7 +41,7 @@ Page({
     feedItems: FEED_ITEMS,
     feedStock: 0,
     petImage: '',
-    petBg: '/images/Background.png',
+    petBg: getImageUrl('/images/Background.png'),
     showFeedModal: false,
     modalFeeds: [],
     showLevelUp: false,

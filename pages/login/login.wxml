@@ -1,16 +1,16 @@
 <view class="page login-page">
   <view class="login-wrapper">
   <view class="brand">
-    <image class="brand-logo" src="/images/logo.png" mode="aspectFit" />
+    <image class="brand-logo" src="{{logoImage}}" mode="aspectFit" />
   </view>
 
     <view class="actions">
       <button class="btn-login" bindtap="onWxLogin">
-        <image class="btn-icon" src="/images/icons/登录.png" mode="aspectFit" />
+        <image class="btn-icon" src="{{loginIcon}}" mode="aspectFit" />
         <text>微信一键登录</text>
       </button>
       <button class="btn-guest" bindtap="onGuestLogin">
-        <image class="btn-icon" src="/images/icons/未登录.png" mode="aspectFit" />
+        <image class="btn-icon" src="{{guestIcon}}" mode="aspectFit" />
         <text>访客模式</text>
       </button>
       <view class="guest-hint">访客模式下游戏进度不会保存</view>
