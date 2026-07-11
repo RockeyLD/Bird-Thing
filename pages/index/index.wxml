@@ -135,6 +135,30 @@
     </view>
   </view>
 
+  <!-- 喂食选择弹窗 -->
+  <view class="card-modal" wx:if="{{showFeedModal}}" bindtap="onFeedModalClose">
+    <view class="feed-modal-content" catchtap="onContentTap">
+      <view class="feed-modal-header">
+        <view class="feed-modal-title">选择食物</view>
+        <view class="feed-modal-close" bindtap="onFeedModalClose">✕</view>
+      </view>
+      <view class="feed-list">
+        <view class="feed-item" wx:for="{{feedInventoryList}}" wx:key="key" bindtap="onFeedItemTap" data-type="{{item.key}}" data-exp="{{item.exp}}">
+          <image class="feed-item-icon" src="{{item.iconUrl}}" mode="aspectFit" />
+          <view class="feed-item-info">
+            <view class="feed-item-name">{{item.name}}</view>
+            <view class="feed-item-meta">+{{item.exp}} 经验 · 库存 {{item.stock}}</view>
+          </view>
+          <view class="feed-item-arrow">›</view>
+        </view>
+      </view>
+      <view wx:if="{{feedInventoryList.length === 0}}" class="feed-empty">
+        <view class="text-sm">没有食物了，快去商店购买吧！</view>
+        <button class="btn-primary" style="margin-top: 24rpx;" bindtap="onFeedModalClose">去商店</button>
+      </view>
+    </view>
+  </view>
+
   <!-- 引导遮罩 -->
   <view wx:if="{{guideStep >= 0}}">
     <view class="guide-mask" catchtap="onGuideMaskTap" style="top: 0; left: 0; width: 100vw; height: {{guideTop}}px;"></view>

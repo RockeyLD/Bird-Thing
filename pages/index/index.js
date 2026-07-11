@@ -1,6 +1,6 @@
-const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, getFeedInventory, consumeFeedInventory, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
-const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
+const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, FEED_ITEMS, BIRDS } = require('../../data/birds');
 const { getImageUrl, ensureImageUrl } = require('../../utils/imageUrls');
 
 function getPetBird(birdId) {
@@ -47,7 +47,9 @@ Page({
     bgImage: getImageUrl('/images/Background.png'),
     loginIcon: getImageUrl('/images/icons/登录.png'),
     guestIcon: getImageUrl('/images/icons/未登录.png'),
-    unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png')
+    unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png'),
+    showFeedModal: false,
+    feedInventoryList: []
   },
 
   onLoad() {
@@ -245,6 +247,15 @@ Page({
 
     const progress = (masteredCount * 10 + (learnedCount - masteredCount) * 5) / (totalBirds * 10) * 100;
 
+    const feedInventory = getFeedInventory();
+    const feedInventoryList = FEED_ITEMS
+      .filter(item => feedInventory[item.key] > 0)
+      .map(item => ({
+        ...item,
+        iconUrl: getImageUrl(item.icon),
+        stock: feedInventory[item.key]
+      }));
+
     this.setData({
       user,
       pet,
@@ -263,7 +274,8 @@ Page({
       bgImage: getImageUrl('/images/Background.png'),
       loginIcon: getImageUrl('/images/icons/登录.png'),
       guestIcon: getImageUrl('/images/icons/未登录.png'),
-      unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png')
+      unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png'),
+      feedInventoryList
     });
   },
 
@@ -384,16 +396,30 @@ Page({
       wx.showToast({ title: '先领养一只鸟吧', icon: 'none' });
       return;
     }
-    const stock = getFeedStock();
-    if (stock <= 0) {
+    const feedInventoryList = this.data.feedInventoryList;
+    if (feedInventoryList.length === 0) {
       wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
+    this.setData({ showFeedModal: true });
+  },
+
+  onFeedItemTap(e) {
+    const { type, exp } = e.currentTarget.dataset;
+    const consumed = consumeFeedInventory(type);
+    if (!consumed) {
+      wx.showToast({ title: '食物不足', icon: 'none' });
+      this.setData({ showFeedModal: false });
+      return;
+    }
+
+    const pet = getCurrentPet();
     const oldStageIndex = getStageIndex(pet.exp);
     const oldExp = pet.exp;
-    consumeFeed();
-    const updated = feedPet(FEED_EXP);
+    const updated = feedPet(Number(exp));
     this.refresh();
+    this.setData({ showFeedModal: false });
+
     const newStage = getStageIndex(updated.exp);
     if (oldStageIndex === 4 && oldExp < 1350 && updated.exp >= 1350) {
       const oldBird = getPetBird(pet.birdId);
@@ -416,7 +442,11 @@ Page({
         showCancel: false
       });
     } else {
-      wx.showToast({ title: `喂食成功 +${FEED_EXP}经验`, icon: 'success' });
+      wx.showToast({ title: `喂食成功 +${exp}经验`, icon: 'success' });
     }
-  }
+  },
+
+  onFeedModalClose() {
+    this.setData({ showFeedModal: false });
+  },
 });
