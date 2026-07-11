@@ -16,7 +16,7 @@
 
         <view wx:else class="shed-grid">
           <view class="shed-item" wx:for="{{birdShed}}" wx:key="index">
-            <view class="shed-emoji">🦜</view>
+            <image class="shed-avatar" src="{{item.image}}" mode="aspectFit" />
             <view class="shed-name">{{item.name}}</view>
             <view class="shed-stage">{{item.stageLabel}}</view>
           </view>

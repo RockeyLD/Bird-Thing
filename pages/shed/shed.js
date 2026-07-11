@@ -21,10 +21,12 @@ Page({
     const shed = (user.birdShed || []).map(item => {
       const bird = PET_BIRDS.find(b => b.id === item.birdId);
       const stage = getStage(item.exp);
+      const image = bird && bird.stages && stage ? (bird.stages[stage.key] || bird.stages.ultimate) : '';
       return {
         ...item,
         name: bird ? bird.name : '未知鸟类',
-        stageLabel: stage.label
+        stageLabel: stage.label,
+        image
       };
     });
     this.setData({ birdShed: shed });
