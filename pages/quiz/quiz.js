@@ -47,6 +47,16 @@ Page({
     isEarlyReview: false
   },
 
+  // 安全返回：防止页面栈为空时 navigateBack 失败
+  safeNavigateBack() {
+    const pages = getCurrentPages();
+    if (pages.length > 1) {
+      wx.navigateBack();
+    } else {
+      wx.switchTab({ url: '/pages/index/index' });
+    }
+  },
+
   onLoad(options) {
     getApp().setNavBarData(this);
     const bird = BIRDS.find(b => b.id === options.birdId) || BIRDS[0];
@@ -67,7 +77,7 @@ Page({
     if (isDelayed) {
       if (!entry || !entry.learned || entry.mastered) {
         wx.showToast({ title: '该鸟类无需复习', icon: 'none' });
-        setTimeout(() => wx.navigateBack(), 1500);
+        setTimeout(() => this.safeNavigateBack(), 1500);
         return;
       }
       if (entry.nextReviewAt && Date.now() < entry.nextReviewAt) {
@@ -105,7 +115,7 @@ Page({
           title: '很遗憾，就差一点点',
           content: `你答对了 ${correctCount} 题，再接再厉！`,
           showCancel: false,
-          success: () => wx.navigateBack()
+          success: () => this.safeNavigateBack()
         });
       }
       return;
@@ -116,7 +126,7 @@ Page({
         title: '很遗憾，就差一点点',
         content: `你答对了 ${correctCount} 题，再接再厉！`,
         showCancel: false,
-        success: () => wx.navigateBack()
+        success: () => this.safeNavigateBack()
       });
       return;
     }
@@ -149,14 +159,14 @@ Page({
           title: '练习完成',
           content: `你答对了 5 题，但复习时间还没到，本次不记录进度和积分。`,
           showCancel: false,
-          success: () => wx.navigateBack()
+          success: () => this.safeNavigateBack()
         });
         return;
       }
       const result = recordReview(this.data.bird.id, true);
       if (!result) {
         wx.showToast({ title: '复习记录失败', icon: 'none' });
-        wx.navigateBack();
+        this.safeNavigateBack();
         return;
       }
       if (result.mastered) {
@@ -164,7 +174,7 @@ Page({
           title: '真正精通！',
           content: `恭喜！你已经完全掌握了 ${this.data.bird.name}！`,
           showCancel: false,
-          success: () => wx.navigateBack()
+          success: () => this.safeNavigateBack()
         });
       } else {
         const daysLeft = Math.ceil((result.nextReviewAt - Date.now()) / DAY_MS);
@@ -172,7 +182,7 @@ Page({
           title: '复习通过！',
           content: `复习通过！+20 分，下次 ${daysLeft} 天后复习。`,
           showCancel: false,
-          success: () => wx.navigateBack()
+          success: () => this.safeNavigateBack()
         });
       }
       return;
@@ -186,7 +196,7 @@ Page({
       title: '恭喜通过！',
       content: `你答对了 5 题，成功解锁了 ${this.data.bird.name}！1天后可以开始复习。`,
       showCancel: false,
-      success: () => wx.navigateBack()
+      success: () => this.safeNavigateBack()
     });
   },
 
@@ -201,11 +211,11 @@ Page({
     const remaining = this.getRemainingDimensions();
     if (remaining.length === 0) {
       wx.showModal({
-        title: '学习完成',
-        content: '你已经完成了这只鸟的所有维度学习！',
-        showCancel: false,
-        success: () => wx.navigateBack()
-      });
+      title: '学习完成',
+      content: '你已经完成了这只鸟的所有维度学习！',
+      showCancel: false,
+      success: () => this.safeNavigateBack()
+    });
       return;
     }
     const dim = remaining[Math.floor(Math.random() * remaining.length)];
@@ -258,7 +268,7 @@ Page({
       if (this.data.quizMode) {
         this.loadNextQuestion();
       } else {
-        wx.navigateBack();
+        this.safeNavigateBack();
       }
       return;
     }
@@ -286,6 +296,6 @@ Page({
   },
 
   onBackTap() {
-    wx.navigateBack();
+    this.safeNavigateBack();
   }
 });

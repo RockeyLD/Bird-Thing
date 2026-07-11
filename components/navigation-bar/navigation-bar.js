@@ -64,11 +64,12 @@ Component({
       const isAndroid = platform === 'android';
       const isDevtools = platform === 'devtools';
       const windowInfo = wx.getWindowInfo() || {};
+      const menuButtonInfo = wx.getMenuButtonBoundingClientRect() || {};
       const { windowWidth, safeArea: { top = 0, bottom = 0 } = {} } = windowInfo;
       this.setData({
         ios: !isAndroid,
-        innerPaddingRight: `padding-right: ${windowWidth - rect.left}px`,
-        leftWidth: `width: ${windowWidth - rect.left}px`,
+        innerPaddingRight: `padding-right: ${windowWidth - menuButtonInfo.left}px`,
+        leftWidth: `width: ${windowWidth - menuButtonInfo.left}px`,
         safeAreaTop: isDevtools || isAndroid ? `height: calc(var(--height) + ${top}px); padding-top: ${top}px` : ``
       })
     },
@@ -93,11 +94,20 @@ Component({
     back() {
       const data = this.data
       if (data.delta) {
-        wx.navigateBack({
-          delta: data.delta
-        })
+        const pages = getCurrentPages();
+        if (pages.length > 1) {
+          wx.navigateBack({
+            delta: data.delta
+          })
+        } else {
+          wx.switchTab({ url: '/pages/index/index' });
+        }
       }
       this.triggerEvent('back', { delta: data.delta }, {})
+    },
+    home() {
+      wx.switchTab({ url: '/pages/index/index' });
+      this.triggerEvent('home', {}, {});
     }
   },
 })

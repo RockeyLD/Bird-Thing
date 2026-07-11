@@ -2,6 +2,18 @@ const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
+function buildUpdateData(state, db) {
+  const updateData = {};
+  for (const k in state) {
+    if (state[k] === null) {
+      updateData[k] = db.command.remove();
+    } else {
+      updateData[k] = db.command.set(state[k]);
+    }
+  }
+  return updateData;
+}
+
 function pickState(data) {
   return {
     totalScore: data.totalScore || 0,
@@ -36,10 +48,7 @@ exports.main = async (event, context) => {
       const doubleCheck = await db.collection('bird-users').where({ openid: OPENID }).get();
       if (doubleCheck.data.length > 0) {
         userData = doubleCheck.data[0];
-        const updateData = {};
-        for (const k in state) {
-          updateData[k] = db.command.set(state[k]);
-        }
+        const updateData = buildUpdateData(state, db);
         updateData.updatedAt = db.serverDate();
         await db.collection('bird-users').doc(userData._id).update({ data: updateData });
       } else {
@@ -53,10 +62,7 @@ exports.main = async (event, context) => {
         });
       }
     } else {
-      const updateData = {};
-      for (const k in state) {
-        updateData[k] = db.command.set(state[k]);
-      }
+      const updateData = buildUpdateData(state, db);
       updateData.updatedAt = db.serverDate();
       await db.collection('bird-users').doc(userData._id).update({ data: updateData });
     }

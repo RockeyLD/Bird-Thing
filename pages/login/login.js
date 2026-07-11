@@ -9,7 +9,10 @@ Page({
   onLoad() {
     const openid = wx.getStorageSync('openid');
     if (openid) {
-      wx.switchTab({ url: '/pages/index/index' });
+      // 延迟跳转，避免 onLoad 阶段同步路由导致 webview 生命周期错误
+      wx.nextTick(() => {
+        wx.switchTab({ url: '/pages/index/index' });
+      });
     }
   },
 
