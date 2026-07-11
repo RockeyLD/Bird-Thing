@@ -12,6 +12,8 @@
   font-weight: 600;
 }
 
+.badge-icon { width: 28rpx; height: 28rpx; }
+
 .login-badge.guest {
   background: rgba(232, 112, 91, 0.12);
   color: #E8705B;

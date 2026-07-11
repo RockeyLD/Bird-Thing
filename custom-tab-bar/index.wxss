@@ -22,7 +22,7 @@
   gap: 4rpx;
 }
 
-.tab-icon { font-size: 36rpx; opacity: 0.6; transition: opacity 0.2s; }
+.tab-icon { width: 40rpx; height: 40rpx; opacity: 0.6; transition: opacity 0.2s; }
 .tab-text { font-size: 20rpx; color: #8A9A90; transition: color 0.2s; }
 
 .tab-item.active .tab-icon { opacity: 1; }

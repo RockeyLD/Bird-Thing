@@ -5,13 +5,16 @@
     <view class="nav-title">鸟圳</view>
     <view class="nav-right">
       <view class="login-badge" wx:if="{{!isLoggedIn}}" bindtap="onLoginTap">
-        <text>🔐 登录</text>
+        <image class="badge-icon" src="/images/icons/未登录.png" mode="aspectFit" />
+        <text>登录</text>
       </view>
       <view class="login-badge guest" wx:elif="{{isGuest}}">
-        <text>👤 访客</text>
+        <image class="badge-icon" src="/images/icons/访客登录.png" mode="aspectFit" />
+        <text>访客</text>
       </view>
       <view class="login-badge logged" wx:else>
-        <text>✅ 已登录</text>
+        <image class="badge-icon" src="/images/icons/登录.png" mode="aspectFit" />
+        <text>已登录</text>
       </view>
       <view class="score-badge">
         <text>⭐</text>

@@ -49,6 +49,10 @@
 }
 
 .btn-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
   background: var(--primary);
   color: #fff;
   border-radius: 48rpx;
@@ -65,6 +69,10 @@
 }
 
 .btn-guest {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
   background: var(--card);
   color: var(--text);
   border-radius: 48rpx;
@@ -78,6 +86,8 @@
 .btn-guest::after {
   border: none;
 }
+
+.btn-icon { width: 40rpx; height: 40rpx; }
 
 .guest-hint {
   text-align: center;
