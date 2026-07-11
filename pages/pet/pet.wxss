@@ -134,7 +134,7 @@ page { background: transparent; overflow: hidden; }
 .bottom-panel {
   padding: 8rpx 30rpx;
   padding-bottom: calc(8rpx + env(safe-area-inset-bottom));
-  background: var(--bg);
+  background: transparent;
   flex-shrink: 0;
 }
 
