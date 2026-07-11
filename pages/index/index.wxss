@@ -12,7 +12,7 @@
   font-weight: 600;
 }
 
-.badge-icon { width: 28rpx; height: 28rpx; }
+.badge-icon { width: 36rpx; height: 36rpx; }
 
 .login-badge.guest {
   background: rgba(232, 112, 91, 0.12);
