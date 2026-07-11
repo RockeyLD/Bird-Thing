@@ -31,7 +31,7 @@
               <view class="stats-label">已精通</view>
             </view>
             <view class="stats-block">
-              <view class="stats-num">{{15 - user.learnedBirdIds.length}}</view>
+              <view class="stats-num">{{totalBirds - user.learnedBirdIds.length}}</view>
               <view class="stats-label">待探索</view>
             </view>
           </view>

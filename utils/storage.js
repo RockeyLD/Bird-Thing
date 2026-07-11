@@ -124,8 +124,8 @@ function setCurrentPet(pet) {
 function feedPet(expGain) {
   const state = getUserState();
   if (!state.currentBird) return null;
-  state.currentBird.exp += expGain;
-  state.currentBird.feedCount += 1;
+  state.currentBird.exp = Number(state.currentBird.exp || 0) + expGain;
+  state.currentBird.feedCount = Number(state.currentBird.feedCount || 0) + 1;
   setUserState(state);
   scheduleSync(state);
   return state.currentBird;

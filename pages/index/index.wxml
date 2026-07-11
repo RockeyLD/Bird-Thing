@@ -65,10 +65,11 @@
             <image class="pet-avatar {{stageInfo.key}}" src="{{petImage}}" mode="aspectFit" />
             <view class="pet-info">
               <view class="title-md">{{stageInfo.label}}</view>
-              <view class="text-sm">经验 {{currentExp}} / {{stageInfo.nextExpLabel}}</view>
+              <view class="text-sm" wx:if="{{!stageInfo.isMax}}">经验 {{currentExp}} / {{stageInfo.reqExp}}</view>
+              <view class="text-sm" wx:else>经验 {{currentExp}} / MAX</view>
             </view>
             <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
-              <view class="progress-fill" style="width: {{currentExp / stageInfo.nextExp * 100}}%"></view>
+              <view class="progress-fill" style="width: {{currentExp / stageInfo.reqExp * 100}}%"></view>
             </view>
             <view wx:else class="max-badge">已满级</view>
             <button wx:if="{{!stageInfo.isMax}}" class="btn-secondary feed-btn" bindtap="onFeedTap">

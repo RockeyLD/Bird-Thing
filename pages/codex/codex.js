@@ -50,6 +50,7 @@ Page({
       birds: list,
       cardBird: cardBird ? { ...cardBird, cover: getImageUrl(cardBird.cover), iconPath: getImageUrl(`/images/Bird Icon/${cardBird.name}.png`) } : null,
       user,
+      totalBirds: BIRDS.length,
       masteredCount: list.filter(b => b.mastered).length,
       dueCount: list.filter(b => b.canReview).length
     });

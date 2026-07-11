@@ -87,15 +87,15 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rpx;
-  margin-top: 10rpx;
+  margin-top: 15rpx;
 }
 
 .shop-grid + .shop-grid {
-  margin-top: 25rpx;
+  margin-top: 30rpx;
 }
 
 .shop-grid:last-child {
-  margin-top: 45rpx;
+  margin-top: 50rpx;
 }
 
 .shop-item {

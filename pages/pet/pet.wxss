@@ -101,8 +101,8 @@ page { background: transparent; overflow: hidden; }
 }
 
 .pet-avatar {
-  width: 500rpx;
-  height: 500rpx;
+  width: 420rpx;
+  height: 420rpx;
   display: inline-block;
   transition: transform 0.3s ease;
   line-height: 1;
@@ -125,10 +125,16 @@ page { background: transparent; overflow: hidden; }
 }
 
 .stage-label {
-  margin-top: 8rpx;
-  font-size: 28rpx;
+  margin-top: 16rpx;
+  font-size: 32rpx;
   font-weight: 700;
-  color: var(--primary);
+  color: #fff;
+  text-shadow: 0 2rpx 6rpx rgba(0,0,0,0.4);
+  background: rgba(76, 175, 130, 0.85);
+  padding: 10rpx 32rpx;
+  border-radius: 28rpx;
+  display: inline-block;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.15);
 }
 
 .bottom-panel {
