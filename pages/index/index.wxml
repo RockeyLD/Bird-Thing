@@ -48,6 +48,7 @@
         </view>
 
         <!-- 宠物展示区 -->
+        <view class="section-title">宠物养成</view>
         <view class="card pet-card">
           <view wx:if="{{!pet}}" class="pet-empty">
             <view class="pet-egg">🥚</view>
@@ -68,8 +69,58 @@
               立即喂食
             </button>
           </view>
+        <!-- 学习统计 -->
+        <view class="section-title">学习统计</view>
+        <view class="card stats-card">
+          <view class="stats-row">
+            <view class="stats-item">
+              <view class="stats-num">{{learnedCount}}<text class="stats-total">/{{totalBirds}}</text></view>
+              <view class="stats-label">已学习</view>
+            </view>
+            <view class="stats-divider"></view>
+            <view class="stats-item">
+              <view class="stats-num">{{masteredCount}}<text class="stats-total">/{{totalBirds}}</text></view>
+              <view class="stats-label">已精通</view>
+            </view>
+          </view>
+          <view class="stats-progress-bar">
+            <view class="stats-progress-fill" style="width: {{learnProgress}}%"></view>
+          </view>
+          <view class="stats-progress-text">图鉴进度 {{learnProgress}}%</view>
         </view>
       </view>
     </scroll-view>
+  </view>
+
+  <!-- 每日推荐卡片弹窗 -->
+  <view class="card-modal" wx:if="{{showRecommendCard}}" bindtap="onMaskTap">
+    <view class="card-modal-content" bindtap="onContentTap">
+      <view class="bird-header-modal">
+        <image class="bird-emoji" src="{{recommendBird.cover}}" mode="aspectFill" wx:if="{{recommendBird.cover}}" />
+        <view class="bird-name" wx:else>{{recommendBird.name}}</view>
+        <view class="bird-tags">
+          <text wx:for="{{recommendBird.tags}}" wx:key="index">{{item}}{{(index < recommendBird.tags.length - 1) ? ' · ' : ''}}</text>
+        </view>
+      </view>
+      <view class="knowledge-card-modal">
+        <view class="knowledge-section">
+          <view class="knowledge-section-title">人设</view>
+          <view class="knowledge-text">{{recommendBird.persona}}</view>
+        </view>
+        <view class="knowledge-section">
+          <view class="knowledge-section-title">辨识</view>
+          <view class="knowledge-text">{{recommendBird.identification}}</view>
+        </view>
+        <view class="knowledge-section">
+          <view class="knowledge-section-title">习性</view>
+          <view class="knowledge-text">{{recommendBird.habit}}</view>
+        </view>
+        <view class="knowledge-section">
+          <view class="knowledge-section-title">冷知识</view>
+          <view class="knowledge-text">{{recommendBird.trivia}}</view>
+        </view>
+      </view>
+      <button class="btn-primary card-btn" bindtap="onStartQuizTap">开始答题</button>
+    </view>
   </view>
 </view>

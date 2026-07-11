@@ -24,7 +24,8 @@ Page({
     isGuest: false,
     petImage: '',
     recommendBird: null,
-    recommendHook: ''
+    recommendHook: '',
+    showRecommendCard: false
   },
 
   onLoad() {
@@ -53,14 +54,6 @@ Page({
     this.setData({ isLoggedIn: !!openid || isGuest, isGuest });
   },
 
-  generateRecommend() {
-    const birdsWithHooks = BIRDS.filter(b => b.hooks && b.hooks.length > 0);
-    if (birdsWithHooks.length === 0) return;
-    const bird = birdsWithHooks[Math.floor(Math.random() * birdsWithHooks.length)];
-    const hook = bird.hooks[Math.floor(Math.random() * bird.hooks.length)];
-    this.setData({ recommendBird: bird, recommendHook: hook });
-  },
-
   refresh() {
     const user = getUserState();
     const pet = getCurrentPet();
@@ -75,14 +68,33 @@ Page({
       return bird ? { ...bird, progress } : null;
     }).filter(Boolean);
 
+    const app = getApp();
+    const recommend = app.globalData.dailyRecommend || wx.getStorageSync('dailyRecommend');
+    let recommendBird = this.data.recommendBird;
+    let recommendHook = this.data.recommendHook;
+    if (recommend && recommend.bird) {
+      recommendBird = recommend.bird;
+      recommendHook = recommend.hook;
+    }
+
+    const codexEntries = Object.values(user.codex || {});
+    const learnedCount = codexEntries.filter(e => e.learned).length;
+    const masteredCount = codexEntries.filter(e => e.mastered).length;
+    const totalBirds = BIRDS.length;
+
     this.setData({
       user,
       pet,
       stageInfo,
       petImage: getPetImage(pet),
-      dueReviews
+      dueReviews,
+      recommendBird,
+      recommendHook,
+      learnedCount,
+      masteredCount,
+      totalBirds,
+      learnProgress: totalBirds > 0 ? Math.round((learnedCount / totalBirds) * 100) : 0
     });
-    this.generateRecommend();
   },
 
   onLoginTap() {
@@ -131,6 +143,21 @@ Page({
   onRecommendTap() {
     const bird = this.data.recommendBird;
     if (!bird) return;
+    this.setData({ showRecommendCard: true });
+  },
+
+  onMaskTap() {
+    this.setData({ showRecommendCard: false });
+  },
+
+  onContentTap() {
+    // 阻止事件冒泡
+  },
+
+  onStartQuizTap() {
+    const bird = this.data.recommendBird;
+    if (!bird) return;
+    this.setData({ showRecommendCard: false });
     wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}` });
   },
 

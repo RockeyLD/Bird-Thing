@@ -1,3 +1,5 @@
+const { BIRDS } = require('./data/birds');
+
 /** 全局应用数据 */
 App({
   globalData: {
@@ -22,6 +24,7 @@ App({
     const navBarRealBottom = windowInfo.statusBarHeight + this.globalData.navBarHeight;
     this.globalData.scoreBarOffset = Math.max(0, menuButtonInfo.bottom - navBarRealBottom + 8);
     this.initStorage();
+    this.generateDailyRecommend();
   },
 
   initCloud() {
@@ -64,5 +67,15 @@ App({
       learnedBirdIds: [],
       codex: {}
     };
+  },
+
+  generateDailyRecommend() {
+    const birdsWithHooks = BIRDS.filter(b => b.hooks && b.hooks.length > 0);
+    if (birdsWithHooks.length === 0) return;
+    const bird = birdsWithHooks[Math.floor(Math.random() * birdsWithHooks.length)];
+    const hook = bird.hooks[Math.floor(Math.random() * bird.hooks.length)];
+    const recommend = { bird, hook };
+    this.globalData.dailyRecommend = recommend;
+    wx.setStorageSync('dailyRecommend', recommend);
   }
 });
