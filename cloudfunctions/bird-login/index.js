@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const OPENID = wxContext.OPENID;
 
-  const userRes = await db.collection('bird-users').where({ _openid: OPENID }).get();
+  const userRes = await db.collection('bird-users').where({ openid: OPENID }).get();
   let userData = userRes.data[0] || null;
 
   // 同步数据到云端
@@ -30,7 +30,7 @@ exports.main = async (event, context) => {
       await db.collection('bird-users').add({
         data: {
           ...state,
-          _openid: OPENID,
+          openid: OPENID,
           updatedAt: db.serverDate(),
           createdAt: db.serverDate()
         }
@@ -51,7 +51,7 @@ exports.main = async (event, context) => {
     const localState = event.localState || {};
     const defaultData = {
       ...pickState(localState),
-      _openid: OPENID,
+      openid: OPENID,
       createdAt: db.serverDate(),
       updatedAt: db.serverDate()
     };
