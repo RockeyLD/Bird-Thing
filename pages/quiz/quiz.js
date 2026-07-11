@@ -42,7 +42,8 @@ Page({
     isDelayed: false,
     showCard: false,
     showFeedback: false,
-    feedbackText: ''
+    feedbackText: '',
+    hasWrong: false
   },
 
   onLoad(options) {
@@ -86,13 +87,13 @@ Page({
 
   // ===== 题库模式 =====
   startQuizMode() {
-    this.setData({ showCard: false, correctCount: 0, usedIndices: [], showFeedback: false });
+    this.setData({ showCard: false, correctCount: 0, usedIndices: [], showFeedback: false, hasWrong: false });
     this.loadNextQuestion();
   },
 
   loadNextQuestion() {
-    const { bird, usedIndices, correctCount } = this.data;
-    if (correctCount >= QUIZ_PASS_COUNT) {
+    const { bird, usedIndices, correctCount, hasWrong } = this.data;
+    if (!hasWrong && correctCount >= QUIZ_PASS_COUNT) {
       this.onQuizComplete();
       return;
     }
@@ -100,7 +101,7 @@ Page({
     if (available.length === 0) {
       wx.showModal({
         title: '很遗憾，就差一点点',
-        content: `你答对了 ${correctCount} 题，还差 ${QUIZ_PASS_COUNT - correctCount} 题通过。再接再厉！`,
+        content: `你答对了 ${correctCount} 题，再接再厉！`,
         showCancel: false,
         success: () => wx.navigateBack()
       });
@@ -209,7 +210,7 @@ Page({
       if (isCorrect) {
         this.setData({ correctCount: this.data.correctCount + 1, selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
       } else {
-        this.setData({ selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
+        this.setData({ hasWrong: true, selected: idx, answered: true, isCorrect, feedbackText, showFeedback: true });
       }
     } else {
       const isCorrect = idx === 0;
