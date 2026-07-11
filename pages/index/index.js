@@ -1,4 +1,4 @@
-const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
 const { isCloudReady, syncToCloud } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
 
@@ -374,11 +374,12 @@ Page({
     const updated = feedPet(FEED_EXP);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 3 && pet.exp < 1000 && updated.exp >= 1000) {
+    if (oldStageIndex === 4 && pet.exp < 1350 && updated.exp >= 1350) {
       const oldBird = getPetBird(pet.birdId);
+      retirePet(pet);
       wx.showModal({
         title: '恭喜！',
-        content: `${oldBird.name}已经究极满级！获得一颗新的鸟蛋！`,
+        content: `${oldBird.name}已经究极满级！它已移居鸟舍，获得一颗新的鸟蛋！`,
         showCancel: false,
         success: () => {
           const newPet = createRandomPet();
