@@ -50,11 +50,14 @@ Page({
       stageInfo.isMax = stageInfo.key === 'ultimate' && pet.exp >= 1350;
     }
     const currentExp = pet && stageInfo ? pet.exp - stageInfo.baseExp : 0;
+    const progressWidth = stageInfo && stageInfo.reqExp ? (currentExp / stageInfo.reqExp * 100) : 0;
     this.setData({
       user,
       pet,
       stageInfo,
       currentExp,
+      progressWidth,
+      progressStyle: `width: ${progressWidth}%`,
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
       feedStock: getFeedStock(),
       petImage: getPetImage(pet),

@@ -109,13 +109,13 @@ images/
 
 ### 3.3 宠物成长 5 阶段（`data/birds.js` 中 `getStage()`）
 
-| 阶段 | key | 所需经验 | emoji |
-|------|-----|---------|-------|
-| 鸟蛋 | egg | 0 | 🥚 |
-| 幼鸟 | chick | 100 | 🐣 |
-| 成鸟 | adult | 300 | 🐦 |
-| 老年 | elder | 600 | 🦅 |
-| 满级 | max | 1000 | 🦜 |
+| 阶段 | key | 所需经验 | 图标 | 阶段名 |
+|------|-----|---------|------|-------|
+| 鸟蛋 | egg | 0 | 静态 | 鸟蛋 |
+| 幼年 | chick | 100 | 浮动动画 | 幼年 |
+| 成年 | adult | 300 | 弹跳动画 | 成年 |
+| 盛年 | prime | 600 | 弹跳动画 | 盛年 |
+| 究极 | ultimate | 1350 | 浮动动画 | 究极 |
 
 ---
 
@@ -155,13 +155,15 @@ images/
 - 答对：选项高亮绿色，底部按钮显示「下一题」。
 - 答错：
   - 用户所选选项标红（`wrong`），正确答案标绿（`correct`），无弹窗提示。
-  - 底部按钮文字变为「退出」，样式变为红色（`btn-danger`），需用户手动点击退出，无自动返回。
+  - 答错一次即标记 `hasWrong = true`，即使后续全部答对，最终也判定失败。
+  - 全部题目答完后弹出「很遗憾，就差一点点」并返回。
 - 按钮与选项均添加 `active` 按压缩放动效（`transform: scale()`）。
 
 **积分规则**：
-- 首次学习通过（答对 5 题）：+50 分
-- 复习通过：+10 分
+- 首次学习通过（答对 5 题）：+15 分
+- 复习通过：+20 分
 - 答错：0 分（不扣），但复习间隔重置
+- 早复习（未到复习时间答题）：允许答题，但不加积分、不记录进度
 
 **首次学习判定**：`correctCount >= 5` 时调用 `onQuizComplete()`，写入：
 - `codex[bid].learned = true`
@@ -169,7 +171,7 @@ images/
 - `codex[bid].nextReviewAt = now + 1天`
 
 **延后复习判定**：`quiz?birdId=xxx&mode=delayed` 时，进入复习模式：
-- 若 `nextReviewAt > now`：页面加载时拦截，toast 提示剩余天数并自动返回
+- 若 `nextReviewAt > now`：页面加载时不再拦截返回，允许答题，但标记 `isEarlyReview = true`；答对 5/5 时仅提示「练习完成，不记录进度和积分」。
 - 答对 5/5：调用 `recordReview(birdId, true)`，推进 `progress` 和 `nextReviewAt`（间隔 1→2→4→7 天），弹窗提示"下次 X 天后复习"
 - 答错：调用 `recordReview(birdId, false)`，重置当前级间隔，弹窗提示"复习间隔已重置"
 - 到达 `progress = 5`：设 `mastered = true`，弹窗"真正精通！"
@@ -200,20 +202,22 @@ images/
 ---
 
 ### 5.3 宠物成长
-- 鸟蛋（0）→ 幼鸟（100）→ 成鸟（300）→ 老年（600）→ 满级（1000）
-- 满级后可"放归自然"，进入 birdShed，重新开始领养鸟蛋
+- 鸟蛋（0）→ 幼年（100）→ 成年（300）→ 盛年（600）→ 究极（1350）
+- 满级后可"放归自然"，进入 birdShed，重新开始领养鸟蛋（优先未拥有过的品种）
 - 喂食：`FEED_PRICE = 20` 积分，`FEED_EXP = 20` 经验
+- 宠物页背景图根据当前鸟类动态切换（`data/birds.js` 中 `PET_BIRDS` 配置）
 
 ### 5.4 图鉴系统
 - 真正精通标记为 `mastered: true`（走完 4 次间隔复习）
 - `progress` 表示当前复习进度（1~5），1=刚学完，5=精通
-- 图鉴页面展示：已学习 / 已精通 / 待复习，支持按状态筛选
+- 图鉴页面展示：正在学习 / 已精通 / 待复习，支持按状态筛选
+- 文案统一为「正在学习」/「学习中」（原「已学习」）
 
 ### 5.5 每日推荐（首页 index）
 - 从 `BIRDS.filter(b => b.hooks && b.hooks.length > 0)` 中随机抽取一鸟
 - 再从该鸟 `hooks` 数组中随机抽取一条 hook
 - 展示：左侧鸟图，上方鸟名，下方 hook 文案
-- 点击后 `wx.switchTab` 跳转至 `/pages/library/library`
+- 点击后直接在首页弹知识卡片覆盖层（不跳转新页面），点击「开始答题」再跳转 `/pages/quiz/quiz?birdId=xxx&skipCard=1`（追加 `skipCard=1` 防止 quiz 页重复弹出卡片）
 
 ### 5.6 新手教程
 - 首次进入若 `tutorialCompleted === false`，自动重定向到 `/pages/tutorial/tutorial`
@@ -228,13 +232,15 @@ images/
 |------|------|------|
 | `--primary` | `#4CAF82` | 主按钮、进度、品牌色 |
 | `--secondary` | `#FFC857` | 积分、奖励、次要按钮 |
-| `--bg` | `#F4F8F4` | 页面背景 |
+| `--bg` | `#F4F8F4` | 页面背景（宠物养成页已改为 `transparent`） |
 | `--card` | `#FFFFFF` | 卡片底色 |
 | `--text` | `#2E3A33` | 正文 |
 | `--text-secondary` | `#8A9A90` | 辅助文字 |
 | `--accent` | `#E8705B` | 错误/警示/退出按钮 |
 
 **禁忌**：绝对不用紫色或渐变色。用户明确禁止紫色。
+
+**图标替换**：底部 Tab 栏、首页登录标识、搜索框、登录页按钮的 emoji 已全部替换为 `images/icons/` 下的 PNG 图片（`主页.png`、`答题学鸟.png`、`图鉴.png`、`宠物养成.png`、`登录.png`、`未登录.png`、`搜索.png`）。
 
 **滚动布局规范**：每个页面结构为 `<view class="page">` → `<view class="content-wrapper">`（`flex: 1; overflow: hidden`）→ `<scroll-view scroll-y class="scrollarea">`（`height: 100%`）。小程序 `scroll-view` 必须依赖显式高度，不能仅靠 flex 伸缩。
 
@@ -258,11 +264,13 @@ images/
 1. **scroll-view 高度**：必须外层 `content-wrapper` 定高（`flex: 1 + overflow: hidden`），内部 `scrollarea` 用 `height: 100%`，否则无法滚动。
 2. **云函数部署**：修改 `bird-login` 后必须重新"创建并部署：云端安装依赖"。
 3. **数据库集合**：首次使用需手动创建 `bird-users` 集合。
-4. **题库模式 vs 维度模式**：`quiz.js` 优先检测 `bird.questions`，有题库则走题库模式（答对 5 题通过），无题库则回退到旧 5 维度模式。
+4. **题库模式 vs 维度模式**：`quiz.js` 优先检测 `bird.questions`，有题库则走题库模式（答对 5 题通过，答错即标记失败），无题库则回退到旧 5 维度模式。
 5. **识别功能**：拍照识别和特征搜索已预留接口（`quiz` 页面接收参数），API 未接入。
 6. **用户偏好**：禁止紫色配色；自动提交和推送代码，无需确认。
 7. **废弃 API 已替换**：`wx.getSystemInfoSync` 已全局替换为 `wx.getWindowInfo()` / `wx.getDeviceInfo()`（`app.js`、`custom-tab-bar/index.js`、`components/navigation-bar/navigation-bar.js`）。
 8. **WXML 性能**：`wx:for` 已补 `wx:key="*this"`。
+9. **宠物养成样式**：顶部 `.nav-bar`、`.top-info` 和底部 `.bottom-panel` 背景已改为 `transparent`，避免浅色长条遮挡背景图。
+10. **进度条样式**：`pet.wxml` 中 `style` 属性不再直接写 Mustache 表达式，统一在 `pet.js` 中拼好字符串（如 `progressStyle: 'width: 60%'`），避免 IDE 误报 CSS 语法错误。
 
 ---
 
@@ -285,13 +293,13 @@ images/
 ## 10. 修改规范（供 AI 代理参考）
 
 - **添加新鸟**：在 `data/birds.js` 的 `BIRDS` 数组末尾追加，id 建议按现有递增（如 `bird_017`），必须有 `cover` 照片（放 `images/birds/`）和 `questions`（10 题），建议同时补充 `persona`/`identification`/`habit`/`trivia`/`hooks`。
-- **修改答题逻辑**：优先改 `pages/quiz/quiz.js`，注意 `quizMode` 双分支（题库模式 / 维度 fallback），选项打乱逻辑在 `loadNextQuestion()` 中。
-- **修改积分**：改 `utils/storage.js` 的 `addScore`，同时检查 `quiz.js` 中的加分点。
-- **样式调整**：遵循 `app.wxss` 中的 CSS 变量，禁止引入紫色或渐变色。
-- **图片路径**：鸟类照片统一放在 `images/birds/`，引用格式为 `/images/birds/鸟名.扩展名`。
+- **修改答题逻辑**：优先改 `pages/quiz/quiz.js`，注意 `quizMode` 双分支（题库模式 / 维度 fallback），选项打乱逻辑在 `loadNextQuestion()` 中；答错即标记 `hasWrong`。
+- **修改积分**：改 `utils/storage.js` 的 `addScore`，同时检查 `quiz.js` 中的加分点（首次学习 +15，复习 +20）。
+- **样式调整**：遵循 `app.wxss` 中的 CSS 变量，禁止引入紫色或渐变色；宠物养成页背景改为 `transparent`。
+- **图片路径**：鸟类照片统一放在 `images/birds/`，图标放在 `images/icons/`，引用格式为 `/images/xxx/文件名.扩展名`。
 - **API 规范**：禁止使用已废弃的 `wx.getSystemInfoSync`，统一使用 `wx.getWindowInfo()` / `wx.getDeviceInfo()`。
-- **WXML 规范**：所有 `wx:for` 必须添加 `wx:key`。
+- **WXML 规范**：所有 `wx:for` 必须添加 `wx:key`；`style` 属性优先在 JS 中拼接完整字符串，避免 IDE 误报。
 
 ---
 
-*最后更新：2026-07-11* · 新增延后复习系统（Spaced Retrieval）
+*最后更新：2026-07-11* · 新增延后复习系统（Spaced Retrieval）+ 图标全面替换 + 分数机制调整 + 宠物养成 UI 优化
