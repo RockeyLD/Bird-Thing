@@ -133,11 +133,12 @@ Page({
 
     const oldStageIndex = this.data.stageIndex;
     const oldPet = this.data.pet;
+    const oldExp = oldPet.exp;
     consumeFeedInventory(key);
     const updated = feedPet(item.exp);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 4 && oldPet.exp < 1350 && updated.exp >= 1350) {
+    if (oldStageIndex === 4 && oldExp < 1350 && updated.exp >= 1350) {
       const oldBird = getPetBird(oldPet.birdId);
       retirePet(oldPet);
       wx.showModal({
