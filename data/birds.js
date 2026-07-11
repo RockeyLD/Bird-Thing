@@ -372,7 +372,7 @@ const PET_BIRDS = [
   },
   {
     id: 'pet_starling',
-    name: '黑顶椋鸟',
+    name: '黑领椋鸟',
     stages: {
       egg: '/images/pets/starling_egg.png',
       chick: '/images/pets/starling_young.png',
