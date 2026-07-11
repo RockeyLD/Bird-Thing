@@ -99,8 +99,8 @@ Page({
     const available = bird.questions.map((_, i) => i).filter(i => !usedIndices.includes(i));
     if (available.length === 0) {
       wx.showModal({
-        title: '答题结束',
-        content: `你答对了 ${correctCount} 题，还差 ${QUIZ_PASS_COUNT - correctCount} 题通过。`,
+        title: '很遗憾，就差一点点',
+        content: `你答对了 ${correctCount} 题，还差 ${QUIZ_PASS_COUNT - correctCount} 题通过。再接再厉！`,
         showCancel: false,
         success: () => wx.navigateBack()
       });
@@ -224,18 +224,18 @@ Page({
   },
 
   onNextTap() {
+    if (!this.data.isCorrect && this.data.isDelayed) {
+      // 复习模式答错也继续做完所有题目，最后统一处理结果
+      this.loadNextQuestion();
+      return;
+    }
     if (!this.data.isCorrect) {
-      if (this.data.isDelayed) {
-        recordReview(this.data.bird.id, false);
-        wx.showModal({
-          title: '复习失败',
-          content: '答错了，复习间隔已重置，请继续加油！',
-          showCancel: false,
-          success: () => wx.navigateBack()
-        });
-        return;
+      // 首次学习模式答错也继续做完，不中途退出
+      if (this.data.quizMode) {
+        this.loadNextQuestion();
+      } else {
+        wx.navigateBack();
       }
-      wx.navigateBack();
       return;
     }
     if (this.data.quizMode) {

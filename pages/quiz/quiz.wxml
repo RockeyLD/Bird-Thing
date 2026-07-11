@@ -103,7 +103,7 @@
         </view>
 
         <button wx:if="{{answered}}" class="btn-primary {{isCorrect ? '' : 'btn-danger'}}" bindtap="onNextTap">
-          {{isCorrect ? (quizMode ? '下一题' : '下一维度 →') : '退出'}}
+          {{isCorrect ? (quizMode ? '下一题' : '下一维度 →') : '下一题'}}
         </button>
 
         <view wx:if="{{showFeedback}}" class="feedback-area {{isCorrect ? 'feedback-correct' : 'feedback-wrong'}}">
