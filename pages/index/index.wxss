@@ -264,7 +264,7 @@
 .guide-mask-tabbar {
   position: fixed;
   bottom: 0;
-  height: 120rpx;
+  height: calc(200rpx + env(safe-area-inset-bottom));
   z-index: 1000;
 }
 
