@@ -77,6 +77,11 @@ Page({
       recommendHook = recommend.hook;
     }
 
+    const codexEntries = Object.values(user.codex || {});
+    const learnedCount = codexEntries.filter(e => e.learned).length;
+    const masteredCount = codexEntries.filter(e => e.mastered).length;
+    const totalBirds = BIRDS.length;
+
     this.setData({
       user,
       pet,
@@ -84,7 +89,11 @@ Page({
       petImage: getPetImage(pet),
       dueReviews,
       recommendBird,
-      recommendHook
+      recommendHook,
+      learnedCount,
+      masteredCount,
+      totalBirds,
+      learnProgress: totalBirds > 0 ? Math.round((learnedCount / totalBirds) * 100) : 0
     });
   },
 

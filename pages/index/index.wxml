@@ -69,6 +69,24 @@
               立即喂食
             </button>
           </view>
+        <!-- 学习统计 -->
+        <view class="section-title">学习统计</view>
+        <view class="card stats-card">
+          <view class="stats-row">
+            <view class="stats-item">
+              <view class="stats-num">{{learnedCount}}<text class="stats-total">/{{totalBirds}}</text></view>
+              <view class="stats-label">已学习</view>
+            </view>
+            <view class="stats-divider"></view>
+            <view class="stats-item">
+              <view class="stats-num">{{masteredCount}}<text class="stats-total">/{{totalBirds}}</text></view>
+              <view class="stats-label">已精通</view>
+            </view>
+          </view>
+          <view class="stats-progress-bar">
+            <view class="stats-progress-fill" style="width: {{learnProgress}}%"></view>
+          </view>
+          <view class="stats-progress-text">图鉴进度 {{learnProgress}}%</view>
         </view>
       </view>
     </scroll-view>
