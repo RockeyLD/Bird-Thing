@@ -426,7 +426,7 @@ Page({
     this.setData({ showFeedModal: false });
 
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 3 && oldExp < 1350 && updated.exp >= 1350) {
+    if (oldStageIndex === 3 && oldExp < 1050 && updated.exp >= 1050) {
       const oldBird = getPetBird(pet.birdId);
       retirePet(pet);
       wx.showModal({

@@ -72,7 +72,7 @@ Page({
     const pet = getCurrentPet();
     const stageInfo = pet ? getStage(pet.exp) : null;
     if (stageInfo) {
-      stageInfo.isMax = stageInfo.key === 'ultimate' && pet.exp >= 1350;
+      stageInfo.isMax = stageInfo.key === 'ultimate' && pet.exp >= 1050;
     }
     const currentExp = pet && stageInfo ? pet.exp - stageInfo.baseExp : 0;
     const progressWidth = stageInfo && stageInfo.reqExp ? (currentExp / stageInfo.reqExp * 100) : 0;
@@ -86,6 +86,7 @@ Page({
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
       feedStock: getFeedStock(),
       petImage: getImageUrl(getPetImage(pet)),
+      petName: pet ? getPetBird(pet.birdId).name : '',
       petBg: getPetBg(pet),
       feedItems: FEED_ITEMS.map(item => ({ ...item, icon: getImageUrl(item.icon) }))
     });
@@ -164,7 +165,7 @@ Page({
     const updated = feedPet(item.exp);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 3 && oldExp < 1350 && updated.exp >= 1350) {
+    if (oldStageIndex === 3 && oldExp < 1050 && updated.exp >= 1050) {
       const oldBird = getPetBird(oldPet.birdId);
       retirePet(oldPet);
       wx.showModal({

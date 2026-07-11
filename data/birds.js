@@ -398,7 +398,7 @@ const STAGES = [
   { key: 'egg', label: '鸟蛋', nextExp: 100, reqExp: 100 },
   { key: 'chick', label: '幼年', nextExp: 300, reqExp: 200 },
   { key: 'adult', label: '成年', nextExp: 600, reqExp: 300 },
-  { key: 'ultimate', label: '究极', nextExp: 1350, reqExp: 750 }
+  { key: 'ultimate', label: '究极', nextExp: 1050, reqExp: 450 }
 ];
 
 const FEED_ITEMS = [
@@ -426,7 +426,7 @@ function getStage(exp) {
   if (exp < 100) return { ...STAGES[0], baseExp: 0 };
   if (exp < 300) return { ...STAGES[1], baseExp: 100 };
   if (exp < 600) return { ...STAGES[2], baseExp: 300 };
-  if (exp < 1350) return { ...STAGES[3], baseExp: 600 };
+  if (exp < 1050) return { ...STAGES[3], baseExp: 600 };
   return { ...STAGES[3], isMax: true, nextExpLabel: 'MAX', baseExp: 600 };
 }
 
@@ -434,7 +434,7 @@ function getStageIndex(exp) {
   if (exp < 100) return 0;
   if (exp < 300) return 1;
   if (exp < 600) return 2;
-  if (exp < 1350) return 3;
+  if (exp < 1050) return 3;
   return 3;
 }
 

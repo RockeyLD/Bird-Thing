@@ -21,7 +21,7 @@
 
     <view wx:else class="pet-avatar-wrap">
       <image class="pet-avatar {{stageInfo.key}}" src="{{petImage}}" mode="aspectFit" />
-      <view class="stage-label">{{stageInfo.label}}</view>
+      <view class="stage-label">{{petName}} · {{stageInfo.label}}</view>
     </view>
   </view>
 
