@@ -131,15 +131,52 @@ function initCloudImages() {
   });
 }
 
-/** 获取图片临时链接；若缓存未命中则返回 cloud:// 路径，不依赖本地文件 */
+/** 获取图片临时链接；若缓存未命中则返回空字符串，不再返回 cloud:// 路径 */
 function getImageUrl(localPath) {
   if (!localPath) return '';
-  // 如果已经是临时链接或 cloud:// 路径，直接返回
-  if (localPath.startsWith('http://') || localPath.startsWith('https://') || localPath.startsWith('cloud://')) {
+  // 如果已经是临时链接，直接返回
+  if (localPath.startsWith('http://') || localPath.startsWith('https://')) {
     return localPath;
   }
-  // 优先返回缓存的临时链接，否则返回 cloud:// 云文件路径
-  return tempUrlCache[localPath] || IMAGE_MAP[localPath] || '';
+  // 只返回已缓存的临时链接，避免 cloud:// 路径在渲染层被当作相对路径导致 500 错误
+  return tempUrlCache[localPath] || '';
+}
+
+/** 按需获取单个图片的临时链接；若缓存已存在则直接返回缓存值 */
+function ensureImageUrl(localPath) {
+  return new Promise((resolve) => {
+    const cached = tempUrlCache[localPath];
+    if (cached) {
+      resolve(cached);
+      return;
+    }
+    const cloudPath = IMAGE_MAP[localPath];
+    if (!cloudPath) {
+      resolve('');
+      return;
+    }
+    if (!wx.cloud) {
+      resolve('');
+      return;
+    }
+    wx.cloud.callFunction({
+      name: 'getImageUrls',
+      data: { fileList: [cloudPath] },
+      success: res => {
+        const result = res.result || {};
+        if (result.success) {
+          const item = (result.fileList || [])[0];
+          if (item && item.status === 0 && item.tempFileURL) {
+            tempUrlCache[localPath] = item.tempFileURL;
+            resolve(item.tempFileURL);
+            return;
+          }
+        }
+        resolve('');
+      },
+      fail: () => resolve('')
+    });
+  });
 }
 
 /** 将 birds.js 中的静态图片路径转换为临时链接（应在 initCloudImages 成功后调用） */
@@ -163,6 +200,7 @@ function resolveBirdImages(birds, petBirds, feedItems) {
 module.exports = {
   initCloudImages,
   getImageUrl,
+  ensureImageUrl,
   resolveBirdImages,
   getCloudFileID
 };

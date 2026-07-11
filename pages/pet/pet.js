@@ -16,7 +16,7 @@ function getPetImage(pet) {
 
 function getPetBg(pet) {
   if (!pet) return getImageUrl('/images/Background.png');
-  return getPetBird(pet.birdId).bg || getImageUrl('/images/Background.png');
+  return getImageUrl(getPetBird(pet.birdId).bg) || getImageUrl('/images/Background.png');
 }
 
 function getAvailableFeeds(pet) {
@@ -80,7 +80,7 @@ Page({
       progressStyle: `width: ${progressWidth}%`,
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
       feedStock: getFeedStock(),
-      petImage: getPetImage(pet),
+      petImage: getImageUrl(getPetImage(pet)),
       petBg: getPetBg(pet),
       feedItems: FEED_ITEMS.map(item => ({ ...item, icon: getImageUrl(item.icon) }))
     });
@@ -184,7 +184,7 @@ Page({
       };
       this.setData({
         showLevelUp: true,
-        levelUpImage: getPetImage(updated),
+        levelUpImage: getImageUrl(getPetImage(updated)),
         levelUpText: LEVELUP_TEXTS[stage.key] || '一只宠物鸟',
         levelUpReqExp: stage.reqExp
       });

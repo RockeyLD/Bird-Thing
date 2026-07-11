@@ -3,7 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(100rpx + env(safe-area-inset-bottom));
+  height: calc(80rpx + env(safe-area-inset-bottom));
   background: #FFFFFF;
   display: flex;
   justify-content: space-around;
@@ -28,12 +28,12 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  height: 100rpx;
+  height: 80rpx;
   gap: 6rpx;
 }
 
-.tab-item:first-child .tab-icon { width: 64rpx; height: 64rpx; }
-.tab-icon { width: 56rpx; height: 56rpx; opacity: 0.6; transition: opacity 0.2s; }
+.tab-item:first-child .tab-icon { width: 72rpx; height: 72rpx; }
+.tab-icon { width: 52rpx; height: 52rpx; opacity: 0.6; transition: opacity 0.2s; }
 .tab-text { font-size: 22rpx; color: #8A9A90; transition: color 0.2s; }
 
 .tab-item.active .tab-icon { opacity: 1; }

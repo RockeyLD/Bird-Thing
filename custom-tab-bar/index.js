@@ -1,4 +1,4 @@
-const { getImageUrl } = require('../utils/imageUrls');
+const { getImageUrl, ensureImageUrl } = require('../utils/imageUrls');
 
 function getTabBarList() {
   return [
@@ -24,6 +24,12 @@ Component({
       if (getApp().globalData.imagesReady) {
         this.setData({ list: getTabBarList() });
       } else {
+        // 主动获取 tabBar 图标临时链接，避免等待全局批量请求
+        const paths = ['/images/icons/主页.png', '/images/icons/答题学鸟.png', '/images/icons/图鉴.png', '/images/icons/宠物养成.png'];
+        Promise.all(paths.map(p => ensureImageUrl(p))).then(() => {
+          this.setData({ list: getTabBarList() });
+        });
+        // 同时轮询检查全局 imagesReady，以防 app.js 中的 initCloudImages 后完成
         const check = setInterval(() => {
           if (getApp().globalData.imagesReady) {
             clearInterval(check);

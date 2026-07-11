@@ -12,8 +12,14 @@ function ensureCloud() {
   }
   const app = getApp();
   if (app && !app.globalData.cloudInited) {
-    wx.cloud.init({ env: CLOUD_ENV });
-    app.globalData.cloudInited = true;
+    try {
+      wx.cloud.init({ env: CLOUD_ENV });
+      app.globalData.cloudInited = true;
+    } catch (e) {
+      console.warn('云开发初始化失败', e);
+      app.globalData.cloudInited = false;
+      throw new Error('云开发初始化失败: ' + e.message);
+    }
   }
 }
 

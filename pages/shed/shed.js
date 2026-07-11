@@ -1,6 +1,7 @@
 /** 鸟舍页面 */
 const { getUserState } = require('../../utils/storage');
 const { PET_BIRDS, getStage } = require('../../data/birds');
+const { getImageUrl } = require('../../utils/imageUrls');
 
 Page({
   data: {
@@ -21,7 +22,7 @@ Page({
     const shed = (user.birdShed || []).map(item => {
       const bird = PET_BIRDS.find(b => b.id === item.birdId);
       const stage = getStage(item.exp);
-      const image = bird && bird.stages && stage ? (bird.stages[stage.key] || bird.stages.ultimate) : '';
+      const image = getImageUrl(bird && bird.stages && stage ? (bird.stages[stage.key] || bird.stages.ultimate) : '');
       return {
         ...item,
         name: bird ? bird.name : '未知鸟类',

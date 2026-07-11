@@ -1,7 +1,7 @@
 const { getUserState, getTutorialCompleted, setTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews, retirePet } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
-const { getImageUrl } = require('../../utils/imageUrls');
+const { getImageUrl, ensureImageUrl } = require('../../utils/imageUrls');
 
 function getPetBird(birdId) {
   return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
@@ -54,6 +54,12 @@ Page({
     getApp().setNavBarData(this);
     this.checkLogin();
     this.refresh();
+    if (!getApp().globalData.imagesReady) {
+      const paths = ['/images/Background.png', '/images/icons/登录.png', '/images/icons/未登录.png', '/images/unclaimed_egg.png'];
+      Promise.all(paths.map(p => ensureImageUrl(p))).then(() => {
+        this.refresh();
+      });
+    }
   },
 
   onShow() {
@@ -213,7 +219,7 @@ Page({
 
     const dueReviews = getDueReviews().map(({ birdId, progress }) => {
       const bird = BIRDS.find(b => b.id === birdId);
-      return bird ? { ...bird, progress } : null;
+      return bird ? { ...bird, cover: getImageUrl(bird.cover), progress } : null;
     }).filter(Boolean);
 
     const app = getApp();
@@ -244,11 +250,11 @@ Page({
       pet,
       stageInfo,
       currentExp,
-      petImage: getPetImage(pet),
+      petImage: getImageUrl(getPetImage(pet)),
       feedStock: getFeedStock(),
       dueReviews,
       isDueReview,
-      recommendBird: recommendBird ? { ...recommendBird } : null,
+      recommendBird: recommendBird ? { ...recommendBird, cover: getImageUrl(recommendBird.cover) } : null,
       recommendHook,
       learnedCount,
       masteredCount,

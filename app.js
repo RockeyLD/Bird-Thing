@@ -18,17 +18,19 @@ App({
 
   onLaunch() {
     this.initCloud();
-    initCloudImages().then(() => {
-      this.globalData.imagesReady = true;
-      // 临时链接已获取，将 birds.js 中的本地路径替换为临时链接
-      resolveBirdImages(BIRDS, PET_BIRDS, FEED_ITEMS);
-      // 刷新所有已打开的页面，使其使用新的图片链接
-      const pages = getCurrentPages();
-      pages.forEach(page => {
-        if (typeof page.refresh === 'function') {
-          try { page.refresh(); } catch (e) {}
-        }
-      });
+    initCloudImages().then((success) => {
+      if (success) {
+        this.globalData.imagesReady = true;
+        // 临时链接已获取，将 birds.js 中的本地路径替换为临时链接
+        resolveBirdImages(BIRDS, PET_BIRDS, FEED_ITEMS);
+        // 刷新所有已打开的页面，使其使用新的图片链接
+        const pages = getCurrentPages();
+        pages.forEach(page => {
+          if (typeof page.refresh === 'function') {
+            try { page.refresh(); } catch (e) {}
+          }
+        });
+      }
     });
     const windowInfo = wx.getWindowInfo();
     const menuButtonInfo = wx.getMenuButtonBoundingClientRect();
@@ -53,6 +55,7 @@ App({
       this.globalData.cloudInited = true;
     } catch (e) {
       console.warn('云开发初始化失败', e);
+      this.globalData.cloudInited = false;
     }
   },
 

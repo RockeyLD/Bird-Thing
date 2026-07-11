@@ -4,8 +4,8 @@ const { getImageUrl } = require('../../utils/imageUrls');
 
 Page({
   data: {
-    birds: BIRDS,
-    filtered: BIRDS,
+    birds: BIRDS.map(b => ({ ...b, cover: getImageUrl(b.cover) })),
+    filtered: BIRDS.map(b => ({ ...b, cover: getImageUrl(b.cover) })),
     keyword: '',
     showCard: false,
     cardBird: null,
@@ -15,6 +15,7 @@ Page({
 
   onLoad() {
     getApp().setNavBarData(this);
+    this.refresh();
   },
 
   refresh() {
@@ -24,13 +25,13 @@ Page({
           b.name.includes(keyword) ||
           b.desc.includes(keyword) ||
           b.tags.some(t => t.includes(keyword))
-        )
-      : BIRDS;
+        ).map(b => ({ ...b, cover: getImageUrl(b.cover) }))
+      : BIRDS.map(b => ({ ...b, cover: getImageUrl(b.cover) }));
     const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
     this.setData({
-      birds: [...BIRDS],
-      filtered: [...filtered],
-      cardBird: cardBird ? { ...cardBird } : null,
+      birds: BIRDS.map(b => ({ ...b, cover: getImageUrl(b.cover) })),
+      filtered,
+      cardBird: cardBird ? { ...cardBird, cover: getImageUrl(cardBird.cover) } : null,
       bgImage: getImageUrl('/images/Background.png'),
       searchIcon: getImageUrl('/images/icons/搜索.png')
     });
@@ -44,22 +45,20 @@ Page({
 
   onSearch(e) {
     const keyword = e.detail.value.toLowerCase();
-    this.setData({
-      keyword,
-      filtered: keyword
-        ? BIRDS.filter(b =>
-            b.name.includes(keyword) ||
-            b.desc.includes(keyword) ||
-            b.tags.some(t => t.includes(keyword))
-          )
-        : BIRDS
-    });
+    const filtered = keyword
+      ? BIRDS.filter(b =>
+          b.name.includes(keyword) ||
+          b.desc.includes(keyword) ||
+          b.tags.some(t => t.includes(keyword))
+        ).map(b => ({ ...b, cover: getImageUrl(b.cover) }))
+      : BIRDS.map(b => ({ ...b, cover: getImageUrl(b.cover) }));
+    this.setData({ keyword, filtered });
   },
 
   onBirdTap(e) {
     const { id } = e.currentTarget.dataset;
     const bird = BIRDS.find(b => b.id === id);
-    this.setData({ showCard: true, cardBird: bird });
+    this.setData({ showCard: true, cardBird: bird ? { ...bird, cover: getImageUrl(bird.cover) } : null });
   },
 
   onStartQuiz() {

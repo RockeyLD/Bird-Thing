@@ -16,7 +16,7 @@ function getAvailableFeedKeys(pet) {
 Page({
   data: {
     user: null,
-    FEED_ITEMS,
+    FEED_ITEMS: FEED_ITEMS.map(item => ({ ...item, icon: getImageUrl(item.icon) })),
     currentPet: null,
     availableKeys: [],
     availableMap: {},

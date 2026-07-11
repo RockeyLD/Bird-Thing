@@ -36,6 +36,7 @@ Page({
       const status = getReviewStatus(b.id);
       return {
         ...b,
+        cover: getImageUrl(b.cover),
         iconPath: getImageUrl(`/images/Bird Icon/${b.name}.png`),
         learnedDimensions: entry ? entry.learnedDimensions : [],
         mastered,
@@ -47,7 +48,7 @@ Page({
     const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
     this.setData({
       birds: list,
-      cardBird: cardBird ? { ...cardBird, iconPath: getImageUrl(`/images/Bird Icon/${cardBird.name}.png`) } : null,
+      cardBird: cardBird ? { ...cardBird, cover: getImageUrl(cardBird.cover), iconPath: getImageUrl(`/images/Bird Icon/${cardBird.name}.png`) } : null,
       user,
       masteredCount: list.filter(b => b.mastered).length,
       dueCount: list.filter(b => b.canReview).length
@@ -66,7 +67,7 @@ Page({
   onBirdTap(e) {
     const { id } = e.currentTarget.dataset;
     const bird = BIRDS.find(b => b.id === id);
-    this.setData({ showCard: true, cardBird: bird });
+    this.setData({ showCard: true, cardBird: bird ? { ...bird, cover: getImageUrl(bird.cover), iconPath: getImageUrl(`/images/Bird Icon/${bird.name}.png`) } : null });
   },
 
   onStartQuiz() {
