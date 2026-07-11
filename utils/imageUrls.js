@@ -80,7 +80,7 @@ function getCloudFileID(localPath) {
 function initCloudImages() {
   return new Promise((resolve) => {
     if (!wx.cloud) {
-      console.warn('云开发不可用，使用本地图片');
+      console.warn('云开发不可用');
       resolve(false);
       return;
     }
@@ -131,15 +131,15 @@ function initCloudImages() {
   });
 }
 
-/** 获取图片临时链接；若获取失败则回退到本地路径 */
+/** 获取图片临时链接；若缓存未命中则返回 cloud:// 路径，不依赖本地文件 */
 function getImageUrl(localPath) {
   if (!localPath) return '';
   // 如果已经是临时链接或 cloud:// 路径，直接返回
   if (localPath.startsWith('http://') || localPath.startsWith('https://') || localPath.startsWith('cloud://')) {
     return localPath;
   }
-  // 优先返回缓存的临时链接，否则回退到本地路径
-  return tempUrlCache[localPath] || localPath;
+  // 优先返回缓存的临时链接，否则返回 cloud:// 云文件路径
+  return tempUrlCache[localPath] || IMAGE_MAP[localPath] || '';
 }
 
 /** 将 birds.js 中的静态图片路径转换为临时链接（应在 initCloudImages 成功后调用） */
