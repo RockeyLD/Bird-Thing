@@ -25,7 +25,7 @@
     </view>
   </view>
 
-  <!-- 底部固定面板：经验值 + 饲料 -->
+  <!-- 底部固定面板：经验值 + 食物 -->
   <view wx:if="{{pet}}" class="bottom-panel">
     <!-- 经验进度 -->
     <view class="card exp-card">
@@ -41,13 +41,7 @@
 
     <!-- 喂食 -->
     <view class="card feed-card">
-      <view class="flex-between">
-        <view>
-          <view class="title-md">🌾 基础饲料</view>
-          <view class="text-sm">喂食一次 +{{feedExp}} 经验</view>
-        </view>
-        <view class="stock-tag">库存: {{feedStock}}</view>
-      </view>
+      <view class="stock-tag">库存: {{feedStock}}</view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
     </view>
   </view>

@@ -83,7 +83,7 @@ Page({
     }
     const stock = this.data.feedStock;
     if (stock <= 0) {
-      wx.showToast({ title: '没有饲料啦！来商店看看吧～', icon: 'none' });
+      wx.showToast({ title: '没有食物啦！来商店看看吧～', icon: 'none' });
       setTimeout(() => {
         wx.navigateTo({ url: '/pages/shop/shop' });
       }, 1500);
