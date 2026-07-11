@@ -10,7 +10,6 @@
   align-items: center;
   border-top: 1rpx solid rgba(0,0,0,0.06);
   z-index: 999;
-  overflow: hidden;
 }
 
 .guide-overlay {
