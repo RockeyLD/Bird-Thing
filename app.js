@@ -90,11 +90,18 @@ App({
   },
 
   generateDailyRecommend() {
+    const today = new Date().toDateString();
+    const saved = wx.getStorageSync('dailyRecommend');
+    if (saved && saved.date === today) {
+      this.globalData.dailyRecommend = saved;
+      return;
+    }
+
     const birdsWithHooks = BIRDS.filter(b => b.hooks && b.hooks.length > 0);
     if (birdsWithHooks.length === 0) return;
     const bird = birdsWithHooks[Math.floor(Math.random() * birdsWithHooks.length)];
     const hook = bird.hooks[Math.floor(Math.random() * bird.hooks.length)];
-    const recommend = { bird, hook };
+    const recommend = { bird, hook, date: today };
     this.globalData.dailyRecommend = recommend;
     wx.setStorageSync('dailyRecommend', recommend);
   }
