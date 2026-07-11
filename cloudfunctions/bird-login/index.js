@@ -38,7 +38,7 @@ exports.main = async (event, context) => {
         userData = doubleCheck.data[0];
         const updateData = {};
         for (const k in state) {
-          updateData[k] = state[k];
+          updateData[k] = db.command.set(state[k]);
         }
         updateData.updatedAt = db.serverDate();
         await db.collection('bird-users').doc(userData._id).update({ data: updateData });
@@ -55,7 +55,7 @@ exports.main = async (event, context) => {
     } else {
       const updateData = {};
       for (const k in state) {
-        updateData[k] = state[k];
+        updateData[k] = db.command.set(state[k]);
       }
       updateData.updatedAt = db.serverDate();
       await db.collection('bird-users').doc(userData._id).update({ data: updateData });
