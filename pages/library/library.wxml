@@ -1,7 +1,7 @@
 <view class="page">
   <image class="bg-image" src="{{bgImage}}" mode="aspectFill" />
   <view class="nav-bar" style="padding-top: {{statusBarHeight}}px; padding-right: {{menuButtonRight}}px;">
-    <view class="nav-title">知识库</view>
+    <view class="nav-title">答题学鸟</view>
   </view>
 
   <view class="search-box">
