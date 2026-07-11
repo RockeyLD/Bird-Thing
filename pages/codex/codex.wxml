@@ -24,7 +24,7 @@
           <view class="stats-row">
             <view class="stats-block">
               <view class="stats-num">{{user.learnedBirdIds.length}}</view>
-              <view class="stats-label">已学习</view>
+              <view class="stats-label">学习中</view>
             </view>
             <view class="stats-block">
               <view class="stats-num">{{masteredCount}}</view>
