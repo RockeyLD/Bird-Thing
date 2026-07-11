@@ -1,5 +1,5 @@
 /** 宠物养成 */
-const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, createRandomPet } = require('../../utils/storage');
+const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, createRandomPet, retirePet } = require('../../utils/storage');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP } = require('../../data/birds');
 
 function getPetBird(birdId) {
@@ -47,8 +47,7 @@ Page({
     const pet = getCurrentPet();
     const stageInfo = pet ? getStage(pet.exp) : null;
     if (stageInfo) {
-      stageInfo.isMax = stageInfo.key === 'ultimate';
-      stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
+      stageInfo.isMax = stageInfo.key === 'ultimate' && pet.exp >= 1350;
     }
     const currentExp = pet && stageInfo ? pet.exp - stageInfo.baseExp : 0;
     this.setData({
@@ -94,12 +93,13 @@ Page({
     const updated = feedPet(FEED_EXP);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
-    if (oldStageIndex === 3 && oldPet.exp < 1000 && updated.exp >= 1000) {
-      // 究极满级，获得新鸟蛋
+    if (oldStageIndex === 4 && oldPet.exp < 1350 && updated.exp >= 1350) {
+      // 究极满级，旧鸟移居鸟舍，获得新鸟蛋
       const oldBird = getPetBird(oldPet.birdId);
+      retirePet(oldPet);
       wx.showModal({
         title: '恭喜！',
-        content: `你的${oldBird.name}已经究极满级！获得一颗新的鸟蛋！`,
+        content: `你的${oldBird.name}已经究极满级！它已移居鸟舍，获得一颗新的鸟蛋！`,
         showCancel: false,
         success: () => {
           const newPet = createRandomPet();

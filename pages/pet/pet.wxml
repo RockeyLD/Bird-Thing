@@ -31,10 +31,11 @@
     <view class="card exp-card">
       <view class="flex-between">
         <text class="title-md">经验值</text>
-        <text class="text-sm">{{currentExp}} / {{stageInfo.nextExpLabel}}</text>
+        <text wx:if="{{!stageInfo.isMax}}" class="text-sm">{{currentExp}} / {{stageInfo.reqExp}}</text>
+        <text wx:else class="text-sm">MAX</text>
       </view>
       <view class="progress-bar" wx:if="{{!stageInfo.isMax}}">
-        <view class="progress-fill" style="width: {{currentExp / stageInfo.nextExp * 100}}%"></view>
+        <view class="progress-fill" style="width: {{currentExp / stageInfo.reqExp * 100}}%"></view>
       </view>
       <view wx:else class="max-badge">已满级</view>
     </view>

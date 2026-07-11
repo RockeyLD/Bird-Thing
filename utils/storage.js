@@ -264,12 +264,28 @@ function createRandomPet() {
   return pet;
 }
 
+function retirePet(pet) {
+  const state = getUserState();
+  if (!state.birdShed) state.birdShed = [];
+  if (pet) {
+    state.birdShed.push({
+      birdId: pet.birdId,
+      exp: pet.exp,
+      feedCount: pet.feedCount,
+      retiredAt: Date.now()
+    });
+  }
+  state.currentBird = null;
+  setUserState(state);
+  return state;
+}
+
 module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
   completeFirstLearning, recordReview, getDueReviews, getReviewStatus, getProgress,
   getFeedStock, addFeedStock, consumeFeed,
-  getOwnedPetTypes, recordOwnedPetType, createRandomPet,
+  getOwnedPetTypes, recordOwnedPetType, createRandomPet, retirePet,
   loadFromCloud, setIsGuestMode, getIsGuestMode
 };

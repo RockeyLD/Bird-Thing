@@ -70,6 +70,18 @@
   margin-bottom: 12rpx;
 }
 
+.shed-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4rpx;
+}
+
+.shed-stage {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
 .shed-label {
   font-size: 24rpx;
   color: var(--text-secondary);

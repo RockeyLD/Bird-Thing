@@ -1,5 +1,6 @@
 /** 鸟舍页面 */
 const { getUserState } = require('../../utils/storage');
+const { PET_BIRDS, getStage } = require('../../data/birds');
 
 Page({
   data: {
@@ -17,9 +18,16 @@ Page({
 
   refresh() {
     const user = getUserState();
-    this.setData({
-      birdShed: user.birdShed || []
+    const shed = (user.birdShed || []).map(item => {
+      const bird = PET_BIRDS.find(b => b.id === item.birdId);
+      const stage = getStage(item.exp);
+      return {
+        ...item,
+        name: bird ? bird.name : '未知鸟类',
+        stageLabel: stage.label
+      };
     });
+    this.setData({ birdShed: shed });
   },
 
   onBackTap() {
