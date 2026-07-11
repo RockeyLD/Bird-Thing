@@ -11,7 +11,12 @@ function getPetImage(pet) {
   if (!pet) return '';
   const bird = getPetBird(pet.birdId);
   const stage = getStage(pet.exp);
-  return bird.stages[stage.key] || bird.stages.egg;
+  const stageKeys = ['egg', 'chick', 'adult', 'prime', 'ultimate'];
+  let idx = stageKeys.indexOf(stage.key);
+  while (idx >= 0 && !bird.stages[stageKeys[idx]]) {
+    idx--;
+  }
+  return idx >= 0 ? bird.stages[stageKeys[idx]] : bird.stages.egg;
 }
 
 Page({
