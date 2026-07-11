@@ -41,7 +41,7 @@ Page({
     const availableKeys = getAvailableFeedKeys(pet);
     const availableMap = {};
     availableKeys.forEach(key => availableMap[key] = true);
-    this.setData({ user, currentPet: pet, availableKeys, availableMap });
+    this.setData({ user, currentPet: pet, availableKeys, availableMap, FEED_ITEMS, bgImage: getImageUrl('/images/shop-bg-new.png') });
   },
 
   onBackTap() {

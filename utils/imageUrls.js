@@ -2,7 +2,7 @@
 
 const CLOUD_ENV = 'eduction-cloud1-9g1g39x5d24e6574';
 
-const CLOUD_BASE = `cloud://${CLOUD_ENV}`;
+const CLOUD_BASE = `cloud://${CLOUD_ENV}.6564-eduction-cloud1-9g1g39x5d24e6574-1394729867`;
 
 /** 所有图片的本地路径 -> 云存储路径映射 */
 const IMAGE_MAP = {
@@ -89,42 +89,57 @@ function initCloudImages() {
       resolve(false);
       return;
     }
-    wx.cloud.getTempFileURL({
-      fileList: fileIDs,
+
+    wx.cloud.callFunction({
+      name: 'getImageUrls',
+      data: { fileList: fileIDs },
       success: res => {
-        const list = res.fileList || [];
+        const result = res.result || {};
+        if (!result.success) {
+          console.warn('云函数获取临时链接失败:', result.message);
+          resolve(false);
+          return;
+        }
         const imageMapEntries = Object.entries(IMAGE_MAP);
+        const list = result.fileList || [];
+        const missingFiles = [];
+        let successCount = 0;
         list.forEach(item => {
           if (item.status === 0 && item.tempFileURL) {
             const found = imageMapEntries.find(([localPath, cloudPath]) => cloudPath === item.fileID);
             if (found) {
               tempUrlCache[found[0]] = item.tempFileURL;
+              successCount++;
             } else {
               console.warn('无法匹配临时链接:', item.fileID);
             }
           } else {
-            console.warn('获取临时链接失败:', item.fileID, item.status, item.errMsg);
+            missingFiles.push(item.fileID);
           }
         });
-        console.log('云存储图片临时链接已获取，共', Object.keys(tempUrlCache).length, '个');
+        if (missingFiles.length > 0) {
+          console.warn(`[imageUrls] ${missingFiles.length} 个云存储文件不存在，已回退到 cloud 路径。示例:`, missingFiles.slice(0, 3));
+        }
+        console.log('云存储图片临时链接已获取，共', successCount, '个');
         resolve(true);
       },
       fail: err => {
-        console.warn('批量获取图片临时链接失败:', err);
+        console.warn('调用云函数 getImageUrls 失败:', err);
         resolve(false);
       }
     });
   });
 }
 
-/** 获取图片临时链接；若获取失败则回退到本地路径，永不返回 cloud:// */
+/** 获取图片临时链接；若获取失败则回退到本地路径 */
 function getImageUrl(localPath) {
-  if (tempUrlCache[localPath]) {
-    return tempUrlCache[localPath];
+  if (!localPath) return '';
+  // 如果已经是临时链接或 cloud:// 路径，直接返回
+  if (localPath.startsWith('http://') || localPath.startsWith('https://') || localPath.startsWith('cloud://')) {
+    return localPath;
   }
-  // 兜底：直接返回本地路径，不返回 cloud://
-  // cloud:// 只能用于 API 调用，不能用于 WXML 的 src
-  return localPath;
+  // 优先返回缓存的临时链接，否则回退到本地路径
+  return tempUrlCache[localPath] || localPath;
 }
 
 /** 将 birds.js 中的静态图片路径转换为临时链接（应在 initCloudImages 成功后调用） */

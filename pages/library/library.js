@@ -17,6 +17,25 @@ Page({
     getApp().setNavBarData(this);
   },
 
+  refresh() {
+    const keyword = this.data.keyword || '';
+    const filtered = keyword
+      ? BIRDS.filter(b =>
+          b.name.includes(keyword) ||
+          b.desc.includes(keyword) ||
+          b.tags.some(t => t.includes(keyword))
+        )
+      : BIRDS;
+    const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
+    this.setData({
+      birds: BIRDS,
+      filtered,
+      cardBird,
+      bgImage: getImageUrl('/images/Background.png'),
+      searchIcon: getImageUrl('/images/icons/搜索.png')
+    });
+  },
+
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 });

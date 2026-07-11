@@ -85,7 +85,8 @@ Page({
       }
     }
 
-    this.setData({ bird, review, quizMode, isDelayed, isEarlyReview });
+    const birdWithUrl = { ...bird, cover: getImageUrl(bird.cover) };
+    this.setData({ bird: birdWithUrl, review, quizMode, isDelayed, isEarlyReview });
     if (options.skipCard === '1') {
       this.startQuizMode();
     } else if (quizMode) {
@@ -93,6 +94,12 @@ Page({
     } else {
       this.loadRandomDimension(true);
     }
+  },
+
+  refresh() {
+    const bird = BIRDS.find(b => b.id === this.data.bird.id) || BIRDS[0];
+    const birdWithUrl = { ...bird, cover: getImageUrl(bird.cover) };
+    this.setData({ bird: birdWithUrl });
   },
 
   // ===== 题库模式 =====

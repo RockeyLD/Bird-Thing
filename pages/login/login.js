@@ -20,6 +20,14 @@ Page({
     }
   },
 
+  refresh() {
+    this.setData({
+      logoImage: getImageUrl('/images/logo.png'),
+      loginIcon: getImageUrl('/images/icons/登录.png'),
+      guestIcon: getImageUrl('/images/icons/未登录.png')
+    });
+  },
+
   onWxLogin() {
     if (this.data.isLoggingIn) return;
     if (!isCloudReady()) {

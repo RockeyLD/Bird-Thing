@@ -81,7 +81,8 @@ Page({
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
       feedStock: getFeedStock(),
       petImage: getPetImage(pet),
-      petBg: getPetBg(pet)
+      petBg: getPetBg(pet),
+      feedItems: FEED_ITEMS.map(item => ({ ...item, icon: getImageUrl(item.icon) }))
     });
   },
 

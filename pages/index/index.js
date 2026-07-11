@@ -253,7 +253,11 @@ Page({
       learnedCount,
       masteredCount,
       totalBirds,
-      learnProgress: totalBirds > 0 ? Math.round(progress) : 0
+      learnProgress: totalBirds > 0 ? Math.round(progress) : 0,
+      bgImage: getImageUrl('/images/Background.png'),
+      loginIcon: getImageUrl('/images/icons/登录.png'),
+      guestIcon: getImageUrl('/images/icons/未登录.png'),
+      unclaimedEggImage: getImageUrl('/images/unclaimed_egg.png')
     });
   },
 

@@ -44,8 +44,10 @@ Page({
         daysLeft: status ? status.daysLeft : 0
       };
     });
+    const cardBird = this.data.cardBird ? BIRDS.find(b => b.id === this.data.cardBird.id) : null;
     this.setData({
       birds: list,
+      cardBird,
       user,
       masteredCount: list.filter(b => b.mastered).length,
       dueCount: list.filter(b => b.canReview).length
