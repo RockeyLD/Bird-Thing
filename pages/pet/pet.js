@@ -50,10 +50,12 @@ Page({
       stageInfo.isMax = stageInfo.key === 'ultimate';
       stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
     }
+    const currentExp = pet && stageInfo ? pet.exp - stageInfo.baseExp : 0;
     this.setData({
       user,
       pet,
       stageInfo,
+      currentExp,
       stageIndex: pet ? getStageIndex(pet.exp) : 0,
       feedStock: getFeedStock(),
       petImage: getPetImage(pet),
@@ -83,10 +85,7 @@ Page({
     }
     const stock = this.data.feedStock;
     if (stock <= 0) {
-      wx.showToast({ title: '没有食物啦！来商店看看吧～', icon: 'none' });
-      setTimeout(() => {
-        wx.navigateTo({ url: '/pages/shop/shop' });
-      }, 1500);
+      wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
     const oldStageIndex = this.data.stageIndex;

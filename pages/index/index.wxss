@@ -40,7 +40,7 @@
 
 .pet-card { text-align: center; padding: 50rpx 30rpx; }
 
-.pet-egg { font-size: 120rpx; margin-bottom: 20rpx; }
+.pet-egg { width: 120rpx; height: 140rpx; margin: 0 auto 20rpx; display: block; }
 
 .pet-avatar { width: 200rpx; height: 200rpx; margin: 0 auto 16rpx; display: block; }
 
@@ -75,6 +75,17 @@
 
 .adopt-btn { margin-top: 30rpx; }
 .feed-btn { margin-top: 20rpx; }
+
+.max-badge {
+  text-align: center;
+  padding: 6rpx;
+  background: var(--secondary);
+  border-radius: 12rpx;
+  font-weight: 700;
+  color: #8A6A00;
+  margin-top: 6rpx;
+  font-size: 22rpx;
+}
 
 .section-title {
   font-size: 32rpx;
