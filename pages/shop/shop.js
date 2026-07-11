@@ -4,7 +4,12 @@ const { FEED_ITEMS, PET_FEED_MAP } = require('../../data/birds');
 
 function getAvailableFeedKeys(pet) {
   if (!pet) return [];
-  return PET_FEED_MAP[pet.birdId] || [];
+  const keys = PET_FEED_MAP[pet.birdId];
+  if (keys) return keys;
+  // 兼容旧数据：如果 birdId 是百科鸟 ID，映射到对应宠物
+  if (pet.birdId === 'bird_008') return PET_FEED_MAP['pet_starling'];
+  if (pet.birdId === 'bird_005') return PET_FEED_MAP['pet_bulbul'];
+  return [];
 }
 
 Page({
@@ -12,7 +17,8 @@ Page({
     user: null,
     FEED_ITEMS,
     currentPet: null,
-    availableKeys: []
+    availableKeys: [],
+    availableMap: {}
   },
 
   onLoad(options) {
@@ -31,7 +37,9 @@ Page({
     const user = getUserState();
     const pet = getCurrentPet();
     const availableKeys = getAvailableFeedKeys(pet);
-    this.setData({ user, currentPet: pet, availableKeys });
+    const availableMap = {};
+    availableKeys.forEach(key => availableMap[key] = true);
+    this.setData({ user, currentPet: pet, availableKeys, availableMap });
   },
 
   onBackTap() {
