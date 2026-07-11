@@ -87,7 +87,9 @@
   border: none;
 }
 
-.btn-icon { width: 40rpx; height: 40rpx; }
+.btn-icon { width: 48rpx; height: 48rpx; }
+
+.btn-login .btn-icon { filter: brightness(0) invert(1); }
 
 .guest-hint {
   text-align: center;
