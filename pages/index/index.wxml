@@ -72,8 +72,11 @@
               <view class="progress-fill" style="width: {{currentExp / stageInfo.nextExp * 100}}%"></view>
             </view>
             <view wx:else class="max-badge">已满级</view>
-            <button class="btn-secondary feed-btn" bindtap="onFeedTap">
+            <button wx:if="{{!stageInfo.isMax}}" class="btn-secondary feed-btn" bindtap="onFeedTap">
               立即喂食
+            </button>
+            <button wx:else class="btn-secondary feed-btn retire-btn" bindtap="onRetireTap">
+              移居鸟舍
             </button>
           </view>
         </view>

@@ -340,6 +340,24 @@ Page({
     }
   },
 
+  onRetireTap() {
+    const pet = getCurrentPet();
+    if (!pet) return;
+    const oldBird = getPetBird(pet.birdId);
+    retirePet(pet);
+    wx.showModal({
+      title: '恭喜！',
+      content: `${oldBird.name}已经究极满级！它已移居鸟舍，获得一颗新的鸟蛋！`,
+      showCancel: false,
+      success: () => {
+        const newPet = createRandomPet();
+        setCurrentPet(newPet);
+        this.refresh();
+        wx.showToast({ title: `获得${getPetBird(newPet.birdId).name}蛋！`, icon: 'success' });
+      }
+    });
+  },
+
   onSaveTap() {
     const state = getUserState();
     wx.showLoading({ title: '保存中...' });

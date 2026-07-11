@@ -54,7 +54,8 @@
         <view wx:if="{{user.feedInventory.caterpillar}}" class="stock-tag">🐛 毛毛虫: {{user.feedInventory.caterpillar}}</view>
         <view wx:if="{{user.feedInventory.fig}}" class="stock-tag">🍈 榕树果实: {{user.feedInventory.fig}}</view>
       </view>
-      <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
+      <button wx:if="{{!stageInfo.isMax}}" class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
+      <button wx:else class="btn-primary feed-action-btn retire-btn" bindtap="onRetireTap">移居鸟舍</button>
     </view>
   </view>
 
