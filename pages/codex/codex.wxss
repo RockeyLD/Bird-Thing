@@ -93,6 +93,21 @@
 
 .progress-text { font-size: 20rpx; color: var(--text-secondary); }
 
+.review-status {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  margin-top: 8rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 10rpx;
+  background: rgba(0,0,0,0.04);
+}
+
+.review-status.due {
+  background: rgba(255, 152, 0, 0.12);
+  color: #ff9800;
+  font-weight: 600;
+}
+
 .stats-card {
   background: var(--card);
   border-radius: 24rpx;

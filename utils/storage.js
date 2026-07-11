@@ -2,6 +2,8 @@
 const { syncToCloud } = require('./cloud');
 const USER_KEY = 'userState';
 const TUTORIAL_KEY = 'tutorialCompleted';
+const DAY_MS = 24 * 60 * 60 * 1000;
+const REVIEW_INTERVALS = [1, 2, 4, 7]; // days between reviews: 1/5→2/5, 2/5→3/5, 3/5→4/5, 4/5→5/5
 
 let isGuestMode = false;
 let guestState = getDefaultState();
@@ -119,13 +121,95 @@ function addToCodex(birdId, dimension) {
   }
   const dims = ['appearance','name','diet','habitat','behavior'];
   if (dims.every(d => entry.learnedDimensions.includes(d))) {
-    entry.mastered = true;
+    if (!entry.learned) {
+      entry.learned = true;
+      entry.progress = 1;
+      entry.learnedAt = Date.now();
+      entry.nextReviewAt = Date.now() + REVIEW_INTERVALS[0] * DAY_MS;
+    }
   }
   if (!state.learnedBirdIds.includes(birdId)) {
     state.learnedBirdIds.push(birdId);
   }
   setUserState(state);
   return entry;
+}
+
+function completeFirstLearning(birdId) {
+  const state = getUserState();
+  if (!state.codex[birdId]) {
+    state.codex[birdId] = { learnedDimensions: [], mastered: false, lastReviewAt: 0 };
+  }
+  const entry = state.codex[birdId];
+  const alreadyFull = entry.learnedDimensions.length >= 5;
+  if (!alreadyFull) {
+    entry.learnedDimensions.push('quiz');
+  }
+  if (!entry.learned) {
+    entry.learned = true;
+    entry.progress = 1;
+    entry.learnedAt = Date.now();
+    entry.nextReviewAt = Date.now() + REVIEW_INTERVALS[0] * DAY_MS;
+  }
+  if (!state.learnedBirdIds.includes(birdId)) {
+    state.learnedBirdIds.push(birdId);
+  }
+  setUserState(state);
+  return { alreadyFull, entry };
+}
+
+function recordReview(birdId, passed) {
+  const state = getUserState();
+  const entry = state.codex[birdId];
+  if (!entry || !entry.learned || entry.mastered) return null;
+
+  const now = Date.now();
+  if (passed) {
+    entry.progress += 1;
+    entry.lastReviewAt = now;
+    if (entry.progress >= 5) {
+      entry.mastered = true;
+      entry.nextReviewAt = 0;
+    } else {
+      entry.nextReviewAt = now + REVIEW_INTERVALS[entry.progress - 1] * DAY_MS;
+    }
+    addScore(10);
+  } else {
+    // Reset current interval on failure
+    entry.nextReviewAt = now + REVIEW_INTERVALS[entry.progress - 1] * DAY_MS;
+  }
+  setUserState(state);
+  return entry;
+}
+
+function getDueReviews() {
+  const state = getUserState();
+  const now = Date.now();
+  const due = [];
+  for (const birdId in state.codex) {
+    const entry = state.codex[birdId];
+    if (entry.learned && !entry.mastered && entry.nextReviewAt && now >= entry.nextReviewAt) {
+      due.push({ birdId, progress: entry.progress || 1, entry });
+    }
+  }
+  return due;
+}
+
+function getReviewStatus(birdId) {
+  const state = getUserState();
+  const entry = state.codex[birdId];
+  if (!entry || !entry.learned || entry.mastered) return null;
+  const now = Date.now();
+  const canReview = entry.nextReviewAt ? now >= entry.nextReviewAt : true;
+  const daysLeft = entry.nextReviewAt ? Math.ceil((entry.nextReviewAt - now) / DAY_MS) : 0;
+  return { canReview, daysLeft, progress: entry.progress || 1 };
+}
+
+function getProgress(entry) {
+  if (!entry) return 0;
+  if (entry.mastered) return 5;
+  if (entry.progress) return entry.progress;
+  return Math.min(entry.learnedDimensions?.length || 0, 5);
 }
 
 function getFeedStock() {
@@ -184,6 +268,7 @@ module.exports = {
   getUserState, setUserState,
   getTutorialCompleted, setTutorialCompleted,
   addScore, getCurrentPet, setCurrentPet, feedPet, addToCodex,
+  completeFirstLearning, recordReview, getDueReviews, getReviewStatus, getProgress,
   getFeedStock, addFeedStock, consumeFeed,
   getOwnedPetTypes, recordOwnedPetType, createRandomPet,
   loadFromCloud, setIsGuestMode, getIsGuestMode

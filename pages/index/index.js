@@ -1,4 +1,4 @@
-const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet } = require('../../utils/storage');
+const { getUserState, getTutorialCompleted, addScore, getCurrentPet, setCurrentPet, feedPet, loadFromCloud, getIsGuestMode, getFeedStock, consumeFeed, createRandomPet, getDueReviews } = require('../../utils/storage');
 const { isCloudReady } = require('../../utils/cloud');
 const { PET_BIRDS, getStage, getStageIndex, FEED_PRICE, FEED_EXP, BIRDS } = require('../../data/birds');
 
@@ -69,11 +69,18 @@ Page({
       stageInfo.isMax = stageInfo.key === 'ultimate';
       stageInfo.nextExpLabel = stageInfo.isMax ? 'MAX' : stageInfo.nextExp;
     }
+
+    const dueReviews = getDueReviews().map(({ birdId, progress }) => {
+      const bird = BIRDS.find(b => b.id === birdId);
+      return bird ? { ...bird, progress } : null;
+    }).filter(Boolean);
+
     this.setData({
       user,
       pet,
       stageInfo,
-      petImage: getPetImage(pet)
+      petImage: getPetImage(pet),
+      dueReviews
     });
     this.generateRecommend();
   },
@@ -125,6 +132,11 @@ Page({
     const bird = this.data.recommendBird;
     if (!bird) return;
     wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}` });
+  },
+
+  onDueReviewTap(e) {
+    const birdId = e.currentTarget.dataset.birdId;
+    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${birdId}&mode=delayed&review=1&skipCard=1` });
   },
 
   onFeedTap() {

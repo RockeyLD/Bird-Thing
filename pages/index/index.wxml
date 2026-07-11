@@ -35,6 +35,18 @@
           </view>
         </view>
 
+        <!-- 待复习 -->
+        <view wx:if="{{dueReviews.length > 0}}" class="section-title">待复习</view>
+        <view class="card daily-recommend due-review" wx:for="{{dueReviews}}" wx:key="id" bindtap="onDueReviewTap" data-bird-id="{{item.id}}">
+          <view class="recommend-row">
+            <image class="recommend-img" src="{{item.cover}}" mode="aspectFill" />
+            <view class="recommend-info">
+              <view class="recommend-name">{{item.name}}</view>
+              <view class="recommend-hook">复习进度 {{item.progress}}/5，点击开始复习</view>
+            </view>
+          </view>
+        </view>
+
         <!-- 宠物展示区 -->
         <view class="card pet-card">
           <view wx:if="{{!pet}}" class="pet-empty">

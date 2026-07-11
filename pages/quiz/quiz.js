@@ -1,6 +1,8 @@
 /** 答题页面 */
 const { BIRDS, DIMENSIONS } = require('../../data/birds');
-const { getUserState, addScore, setUserState, addToCodex } = require('../../utils/storage');
+const { getUserState, addScore, addToCodex, completeFirstLearning, recordReview } = require('../../utils/storage');
+
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 
 const QUIZ_PASS_COUNT = 5;
@@ -37,6 +39,7 @@ Page({
     isCorrect: false,
     answered: false,
     review: false,
+    isDelayed: false,
     showCard: false,
     showFeedback: false,
     feedbackText: ''
@@ -45,9 +48,33 @@ Page({
   onLoad(options) {
     getApp().setNavBarData(this);
     const bird = BIRDS.find(b => b.id === options.birdId) || BIRDS[0];
+    const user = getUserState();
+    const entry = user.codex[bird.id];
     const review = options.review === '1';
+    let isDelayed = options.mode === 'delayed';
     const quizMode = !!(bird.questions && bird.questions.length > 0);
-    this.setData({ bird, review, quizMode });
+
+    // Auto-detect delayed review mode for learned-but-not-mastered birds
+    if (entry && entry.learned && !entry.mastered && !isDelayed) {
+      isDelayed = true;
+    }
+
+    // Guard: not ready for delayed review yet
+    if (isDelayed) {
+      if (!entry || !entry.learned || entry.mastered) {
+        wx.showToast({ title: '该鸟类无需复习', icon: 'none' });
+        setTimeout(() => wx.navigateBack(), 1500);
+        return;
+      }
+      if (entry.nextReviewAt && Date.now() < entry.nextReviewAt) {
+        const daysLeft = Math.ceil((entry.nextReviewAt - Date.now()) / DAY_MS);
+        wx.showToast({ title: `还差 ${daysLeft} 天才能复习`, icon: 'none' });
+        setTimeout(() => wx.navigateBack(), 1500);
+        return;
+      }
+    }
+
+    this.setData({ bird, review, quizMode, isDelayed });
     if (options.skipCard === '1') {
       this.startQuizMode();
     } else if (quizMode) {
@@ -102,29 +129,39 @@ Page({
   },
 
   onQuizComplete() {
-    const state = getUserState();
-    if (!state.codex[this.data.bird.id]) {
-      state.codex[this.data.bird.id] = { learnedDimensions: [], mastered: false, lastReviewAt: 0 };
+    if (this.data.isDelayed) {
+      const result = recordReview(this.data.bird.id, true);
+      if (!result) {
+        wx.showToast({ title: '复习记录失败', icon: 'none' });
+        wx.navigateBack();
+        return;
+      }
+      if (result.mastered) {
+        wx.showModal({
+          title: '真正精通！',
+          content: `恭喜！你已经完全掌握了 ${this.data.bird.name}！`,
+          showCancel: false,
+          success: () => wx.navigateBack()
+        });
+      } else {
+        const daysLeft = Math.ceil((result.nextReviewAt - Date.now()) / DAY_MS);
+        wx.showModal({
+          title: '复习通过！',
+          content: `复习通过！+10 分，下次 ${daysLeft} 天后复习。`,
+          showCancel: false,
+          success: () => wx.navigateBack()
+        });
+      }
+      return;
     }
-    const entry = state.codex[this.data.bird.id];
-    entry.mastered = true;
-    entry.lastReviewAt = Date.now();
-    const alreadyFull = entry.learnedDimensions.length >= 5;
-    if (!alreadyFull) {
-      entry.learnedDimensions.push('quiz');
-    }
-    if (!state.learnedBirdIds.includes(this.data.bird.id)) {
-      state.learnedBirdIds.push(this.data.bird.id);
-    }
-    setUserState(state);
 
-    const score = this.data.review ? (alreadyFull ? 0 : 3) : 50;
-    if (score > 0) {
-      addScore(score);
+    const { alreadyFull } = completeFirstLearning(this.data.bird.id);
+    if (!alreadyFull) {
+      addScore(50);
     }
     wx.showModal({
       title: '恭喜通过！',
-      content: `你答对了 5 题，成功解锁了 ${this.data.bird.name}！`,
+      content: `你答对了 5 题，成功解锁了 ${this.data.bird.name}！1天后可以开始复习。`,
       showCancel: false,
       success: () => wx.navigateBack()
     });
@@ -188,6 +225,16 @@ Page({
 
   onNextTap() {
     if (!this.data.isCorrect) {
+      if (this.data.isDelayed) {
+        recordReview(this.data.bird.id, false);
+        wx.showModal({
+          title: '复习失败',
+          content: '答错了，复习间隔已重置，请继续加油！',
+          showCancel: false,
+          success: () => wx.navigateBack()
+        });
+        return;
+      }
       wx.navigateBack();
       return;
     }
