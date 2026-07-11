@@ -28,26 +28,127 @@ Page({
     showRecommendCard: false,
     feedStock: 0,
     currentExp: 0,
-    isLoggingIn: false
+    isLoggingIn: false,
+    guideStep: -1,
+    guideTop: 0,
+    guideLeft: 0,
+    guideWidth: 0,
+    guideHeight: 0,
+    guideBottom: 0,
+    guideRight: 0,
+    guideRightWidth: 0,
+    guideBottomHeight: 0,
+    guideTooltipStyle: '',
+    guideText: '',
+    guideTooltipPos: 'bottom',
+    guideScrollTop: 0,
+    windowHeight: 0
   },
 
   onLoad() {
     getApp().setNavBarData(this);
-    if (!getTutorialCompleted()) {
-      wx.redirectTo({ url: '/pages/tutorial/tutorial' });
-      return;
-    }
     this.checkLogin();
     this.refresh();
   },
 
   onShow() {
-    if (getTutorialCompleted()) {
-      this.checkLogin();
-      this.refresh();
-    }
+    this.checkLogin();
+    this.refresh();
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
+    }
+    if (this.data.guideStep >= 0) {
+      setTimeout(() => this.updateGuidePosition(this.data.guideStep), 300);
+    }
+  },
+
+  onReady() {
+    this.initGuide();
+  },
+
+  initGuide() {
+    if (getTutorialCompleted()) return;
+    this.setData({ guideStep: 0 });
+    this.updateGuidePosition(0);
+  },
+
+  updateGuidePosition(stepIndex) {
+    const steps = [
+      { target: '.adopt-btn', text: '点击这里领养你的第一颗鸟蛋，开启鸟类养成之旅！', tooltipPos: 'bottom' },
+      { target: '.daily-recommend', text: '点击每日推荐，了解今天的神秘鸟类！', tooltipPos: 'bottom' },
+      { target: '.card-btn', text: '点击开始答题，答对题目获得积分！', tooltipPos: 'top' }
+    ];
+    const step = steps[stepIndex];
+    if (!step) return;
+
+    const sysInfo = wx.getWindowInfo();
+    this.setData({ windowHeight: sysInfo.windowHeight });
+
+    const tryUpdate = (attempts = 0) => {
+      const query = wx.createSelectorQuery().in(this);
+      query.select(step.target).boundingClientRect();
+      query.select('.scrollarea').scrollOffset();
+      query.exec(res => {
+        const rect = res[0];
+        const scrollInfo = res[1];
+
+        if (!rect) {
+          if (attempts < 10) {
+            setTimeout(() => tryUpdate(attempts + 1), 200);
+          }
+          return;
+        }
+
+        if (scrollInfo && rect.top > sysInfo.windowHeight - 200) {
+          const scrollTop = rect.top - scrollInfo.top + scrollInfo.scrollTop - 200;
+          this.setData({ guideScrollTop: scrollTop });
+        }
+
+        const windowWidth = sysInfo.windowWidth;
+        const windowHeight = sysInfo.windowHeight;
+
+        this.setData({
+          guideTop: rect.top,
+          guideLeft: rect.left,
+          guideWidth: rect.width,
+          guideHeight: rect.height,
+          guideBottom: rect.bottom,
+          guideRight: rect.right,
+          guideRightWidth: windowWidth - rect.right,
+          guideBottomHeight: windowHeight - rect.bottom,
+          guideText: step.text,
+          guideTooltipPos: step.tooltipPos
+        });
+
+        const tooltipStyle = this.calcTooltipStyle(rect, step.tooltipPos, windowWidth, windowHeight);
+        this.setData({ guideTooltipStyle: tooltipStyle });
+      });
+    };
+
+    tryUpdate();
+  },
+
+  calcTooltipStyle(rect, pos, windowWidth, windowHeight) {
+    let style = '';
+    if (pos === 'bottom') {
+      const top = rect.bottom + 20;
+      style = `top: ${top}px; left: ${rect.left + rect.width / 2}px; transform: translateX(-50%);`;
+    } else if (pos === 'top') {
+      const top = Math.max(20, rect.top - 140);
+      style = `top: ${top}px; left: ${rect.left + rect.width / 2}px; transform: translateX(-50%);`;
+    }
+    return style;
+  },
+
+  nextGuideStep() {
+    const nextStep = this.data.guideStep + 1;
+    if (nextStep >= 3) {
+      setTutorialCompleted(true);
+      this.setData({ guideStep: -1, guideScrollTop: 0 });
+      wx.showToast({ title: '引导完成！', icon: 'success' });
+    } else {
+      this.setData({ guideStep: nextStep });
+      setTimeout(() => this.updateGuidePosition(nextStep), 300);
     }
   },
 
@@ -150,12 +251,20 @@ Page({
     setCurrentPet(pet);
     this.refresh();
     wx.showToast({ title: `获得${getPetBird(pet.birdId).name}蛋！`, icon: 'success' });
+
+    if (this.data.guideStep === 0) {
+      this.nextGuideStep();
+    }
   },
 
   onRecommendTap() {
     const bird = this.data.recommendBird;
     if (!bird) return;
     this.setData({ showRecommendCard: true });
+
+    if (this.data.guideStep === 1) {
+      setTimeout(() => this.nextGuideStep(), 300);
+    }
   },
 
   onMaskTap() {
@@ -171,6 +280,10 @@ Page({
     if (!bird) return;
     this.setData({ showRecommendCard: false });
     wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
+
+    if (this.data.guideStep === 2) {
+      this.nextGuideStep();
+    }
   },
 
   onDueReviewTap(e) {

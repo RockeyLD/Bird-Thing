@@ -180,3 +180,81 @@
 .knowledge-text { font-size: 28rpx; line-height: 1.6; color: var(--text-secondary); }
 
 .card-btn { margin-top: 20rpx; width: 100%; }
+
+/* 引导遮罩 */
+.guide-mask {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 200;
+}
+
+/* 高亮边框 */
+.guide-highlight {
+  position: fixed;
+  border: 4rpx solid #4CAF82;
+  border-radius: 16rpx;
+  z-index: 201;
+  animation: guide-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes guide-pulse {
+  0%, 100% { box-shadow: 0 0 0 4rpx rgba(76, 175, 130, 0.3), 0 0 20rpx rgba(76, 175, 130, 0.3); }
+  50% { box-shadow: 0 0 0 8rpx rgba(76, 175, 130, 0.2), 0 0 40rpx rgba(76, 175, 130, 0.5); }
+}
+
+/* 气泡 */
+.guide-tooltip {
+  position: fixed;
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540rpx;
+}
+
+.guide-tooltip-inner {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 32rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.guide-tooltip-text {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+}
+
+.guide-step-badge {
+  font-size: 22rpx;
+  color: #999;
+  background: #f0f0f0;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.guide-tooltip-arrow {
+  width: 0;
+  height: 0;
+  border-left: 16rpx solid transparent;
+  border-right: 16rpx solid transparent;
+}
+
+.guide-tooltip.bottom .guide-tooltip-arrow {
+  border-bottom: 16rpx solid #fff;
+  margin-bottom: -2rpx;
+}
+
+.guide-tooltip.top {
+  flex-direction: column-reverse;
+}
+
+.guide-tooltip.top .guide-tooltip-arrow {
+  border-top: 16rpx solid #fff;
+  margin-top: -2rpx;
+}
