@@ -10,14 +10,15 @@
   align-items: center;
   border-top: 1rpx solid rgba(0,0,0,0.06);
   z-index: 999;
+  overflow: hidden;
 }
 
 .guide-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: -2rpx;
+  left: -2rpx;
+  right: -2rpx;
+  bottom: -2rpx;
   background: rgba(0, 0, 0, 0.75);
   z-index: 1000;
 }

@@ -219,9 +219,13 @@ images/
 - 展示：左侧鸟图，上方鸟名，下方 hook 文案
 - 点击后直接在首页弹知识卡片覆盖层（不跳转新页面），点击「开始答题」再跳转 `/pages/quiz/quiz?birdId=xxx&skipCard=1`（追加 `skipCard=1` 防止 quiz 页重复弹出卡片）
 
-### 5.6 新手教程
-- 首次进入若 `tutorialCompleted === false`，自动重定向到 `/pages/tutorial/tutorial`
-- 4 步：欢迎 → 领蛋 → 答题演示 → 喂食演示
+### 5.6 新手教程（首页沉浸式遮罩引导）
+- 首次进入若 `tutorialCompleted === false`，首页自动触发引导（不再跳转独立页面）
+- 3 步：领养鸟蛋 → 每日推荐 → 开始答题，在真实页面高亮目标按钮 + 黑色遮罩 + 气泡提示
+- 引导期间强制完成：非高亮区域被遮罩拦截（`catchtap`），点击提示「请按照引导点击高亮按钮」
+- 底部 Tab Bar 同步遮罩，防止用户误触其他 tab
+- 高亮按钮可正常点击（`pointer-events: none` 边框），完成步骤后 `wx.nextTick` 立即更新位置
+- 提供「跳过」按钮（气泡内步骤标记下方），确认后标记完成
 - 完成后 `tutorialCompleted = true`，存储于本地和云端
 
 ---
