@@ -9,7 +9,7 @@
         <text>登录</text>
       </view>
       <view class="login-badge guest" wx:elif="{{isGuest}}">
-        <image class="badge-icon" src="/images/icons/访客登录.png" mode="aspectFit" />
+        <image class="badge-icon" src="/images/icons/未登录.png" mode="aspectFit" />
         <text>访客</text>
       </view>
       <view class="login-badge logged" wx:else>
