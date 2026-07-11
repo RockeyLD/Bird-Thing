@@ -52,13 +52,16 @@ Page({
   },
 
   onShow() {
+    if (getTutorialCompleted() && this.data.guideStep >= 0) {
+      this.setData({ guideStep: -1 });
+    }
     this.checkLogin();
     this.refresh();
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
     }
     if (this.data.guideStep >= 0) {
-      setTimeout(() => this.updateGuidePosition(this.data.guideStep), 300);
+      wx.nextTick(() => this.updateGuidePosition(this.data.guideStep));
     }
   },
 
@@ -69,7 +72,7 @@ Page({
   initGuide() {
     if (getTutorialCompleted()) return;
     this.setData({ guideStep: 0 });
-    this.updateGuidePosition(0);
+    wx.nextTick(() => this.updateGuidePosition(0));
   },
 
   updateGuidePosition(stepIndex) {
@@ -93,8 +96,8 @@ Page({
         const scrollInfo = res[1];
 
         if (!rect) {
-          if (attempts < 10) {
-            setTimeout(() => tryUpdate(attempts + 1), 200);
+          if (attempts < 5) {
+            setTimeout(() => tryUpdate(attempts + 1), 100);
           }
           return;
         }
@@ -148,7 +151,7 @@ Page({
       wx.showToast({ title: '引导完成！', icon: 'success' });
     } else {
       this.setData({ guideStep: nextStep });
-      setTimeout(() => this.updateGuidePosition(nextStep), 300);
+      wx.nextTick(() => this.updateGuidePosition(nextStep));
     }
   },
 
@@ -283,11 +286,15 @@ Page({
     this.setData({ showRecommendCard: true });
 
     if (this.data.guideStep === 1) {
-      setTimeout(() => this.nextGuideStep(), 300);
+      wx.nextTick(() => this.nextGuideStep());
     }
   },
 
   onMaskTap() {
+    if (this.data.guideStep >= 0) {
+      wx.showToast({ title: '请按照引导点击高亮按钮', icon: 'none', duration: 2000 });
+      return;
+    }
     this.setData({ showRecommendCard: false });
   },
 
@@ -299,11 +306,11 @@ Page({
     const bird = this.data.recommendBird;
     if (!bird) return;
     this.setData({ showRecommendCard: false });
-    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
 
     if (this.data.guideStep === 2) {
       this.nextGuideStep();
     }
+    wx.navigateTo({ url: `/pages/quiz/quiz?birdId=${bird.id}&skipCard=1` });
   },
 
   onDueReviewTap(e) {
