@@ -15,7 +15,7 @@ page { background: transparent; overflow: hidden; }
 .nav-bar {
   padding-bottom: 10rpx;
   padding-left: 30rpx;
-  background: var(--bg);
+  background: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,7 +34,7 @@ page { background: transparent; overflow: hidden; }
   align-items: center;
   gap: 12rpx;
   padding: 0 30rpx 10rpx;
-  background: var(--bg);
+  background: transparent;
   flex-shrink: 0;
 }
 
