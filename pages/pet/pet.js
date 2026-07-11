@@ -1,6 +1,6 @@
 /** 宠物养成 */
 const { getUserState, getCurrentPet, setCurrentPet, feedPet, getFeedStock, consumeFeed, getFeedInventory, consumeFeedInventory, createRandomPet, retirePet } = require('../../utils/storage');
-const { PET_BIRDS, getStage, getStageIndex, FEED_ITEMS } = require('../../data/birds');
+const { PET_BIRDS, getStage, getStageIndex, FEED_ITEMS, PET_FEED_MAP } = require('../../data/birds');
 
 function getPetBird(birdId) {
   return PET_BIRDS.find(b => b.id === birdId) || PET_BIRDS[0];
@@ -18,15 +18,17 @@ function getPetBg(pet) {
   return getPetBird(pet.birdId).bg || '/images/Background.png';
 }
 
-function getBestFeedExp() {
+function getAvailableFeeds(pet) {
+  if (!pet) return [];
+  const keys = PET_FEED_MAP[pet.birdId] || [];
   const inventory = getFeedInventory();
-  if (inventory.fox > 0) return { type: 'fox', exp: FEED_ITEMS.find(i => i.key === 'fox').exp };
-  if (inventory.beetle > 0) return { type: 'beetle', exp: FEED_ITEMS.find(i => i.key === 'beetle').exp };
-  if (inventory.rabbit > 0) return { type: 'rabbit', exp: FEED_ITEMS.find(i => i.key === 'rabbit').exp };
-  if (inventory.worm > 0) return { type: 'worm', exp: FEED_ITEMS.find(i => i.key === 'worm').exp };
-  if (inventory.mouse > 0) return { type: 'mouse', exp: FEED_ITEMS.find(i => i.key === 'mouse').exp };
-  if (inventory.fruit > 0) return { type: 'fruit', exp: FEED_ITEMS.find(i => i.key === 'fruit').exp };
-  return null;
+  return keys
+    .map(key => {
+      const item = FEED_ITEMS.find(i => i.key === key);
+      return item ? { ...item, stock: inventory[key] || 0 } : null;
+    })
+    .filter(Boolean)
+    .filter(item => item.stock > 0);
 }
 
 Page({
@@ -38,7 +40,9 @@ Page({
     feedItems: FEED_ITEMS,
     feedStock: 0,
     petImage: '',
-    petBg: '/images/Background.png'
+    petBg: '/images/Background.png',
+    showFeedModal: false,
+    modalFeeds: []
   },
 
   onLoad() {
@@ -100,15 +104,29 @@ Page({
       wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
-    const bestFeed = getBestFeedExp();
-    if (!bestFeed) {
+    const modalFeeds = getAvailableFeeds(this.data.pet);
+    if (modalFeeds.length === 0) {
       wx.navigateTo({ url: '/pages/shop/shop?noStock=1' });
       return;
     }
+    this.setData({ showFeedModal: true, modalFeeds });
+  },
+
+  hideFeedModal() {
+    this.setData({ showFeedModal: false });
+  },
+
+  onSelectFeed(e) {
+    const { key } = e.currentTarget.dataset;
+    const item = FEED_ITEMS.find(i => i.key === key);
+    if (!item) return;
+
+    this.hideFeedModal();
+
     const oldStageIndex = this.data.stageIndex;
     const oldPet = this.data.pet;
-    consumeFeedInventory(bestFeed.type);
-    const updated = feedPet(bestFeed.exp);
+    consumeFeedInventory(key);
+    const updated = feedPet(item.exp);
     this.refresh();
     const newStage = getStageIndex(updated.exp);
     if (oldStageIndex === 4 && oldPet.exp < 1350 && updated.exp >= 1350) {
@@ -132,7 +150,7 @@ Page({
         showCancel: false
       });
     } else {
-      wx.showToast({ title: `喂食成功 +${bestFeed.exp}经验`, icon: 'success' });
+      wx.showToast({ title: `喂食成功 +${item.exp}经验`, icon: 'success' });
     }
   }
 });

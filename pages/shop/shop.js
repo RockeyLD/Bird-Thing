@@ -1,11 +1,18 @@
 /** 商店 */
-const { getUserState, addScore, addFeedInventory } = require('../../utils/storage');
-const { FEED_ITEMS } = require('../../data/birds');
+const { getUserState, addScore, addFeedInventory, getCurrentPet } = require('../../utils/storage');
+const { FEED_ITEMS, PET_FEED_MAP } = require('../../data/birds');
+
+function getAvailableFeedKeys(pet) {
+  if (!pet) return [];
+  return PET_FEED_MAP[pet.birdId] || [];
+}
 
 Page({
   data: {
     user: null,
-    FEED_ITEMS
+    FEED_ITEMS,
+    currentPet: null,
+    availableKeys: []
   },
 
   onLoad(options) {
@@ -22,7 +29,9 @@ Page({
 
   refresh() {
     const user = getUserState();
-    this.setData({ user });
+    const pet = getCurrentPet();
+    const availableKeys = getAvailableFeedKeys(pet);
+    this.setData({ user, currentPet: pet, availableKeys });
   },
 
   onBackTap() {
@@ -33,6 +42,12 @@ Page({
     const { type } = e.currentTarget.dataset;
     const item = FEED_ITEMS.find(i => i.key === type);
     if (!item) return;
+
+    const { availableKeys } = this.data;
+    if (!availableKeys.includes(type)) {
+      wx.showToast({ title: '这不是你的宠物的食物，看看其他的吧～', icon: 'none' });
+      return;
+    }
 
     const user = getUserState();
     if (user.totalScore < item.price) {

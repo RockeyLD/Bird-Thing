@@ -408,8 +408,17 @@ const FEED_ITEMS = [
   { key: 'beetle', name: '金龟甲虫', price: 50, exp: 30, icon: '/images/shop/beetle.png' },
   { key: 'mouse', name: '田鼠', price: 10, exp: 5, icon: '/images/shop/mouse.png' },
   { key: 'rabbit', name: '野兔', price: 30, exp: 15, icon: '/images/shop/rabbit.png' },
-  { key: 'fox', name: '狐狸', price: 50, exp: 30, icon: '/images/shop/fox.png' }
+  { key: 'fox', name: '狐狸', price: 50, exp: 30, icon: '/images/shop/fox.png' },
+  { key: 'ant', name: '蚂蚁', price: 10, exp: 5, icon: '/images/shop/ant.png' },
+  { key: 'caterpillar', name: '毛毛虫', price: 30, exp: 15, icon: '/images/shop/caterpillar.png' },
+  { key: 'fig', name: '榕树果实', price: 50, exp: 30, icon: '/images/shop/fig.png' }
 ];
+
+const PET_FEED_MAP = {
+  pet_starling: ['fruit', 'worm', 'beetle'],
+  pet_eagle: ['mouse', 'rabbit', 'fox'],
+  pet_bulbul: ['ant', 'caterpillar', 'fig']
+};
 
 const FEED_PRICE = 50;
 const FEED_EXP = 20;
@@ -433,5 +442,5 @@ function getStageIndex(exp) {
 }
 
 module.exports = {
-  BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_ITEMS, FEED_PRICE, FEED_EXP, getStage, getStageIndex
+  BIRDS, PET_BIRDS, DIMENSIONS, STAGES, FEED_ITEMS, PET_FEED_MAP, FEED_PRICE, FEED_EXP, getStage, getStageIndex
 };

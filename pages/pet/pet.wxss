@@ -213,6 +213,98 @@ page { background: transparent; overflow: hidden; }
   font-size: 26rpx;
 }
 
+/* 喂食弹窗 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 40rpx;
+  width: 100%;
+  max-width: 640rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.15);
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30rpx;
+  color: #5D4037;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.modal-item {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2rpx solid rgba(93, 64, 55, 0.1);
+  border-radius: 24rpx;
+  padding: 20rpx 8rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+
+.modal-img {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 auto 8rpx;
+  display: block;
+}
+
+.modal-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #5D4037;
+  margin-bottom: 4rpx;
+}
+
+.modal-desc {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-bottom: 4rpx;
+}
+
+.modal-stock {
+  font-size: 22rpx;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.modal-empty {
+  text-align: center;
+  padding: 40rpx 0;
+  color: var(--text-secondary);
+}
+
+.modal-close {
+  height: 72rpx;
+  line-height: 72rpx;
+  font-size: 28rpx;
+  border-radius: 36rpx;
+  background: rgba(93, 64, 55, 0.08);
+  color: #5D4037;
+  border: none;
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0);

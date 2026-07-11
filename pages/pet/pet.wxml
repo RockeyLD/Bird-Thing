@@ -50,8 +50,30 @@
         <view wx:if="{{user.feedInventory.mouse}}" class="stock-tag">🐭 田鼠: {{user.feedInventory.mouse}}</view>
         <view wx:if="{{user.feedInventory.rabbit}}" class="stock-tag">🐰 野兔: {{user.feedInventory.rabbit}}</view>
         <view wx:if="{{user.feedInventory.fox}}" class="stock-tag">🦊 狐狸: {{user.feedInventory.fox}}</view>
+        <view wx:if="{{user.feedInventory.ant}}" class="stock-tag">🐜 蚂蚁: {{user.feedInventory.ant}}</view>
+        <view wx:if="{{user.feedInventory.caterpillar}}" class="stock-tag">🐛 毛毛虫: {{user.feedInventory.caterpillar}}</view>
+        <view wx:if="{{user.feedInventory.fig}}" class="stock-tag">🍈 榕树果实: {{user.feedInventory.fig}}</view>
       </view>
       <button class="btn-primary feed-action-btn" bindtap="onFeedTap">立即喂食</button>
+    </view>
+  </view>
+
+  <!-- 喂食选择弹窗 -->
+  <view wx:if="{{showFeedModal}}" class="modal-overlay" bindtap="hideFeedModal">
+    <view class="modal-content" catchtap="onModalTap">
+      <view class="modal-title">选择食物</view>
+      <view class="modal-grid">
+        <view wx:for="{{modalFeeds}}" wx:key="key" class="modal-item" bindtap="onSelectFeed" data-key="{{item.key}}">
+          <image class="modal-img" src="{{item.icon}}" mode="aspectFit" />
+          <view class="modal-name">{{item.name}}</view>
+          <view class="modal-desc">+{{item.exp}} 经验</view>
+          <view class="modal-stock">库存: {{item.stock}}</view>
+        </view>
+      </view>
+      <view wx:if="{{modalFeeds.length === 0}}" class="modal-empty">
+        <view class="text-sm">没有可用的食物，去商店看看吧～</view>
+      </view>
+      <button class="btn-secondary modal-close" bindtap="hideFeedModal">取消</button>
     </view>
   </view>
 </view>
