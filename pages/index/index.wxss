@@ -194,6 +194,7 @@
   border: 4rpx solid #4CAF82;
   border-radius: 16rpx;
   z-index: 201;
+  pointer-events: none;
   animation: guide-pulse 1.5s ease-in-out infinite;
 }
 
@@ -257,4 +258,33 @@
 .guide-tooltip.top .guide-tooltip-arrow {
   border-top: 16rpx solid #fff;
   margin-top: -2rpx;
+}
+
+/* 底部 Tab Bar 遮罩 */
+.guide-mask-tabbar {
+  position: fixed;
+  bottom: 0;
+  height: 120rpx;
+  z-index: 200;
+}
+
+/* 跳过按钮 */
+.guide-skip {
+  position: fixed;
+  top: 60rpx;
+  right: 30rpx;
+  z-index: 201;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 16rpx 30rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 32rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.15);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4rpx);
+}
+
+.guide-skip:active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
 }

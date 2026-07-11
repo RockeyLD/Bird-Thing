@@ -152,6 +152,26 @@ Page({
     }
   },
 
+  onGuideMaskTap() {
+    wx.showToast({ title: '请按照引导点击高亮按钮', icon: 'none', duration: 2000 });
+  },
+
+  onSkipGuide() {
+    wx.showModal({
+      title: '跳过教程',
+      content: '是否跳过新手教程？跳过后可随时在设置中重新查看。',
+      confirmText: '跳过',
+      cancelText: '继续',
+      success: (res) => {
+        if (res.confirm) {
+          setTutorialCompleted(true);
+          this.setData({ guideStep: -1, guideScrollTop: 0 });
+          wx.showToast({ title: '已跳过教程', icon: 'success' });
+        }
+      }
+    });
+  },
+
   checkLogin() {
     const openid = wx.getStorageSync('openid');
     const isGuest = getIsGuestMode();
