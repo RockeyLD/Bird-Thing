@@ -1,18 +1,22 @@
-<view class="page">
-  <view class="tutorial-content">
-    <view class="step-indicator">
-      <view class="step-dot {{index === step ? 'active' : ''}}" wx:for="{{steps}}" wx:key="index"></view>
-    </view>
-
-    <view class="step-card">
-      <view class="step-emoji">{{steps[step].emoji}}</view>
-      <view class="title-lg">{{steps[step].title}}</view>
-      <view class="step-desc">{{steps[step].desc}}</view>
-    </view>
-
-    <button class="btn-primary" style="width: 100%;" bindtap="onNextTap">
-      {{steps[step].action}}
-    </button>
-    <view class="skip-link" bindtap="onSkipTap">稍后再说</view>
+<view class="tutorial-page">
+  <view class="step-indicator">
+    <view class="step-dot {{index === step ? 'active' : ''}}" wx:for="{{steps}}" wx:key="index"></view>
   </view>
+
+  <view class="guide-content">
+    <view class="step-badge">步骤 {{step + 1}}/4</view>
+
+    <view class="highlight-area" bindtap="onNextTap">
+      <view class="pulse-ring"></view>
+      <view class="highlight-btn">
+        <view class="btn-emoji">{{steps[step].emoji}}</view>
+        <view class="btn-label">{{steps[step].action}}</view>
+      </view>
+    </view>
+
+    <view class="guide-title">{{steps[step].title}}</view>
+    <view class="guide-desc">{{steps[step].desc}}</view>
+  </view>
+
+  <view class="skip-link" bindtap="onSkipTap">跳过教程</view>
 </view>
