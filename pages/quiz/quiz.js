@@ -45,7 +45,8 @@ Page({
     showFeedback: false,
     feedbackText: '',
     hasWrong: false,
-    isEarlyReview: false
+    isEarlyReview: false,
+    isImageZoomed: false
   },
 
   // 安全返回：防止页面栈为空时 navigateBack 失败
@@ -305,5 +306,9 @@ Page({
 
   onBackTap() {
     this.safeNavigateBack();
+  },
+
+  onImageTap() {
+    this.setData({ isImageZoomed: !this.data.isImageZoomed });
   }
 });

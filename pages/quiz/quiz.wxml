@@ -53,7 +53,7 @@
         </view>
 
         <!-- 鸟类图片 -->
-        <image wx:if="{{bird.cover}}" class="quiz-bird-img" src="{{bird.cover}}" mode="aspectFit" />
+        <image wx:if="{{bird.cover}}" class="quiz-bird-img {{isImageZoomed ? 'zoomed' : ''}}" src="{{bird.cover}}" mode="aspectFit" bindtap="onImageTap" />
 
         <!-- 答题区 -->
         <view class="card quiz-card">
