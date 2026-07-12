@@ -80,6 +80,8 @@
 }
 
 .card-modal-inner {
+  position: relative;
+  overflow: hidden;
   background: var(--card);
   border-radius: 24rpx;
   width: 100%;
@@ -100,7 +102,7 @@
 
 .bird-header-modal { text-align: center; padding: 20rpx 0 30rpx; }
 .bird-header-modal .bird-cover-img { width: 200rpx; height: 200rpx; border-radius: 24rpx; margin-bottom: 12rpx; transition: all 0.3s ease; }
-.bird-header-modal .bird-cover-img.zoomed { width: 400rpx; height: 400rpx; border-radius: 24rpx; }
+.bird-header-modal .bird-cover-img.zoomed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; border-radius: 0; margin-bottom: 0; }
 .bird-header-modal .bird-emoji { font-size: 100rpx; margin-bottom: 12rpx; }
 .bird-header-modal .bird-tags { margin-top: 16rpx; }
 .bird-header-modal .tag { display: inline-block; padding: 6rpx 16rpx; border-radius: 24rpx; font-size: 24rpx; background: var(--bg); color: var(--text-secondary); margin-right: 8rpx; }
